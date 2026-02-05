@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+========================================
+  CUSTOM FONTS FOR ROOT THEME
+========================================
+  These fonts are prepared for future theming.
+  To activate:
+  1. Add font files to /public/fonts/ directory
+  2. Uncomment the @font-face declarations
+  3. Update font-family references in tailwind.config.ts
+========================================
+*/
+
+@font-face {
+  font-family: 'Root';
+  src: url('/fonts/root-font.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Woodland';
+  src: url('/fonts/woodland-font.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Faction';
+  src: url('/fonts/faction-font.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0a0c10] text-gray-100;
+  }
+
+  /* Apply custom Root font only to headings - body text stays readable sans-serif */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-root;
+  }
+
+  /* Font class utilities for theming */
+  .font-root { font-family: 'Root', serif; }
+  .font-woodland { font-family: 'Woodland', sans-serif; }
+  .font-faction { font-family: 'Faction', sans-serif; }
+}
+
+/*
+========================================
+  THEME-SPECIFIC CLASSES
+========================================
+  Custom utility classes for Root theming.
+  Ready for activation when custom assets are available.
+========================================
+*/
+
+/* Theme Classes - Ready for activation with custom assets */
+.theme-woodland {
+  @apply bg-wood-pattern font-woodland;
+}
+
+.theme-root {
+  @apply font-root;
+}
+
+.theme-paper {
+  @apply bg-paper-texture;
+}
+
+.card-wooden {
+  @apply bg-gradient-to-br from-yellow-900 to-amber-800 border-2 border-amber-600 shadow-lg;
+}
+
+.faction-marquise { @apply text-faction-marquise; }
+.faction-eyrie { @apply text-faction-eyrie; }
+.faction-alliance { @apply text-faction-alliance; }
+.faction-vagabond { @apply text-faction-vagabond; }
+.faction-corvid { @apply text-faction-corvid; }
+.faction-hundreds { @apply text-faction-hundreds; }
+.faction-keepers { @apply text-faction-keepers; }
+.faction-river { @apply text-faction-river; }
+
+/* Theme Container for Wood Background */
+.theme-container {
+  @apply bg-wood-pattern bg-cover bg-fixed bg-center;
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+/*
+========================================
+  SCROLLBAR STYLING
+========================================
+  Custom scrollbar styling for themed elements.
+========================================
+*/
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

@@ -1,0 +1,20 @@
+services:
+  root-companion:
+    container_name: root-companion-app
+    image: root-companion-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Vlevo je port hostitele (můžeš změnit), vpravo port kontejneru (neměnit)
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - PORT=3000
+    # Volitelné: Omezení zdrojů, aby ti to nesežralo celou VPS/Server
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 512M
