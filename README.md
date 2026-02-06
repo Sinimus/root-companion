@@ -45,7 +45,7 @@ docker-compose up --build
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
-- **Deployment**: Ready for GHCR & PWA
+- **Deployment**: GHCR image & PWA supported
 
 ## 📜 License
 This project is licensed under the AGPL v3 License.
