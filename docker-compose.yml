@@ -12,9 +12,4 @@ services:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - PORT=3000
-    # Volitelné: Omezení zdrojů, aby ti to nesežralo celou VPS/Server
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.50'
-    #       memory: 512M
+
