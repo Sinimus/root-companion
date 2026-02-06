@@ -20,7 +20,7 @@ A comprehensive, rule-compliant tactical assistant for **Root: A Game of Woodlan
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/root-companion-app.git
+git clone https://github.com/Sinimus/root-companion.git
 
 # Install dependencies
 npm install
