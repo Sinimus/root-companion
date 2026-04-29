@@ -59,3 +59,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Trigger Coolify redeploy
+        run: |
+          curl --silent --fail --request GET \
+            "https://coolify.sinimus.com/api/v1/deploy?uuid=r5zbopaf9k1ovpsecui3pxw9&force=false" \
+            --header "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
