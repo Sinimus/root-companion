@@ -33,7 +33,7 @@ def text(double: str, single: str) -> str:
 def main() -> None:
     if len(sys.argv) != 2:
         sys.exit(__doc__)
-    parts = ["# Root strategy notes", "", NOTE, ""]
+    parts: list[str] = []
     for slug, name in FACTIONS.items():
         source = (GUIDES / f"{slug}.ts").read_text(encoding="utf-8")
         block = source[source.index("strategy:"):]

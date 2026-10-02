@@ -128,10 +128,42 @@ describe('Data Integrity', () => {
       ]);
     });
 
-    it('Autumn and Winter have four ruins (Law 5.1.4)', () => {
-      [AUTUMN_MAP, WINTER_MAP].forEach(map => {
-        expect(map.clearings.filter(c => c.hasRuin)).toHaveLength(4);
+    it('every map has four ruins, each in a clearing with a slot (Law 5.1.4)', () => {
+      Object.values(MAPS).forEach(map => {
+        const ruins = map.clearings.filter(c => c.hasRuin);
+        expect({ map: map.id, ruins: ruins.length }).toEqual({ map: map.id, ruins: 4 });
+        ruins.forEach(c => expect(c.slots).toBeGreaterThan(0));
       });
+    });
+
+    it('every map is connected and has no duplicate links', () => {
+      Object.values(MAPS).forEach(map => {
+        const keys = map.paths.map(p => [Math.min(p.from, p.to), Math.max(p.from, p.to)].join('-'));
+        expect(new Set(keys).size).toBe(keys.length);
+        const walkable = map.paths.filter(p => !p.river);
+        const seen = new Set([1]);
+        const queue = [1];
+        while (queue.length > 0) {
+          const current = queue.shift() as number;
+          walkable.forEach(p => {
+            const next = p.from === current ? p.to : p.to === current ? p.from : null;
+            if (next !== null && !seen.has(next)) {
+              seen.add(next);
+              queue.push(next);
+            }
+          });
+        }
+        expect({ map: map.id, reachable: seen.size }).toEqual({ map: map.id, reachable: 12 });
+      });
+    });
+
+    it('Autumn prints its suits as on the board', () => {
+      const suits = Object.fromEntries(AUTUMN_MAP.clearings.map(c => [c.id, c.defaultSuit]));
+      expect(suits).toEqual({
+        1: 'fox', 2: 'rabbit', 3: 'mouse', 4: 'mouse', 5: 'rabbit', 6: 'mouse',
+        7: 'fox', 8: 'fox', 9: 'mouse', 10: 'rabbit', 11: 'fox', 12: 'rabbit'
+      });
+      expect(AUTUMN_MAP.paths.some(p => p.river)).toBe(true);
     });
 
     it('Winter is its own layout with a river (Law M.2)', () => {
