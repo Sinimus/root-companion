@@ -75,6 +75,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   // Context Checks
   const isAllianceDefender = defenderId === 'alliance';
   const isVagabondAttacker = attackerId.startsWith('vagabond');
+  const isVagabondDefender = defenderId.startsWith('vagabond');
   const isCorvidDefender = defenderId === 'corvid';
   const isKeeperAttacker = attackerId === 'keepers';
   const isKeeperDefender = defenderId === 'keepers';
@@ -110,9 +111,14 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
          notes.push(`Vagabond: Hits limited by number of swords (${vagabondSwords}).`);
        }
     }
+    // Law 9.2.6 caps the Vagabond's rolled hits as defender too
+    if (isVagabondDefender && rawDefender > vagabondSwords) {
+      rawDefender = vagabondSwords;
+      notes.push(`Vagabond: Hits limited by number of swords (${vagabondSwords}).`);
+    }
 
-    // 3. Base Hits
-    attackerHits = rawAttacker;
+    // 3. Base Hits (rolled hits; the attacker's extra hits are counted apart, Law 4.3.5.I)
+    let attackerExtraHits = 0;
     defenderHits = rawDefender;
 
     // 4. Modifiers Calculation
@@ -125,7 +131,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
     // DEFENSELESS: Attacker deals +1 hit
     if (isDefenseless) {
-      attackerHits += 1;
+      attackerExtraHits += 1;
       notes.push("Defenseless: +1 Attacker Hit.");
     }
 
@@ -137,18 +143,18 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
     // BRUTAL TACTICS: Attacker +1 hit, Defender scores VP (VP logic not tracked here)
     if (brutalTacticsActive) {
-      attackerHits += 1;
+      attackerExtraHits += 1;
       notes.push("Brutal Tactics: Attacker deals +1 hit, Defender scores 1 VP.");
     }
 
     // FACTION BONUSES
     if (isHundredsAttacker && hundredsWarlord && hundredsWrathful) {
-      attackerHits += 1;
+      attackerExtraHits += 1;
       notes.push("Wrathful Warlord: +1 Attacker Hit.");
     }
 
     if (isEyrieAttacker && eyrieCommander) {
-      attackerHits += 1;
+      attackerExtraHits += 1;
       notes.push("Commander: +1 Attacker Hit.");
     }
 
@@ -159,13 +165,13 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
     // 5. Damage Prevention / Reduction (Apply LAST)
 
-    // ARMORERS: Defender takes 0 rolled hits. 
-    // This means Attacker deals 0 hits (excluding Ambush/manual adjustments, but usually ignores all).
-    // Law 2.1.1: "defending player discards this card to ignore all rolled hits taken"
+    // ARMORERS: "In battle, may discard this to ignore all rolled hits taken."
+    // Only rolled hits are ignored; extra hits still land (Law 4.3.5.I, 4.3.5.III).
     if (armorersActive) {
-      attackerHits = 0; 
-      notes.push("Armorers: Defender ignores ALL rolled hits taken.");
+      rawAttacker = 0;
+      notes.push("Armorers: Defender ignores all ROLLED hits taken (extra hits still count).");
     }
+    attackerHits = rawAttacker + attackerExtraHits;
 
     // DEVOUT KNIGHTS (Keepers): Ignore first hit taken
     if (isKeeperDefender && keeperHasRelic && attackerHits > 0) {
@@ -189,7 +195,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
         <div className="bg-gray-900 p-4 border-b border-gray-800 flex justify-between items-center rounded-t-2xl">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Swords className="w-5 h-5 text-red-500" /> Battle Sim 5.0
+            <Swords className="w-5 h-5 text-red-500" /> Battle Sim 5.1
           </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white p-2">✕</button>
         </div>
@@ -304,7 +310,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                )}
              </div>
 
-             {isVagabondAttacker && (
+             {(isVagabondAttacker || isVagabondDefender) && (
                  <div className="flex items-center justify-between border-t border-gray-800 pt-2 mt-2">
                     <span className="text-sm text-gray-300">Undamaged Swords:</span>
                     <div className="flex items-center gap-2">

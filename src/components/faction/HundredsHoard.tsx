@@ -33,24 +33,35 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
     localStorage.setItem(`root_hundreds_items_${factionId}`, JSON.stringify(items));
   }, [items, factionId]);
 
-  // Calculate stats based on rules 14.2.4
+  const COMMAND_ITEMS: ItemType[] = ['Boot', 'Bag', 'Coin'];
+  const PROWESS_ITEMS: ItemType[] = ['Sword', 'Hammer', 'Crossbow', 'Tea'];
+  const TRACK_SIZE = 4;
+
+  const trackCount = (itemTypes: ItemType[], hoard: Record<ItemType, number> = items) =>
+    itemTypes.reduce((sum, type) => sum + hoard[type], 0);
+
+  // Law 14.2.4.II: no items = 1, one or two items = 2, three items = 3, four items = 4
   const calculateStat = (itemTypes: ItemType[]) => {
-    const totalItems = itemTypes.reduce((sum, type) => sum + items[type], 0);
-    if (totalItems === 0) return 0;
-    if (totalItems === 1) return 1;
-    if (totalItems === 2) return 2;
+    const totalItems = trackCount(itemTypes);
+    if (totalItems === 0) return 1;
+    if (totalItems <= 2) return 2;
     if (totalItems === 3) return 3;
-    return 4; // 4+ items
+    return 4;
   };
 
-  const commandStat = calculateStat(['Boot', 'Bag', 'Coin']);
-  const prowessStat = calculateStat(['Sword', 'Hammer', 'Crossbow', 'Tea']);
+  const commandStat = calculateStat(COMMAND_ITEMS);
+  const prowessStat = calculateStat(PROWESS_ITEMS);
 
+  // Each Hoard track has four spaces (Law 14.2.4.I)
   const updateItemCount = (type: ItemType, delta: number) => {
-    setItems(prev => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + delta)
-    }));
+    setItems(prev => {
+      const track = COMMAND_ITEMS.includes(type) ? COMMAND_ITEMS : PROWESS_ITEMS;
+      if (delta > 0 && trackCount(track, prev) >= TRACK_SIZE) return prev;
+      return {
+        ...prev,
+        [type]: Math.max(0, prev[type] + delta)
+      };
+    });
   };
 
   const getItemIcon = (type: ItemType) => {
@@ -170,7 +181,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
 
         {/* Rules Reference */}
         <div className="text-xs text-gray-500 text-center">
-          Stats calculated from item counts: 1-2 items = 1-2 stat, 3 items = 3 stat, 4+ items = 4 stat (Rule 14.2.4)
+          Each track holds up to 4 items. No items = 1, 1-2 items = 2, 3 items = 3, 4 items = 4 (Law 14.2.4)
         </div>
       </div>
 
@@ -203,50 +214,6 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
             className="px-3 py-2 bg-red-800 hover:bg-red-700 text-red-300 rounded-lg text-sm font-bold transition-colors"
           >
             Clear All
-          </button>
-          <button
-            onClick={() => {
-              setItems({
-                Boot: 2,
-                Bag: 1,
-                Coin: 3,
-                Sword: 2,
-                Hammer: 1,
-                Crossbow: 2,
-                Tea: 1,
-              });
-            }}
-            className="px-3 py-2 bg-blue-800 hover:bg-blue-700 text-blue-300 rounded-lg text-sm font-bold transition-colors"
-          >
-            Sample Setup
-          </button>
-          <button
-            onClick={() => {
-              const newItems = { ...items };
-              (Object.keys(newItems) as ItemType[]).forEach(type => {
-                newItems[type] = Math.min(4, newItems[type] + 1);
-              });
-              setItems(newItems);
-            }}
-            className="px-3 py-2 bg-green-800 hover:bg-green-700 text-green-300 rounded-lg text-sm font-bold transition-colors"
-          >
-            Add 1 to All
-          </button>
-          <button
-            onClick={() => {
-              setItems({
-                Boot: 4,
-                Bag: 4,
-                Coin: 4,
-                Sword: 4,
-                Hammer: 4,
-                Crossbow: 4,
-                Tea: 4,
-              });
-            }}
-            className="px-3 py-2 bg-purple-800 hover:bg-purple-700 text-purple-300 rounded-lg text-sm font-bold transition-colors"
-          >
-            Max All (4)
           </button>
         </div>
       </div>
