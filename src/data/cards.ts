@@ -5,22 +5,20 @@ export type CardType = 'craft' | 'ambush' | 'dominance' | 'event';
 export interface ICard {
   id: string;
   name: string;
-  deck: DeckType[]; // Some cards might be in both if we consider structure, but usually decks are distinct physical products. We will list which deck includes this specific card design.
+  deck: DeckType[]; // Decks that contain this card design
   suit: Suit;
   type: CardType;
   cost: string[]; // e.g. ['fox'] or ['rabbit', 'rabbit']
   effect: string;
   vp?: number;
   itemIcon?: string; // boot, sword, etc.
-  totalInDeck?: number; // For deck peeping
+  totalInDeck?: number; // Copies in the deck, set only where the Law states it (2.1.2, 2.1.3)
 }
 
+// One entry per card design (name + suit). Suits, crafting costs, items, points and
+// texts are read from the Leder Games card library (cards.ledergames.com).
+// Both decks contain the same ambush, dominance and item cards.
 export const CARDS_DB: ICard[] = [
-  // --- SHARED / COMMON TYPES (Ambush & Dominance exist in structure of both, but legally are part of the deck used) ---
-  // We will assign them to 'standard' primarily, but note they exist in Exiles too usually (or cover both).
-  // Actually, Exiles & Partisans product contains its own Ambushes/Dominance? Yes.
-  
-  // AMBUSHES
   {
     id: 'ambush_bird',
     name: 'Ambush!',
@@ -28,8 +26,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'ambush',
     cost: [],
-    effect: 'Battle: Defender deals 2 hits immediately, then discards this card. Cancelled if attacker plays a matching Ambush.',
-    totalInDeck: 2
+    effect: 'You may ambush in any clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    totalInDeck: 2,
   },
   {
     id: 'ambush_fox',
@@ -38,8 +36,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'ambush',
     cost: [],
-    effect: 'Battle: Defender deals 2 hits immediately, then discards this card. Cancelled if attacker plays a matching Ambush.',
-    totalInDeck: 1
+    effect: 'You may only ambush in a fox clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    totalInDeck: 1,
   },
   {
     id: 'ambush_rabbit',
@@ -48,8 +46,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'ambush',
     cost: [],
-    effect: 'Battle: Defender deals 2 hits immediately, then discards this card. Cancelled if attacker plays a matching Ambush.',
-    totalInDeck: 1
+    effect: 'You may only ambush in a rabbit clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    totalInDeck: 1,
   },
   {
     id: 'ambush_mouse',
@@ -58,11 +56,9 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'ambush',
     cost: [],
-    effect: 'Battle: Defender deals 2 hits immediately, then discards this card. Cancelled if attacker plays a matching Ambush.',
-    totalInDeck: 1
+    effect: 'You may only ambush in a mouse clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    totalInDeck: 1,
   },
-
-  // DOMINANCE
   {
     id: 'dom_bird',
     name: 'Bird Dominance',
@@ -70,8 +66,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'dominance',
     cost: [],
-    effect: 'Rule 2 opposite corners at start of Birdsong to win. Spend to make available.',
-    totalInDeck: 1
+    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule two opposite corners at the start of your Birdsong.',
+    totalInDeck: 1,
   },
   {
     id: 'dom_fox',
@@ -80,8 +76,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'dominance',
     cost: [],
-    effect: 'Rule 3 fox clearings at start of Birdsong to win. Spend to make available.',
-    totalInDeck: 1
+    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three fox clearings at the start of your Birdsong.',
+    totalInDeck: 1,
   },
   {
     id: 'dom_rabbit',
@@ -90,8 +86,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'dominance',
     cost: [],
-    effect: 'Rule 3 rabbit clearings at start of Birdsong to win. Spend to make available.',
-    totalInDeck: 1
+    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three rabbit clearings at the start of your Birdsong.',
+    totalInDeck: 1,
   },
   {
     id: 'dom_mouse',
@@ -100,464 +96,515 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'dominance',
     cost: [],
-    effect: 'Rule 3 mouse clearings at start of Birdsong to win. Spend to make available.',
-    totalInDeck: 1
+    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three mouse clearings at the start of your Birdsong.',
+    totalInDeck: 1,
   },
-
-  // --- STANDARD DECK UNIQUES ---
-  
-  // Favors
   {
     id: 'favor_fox',
     name: 'Favor of the Foxes',
     deck: ['standard'],
     suit: 'fox',
-    type: 'event',
+    type: 'craft',
     cost: ['fox', 'fox', 'fox'],
-    effect: 'Remove all enemy pieces in fox clearings.',
-    totalInDeck: 1
+    effect: 'Remove all enemy pieces in fox clearings, then discard.',
   },
   {
     id: 'favor_rabbit',
     name: 'Favor of the Rabbits',
     deck: ['standard'],
     suit: 'rabbit',
-    type: 'event',
+    type: 'craft',
     cost: ['rabbit', 'rabbit', 'rabbit'],
-    effect: 'Remove all enemy pieces in rabbit clearings.',
-    totalInDeck: 1
+    effect: 'Remove all enemy pieces in rabbit clearings, then discard.',
   },
   {
     id: 'favor_mouse',
     name: 'Favor of the Mice',
     deck: ['standard'],
     suit: 'mouse',
-    type: 'event',
+    type: 'craft',
     cost: ['mouse', 'mouse', 'mouse'],
-    effect: 'Remove all enemy pieces in mouse clearings.',
-    totalInDeck: 1
+    effect: 'Remove all enemy pieces in mouse clearings, then discard.',
   },
-
-  // Improvements / Persistent
   {
-    id: 'armorers',
+    id: 'std_armorers',
     name: 'Armorers',
     deck: ['standard'],
-    suit: 'fox',
+    suit: 'bird',
     type: 'craft',
     cost: ['fox'],
-    effect: 'In battle, may discard this card to ignore all rolled hits taken.',
-    totalInDeck: 2
+    effect: 'In battle, may discard this to ignore all rolled hits taken.',
   },
   {
-    id: 'sappers',
+    id: 'std_sappers',
     name: 'Sappers',
     deck: ['standard'],
     suit: 'bird',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'In battle as defender, discard to deal an extra hit.',
-    totalInDeck: 2
+    effect: 'In battle as defender, may discard this to deal an extra hit.',
   },
   {
-    id: 'scout',
+    id: 'std_scouting',
     name: 'Scouting Party',
     deck: ['standard'],
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse', 'mouse'],
-    effect: 'As attacker, you are not affected by Ambush cards.',
-    totalInDeck: 2
+    effect: 'As attacker in battle, you are not affected by ambush cards.',
   },
   {
-    id: 'brutal',
+    id: 'std_brutal',
     name: 'Brutal Tactics',
     deck: ['standard'],
     suit: 'bird',
     type: 'craft',
     cost: ['fox', 'fox'],
-    effect: 'In battle as attacker, may deal an extra hit, but defender scores 1 VP.',
-    totalInDeck: 2
+    effect: 'In battle as attacker, may deal an extra hit, but defender scores one point.',
   },
   {
-    id: 'command',
+    id: 'std_command',
     name: 'Command Warren',
     deck: ['standard'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
     effect: 'At start of Daylight, may initiate a battle.',
-    totalInDeck: 2
   },
   {
-    id: 'tax',
+    id: 'std_tax',
     name: 'Tax Collector',
     deck: ['standard'],
     suit: 'fox',
     type: 'craft',
-    cost: ['rabbit', 'mouse', 'fox'],
-    effect: 'Once in Daylight, remove 1 of your warriors to draw 1 card.',
-    totalInDeck: 3
+    cost: ['rabbit', 'fox', 'mouse'],
+    effect: 'Once in Daylight, you may remove a warrior of your faction from a clearing on the map to draw one card.',
   },
   {
-    id: 'codebreakers',
+    id: 'std_codebreakers',
     name: 'Codebreakers',
     deck: ['standard'],
-    suit: 'bird',
+    suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: "Once in Daylight, may look at another player's hand.",
-    totalInDeck: 2
+    effect: 'Once in Daylight, may look at another player\'s hand.',
   },
   {
-    id: 'bank',
+    id: 'std_bank',
     name: 'Better Burrow Bank',
     deck: ['standard'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
-    effect: 'At start of Birdsong, you and another player draw a card.',
-    totalInDeck: 2
+    effect: 'At start of Birdsong, you may draw one card. If you do, choose an enemy to draw one card.',
   },
   {
-    id: 'stand',
+    id: 'std_stand',
     name: 'Stand and Deliver!',
     deck: ['standard'],
-    suit: 'mouse',
+    suit: 'fox',
     type: 'craft',
     cost: ['mouse', 'mouse', 'mouse'],
-    effect: 'In Birdsong, may take a random card from another player. That player scores 1 VP.',
-    totalInDeck: 2
+    effect: 'Once in Birdsong, you may take a random card from an enemy. If you do, they score one point.',
   },
   {
-    id: 'cobbler',
+    id: 'std_cobbler',
     name: 'Cobbler',
     deck: ['standard'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
     effect: 'At start of Evening, may take a move.',
-    totalInDeck: 2
   },
   {
-    id: 'royal',
+    id: 'std_royal',
     name: 'Royal Claim',
     deck: ['standard'],
     suit: 'bird',
     type: 'craft',
-    cost: ['?','?','?','?'],
-    effect: 'In Birdsong, discard to score 1 VP per clearing you rule.',
-    totalInDeck: 1
-  },
-
-  // Standard Items (simplified view, different suits exist)
-  {
-    id: 'std_boot',
-    name: 'Boots',
-    deck: ['standard'],
-    suit: 'rabbit', // Represents generic suit mapping for simplicity
-    type: 'craft',
-    cost: ['rabbit'],
-    effect: 'Craft Item',
-    vp: 1,
-    itemIcon: 'boot',
-    totalInDeck: 2
+    cost: ['?', '?', '?', '?'],
+    effect: 'In Birdsong, may discard this to score one point per clearing you rule.',
   },
   {
-    id: 'std_bag',
-    name: 'Bag',
-    deck: ['standard'],
-    suit: 'mouse',
-    type: 'craft',
-    cost: ['mouse'],
-    effect: 'Craft Item',
-    vp: 1,
-    itemIcon: 'bag',
-    totalInDeck: 1
-  },
-  {
-    id: 'std_xbow',
-    name: 'Crossbow',
-    deck: ['standard'],
-    suit: 'fox',
-    type: 'craft',
-    cost: ['fox'],
-    effect: 'Craft Item',
-    vp: 1,
-    itemIcon: 'crossbow',
-    totalInDeck: 1
-  },
-  {
-    id: 'std_hammer',
-    name: 'Hammer',
-    deck: ['standard'],
-    suit: 'mouse',
-    type: 'craft',
-    cost: ['mouse'],
-    effect: 'Craft Item',
-    vp: 2,
-    itemIcon: 'hammer',
-    totalInDeck: 1
-  },
-  {
-    id: 'std_sword',
-    name: 'Sword',
-    deck: ['standard'],
-    suit: 'fox',
-    type: 'craft',
-    cost: ['fox', 'fox'],
-    effect: 'Craft Item',
-    vp: 2,
-    itemIcon: 'sword',
-    totalInDeck: 2
-  },
-  {
-    id: 'std_tea',
-    name: 'Tea',
-    deck: ['standard'],
-    suit: 'mouse',
-    type: 'craft',
-    cost: ['mouse'],
-    effect: 'Craft Item',
-    vp: 2,
-    itemIcon: 'tea',
-    totalInDeck: 2
-  },
-  {
-    id: 'std_coin',
-    name: 'Coins',
-    deck: ['standard'],
-    suit: 'rabbit',
-    type: 'craft',
-    cost: ['rabbit', 'rabbit'],
-    effect: 'Craft Item',
-    vp: 3,
-    itemIcon: 'coin',
-    totalInDeck: 2
-  },
-
-  // --- EXILES & PARTISANS UNIQUES ---
-
-  // Partisans (Suit haters)
-  {
-    id: 'part_fox',
+    id: 'ex_partisans_fox',
     name: 'Fox Partisans',
     deck: ['exiles'],
     suit: 'fox',
     type: 'craft',
     cost: ['fox'],
-    effect: 'In battle in Fox clearing, may discard all Fox cards. Deal 1 extra hit per card.',
-    totalInDeck: 1
+    effect: 'In battle in fox clearings, may deal one extra hit, then discard all your cards except foxes.',
   },
   {
-    id: 'part_rabbit',
+    id: 'ex_partisans_rabbit',
     name: 'Rabbit Partisans',
     deck: ['exiles'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'In battle in Rabbit clearing, may discard all Rabbit cards. Deal 1 extra hit per card.',
-    totalInDeck: 1
+    effect: 'In battle in rabbit clearings, may deal one extra hit, then discard all your cards except rabbits.',
   },
   {
-    id: 'part_mouse',
+    id: 'ex_partisans_mouse',
     name: 'Mouse Partisans',
     deck: ['exiles'],
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'In battle in Mouse clearing, may discard all Mouse cards. Deal 1 extra hit per card.',
-    totalInDeck: 1
+    effect: 'In battle in mouse clearings, may deal one extra hit, then discard all your cards except mice.',
   },
-
-  // Critical E&P Cards
   {
-    id: 'coffin',
+    id: 'ex_coffin',
     name: 'Coffin Makers',
     deck: ['exiles'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
-    effect: 'Whenever any warriors would return to supply, place them here instead. In Birdsong, score 1 VP per 5 warriors here, then return to supply.',
-    totalInDeck: 1
+    effect: 'Warriors removed, not replaced, from the map to their supply are placed here. At start of Birdsong, score one point per five warriors here, then remove all warriors here.',
   },
   {
-    id: 'soup',
+    id: 'ex_soup',
     name: 'Soup Kitchens',
     deck: ['exiles'],
     suit: 'bird',
     type: 'craft',
-    cost: ['bird'],
-    effect: 'Your tokens count toward Rule. Score 1 VP per token when crafting this.',
-    totalInDeck: 1
+    cost: ['rabbit', 'fox', 'mouse'],
+    effect: 'Your tokens now count toward rule, and each of your tokens counts twice.',
   },
   {
-    id: 'boat',
+    id: 'ex_boat',
     name: 'Boat Builders',
     deck: ['exiles'],
     suit: 'bird',
     type: 'craft',
-    cost: ['bird'],
+    cost: ['?', '?'],
     effect: 'You treat rivers as paths.',
-    totalInDeck: 1
   },
   {
-    id: 'planners',
+    id: 'ex_planners',
     name: 'Corvid Planners',
     deck: ['exiles'],
     suit: 'bird',
     type: 'craft',
-    cost: ['bird'],
-    effect: 'You can move without Ruling the origin or destination.',
-    totalInDeck: 1
+    cost: ['?', '?'],
+    effect: 'While moving, you ignore rule.',
   },
   {
-    id: 'propaganda',
+    id: 'ex_propaganda',
     name: 'Propaganda Bureau',
     deck: ['exiles'],
-    suit: 'bird',
+    suit: 'fox',
     type: 'craft',
-    cost: ['?','?','?'],
-    effect: 'Once in Daylight, spend a card to remove an enemy warrior from a matching clearing and place a warrior there.',
-    totalInDeck: 1
+    cost: ['?', '?', '?'],
+    effect: 'Once in Daylight, you may spend a card to replace an enemy warrior in a matching clearing with a warrior of your faction.',
   },
   {
-    id: 'false_orders',
+    id: 'ex_false_orders',
     name: 'False Orders',
-    deck: ['exiles'],
-    suit: 'bird',
-    type: 'craft',
-    cost: ['fox'],
-    effect: "In Birdsong, discard this to move half of an enemy's warriors from a clearing you rule.",
-    totalInDeck: 2
-  },
-  {
-    id: 'informant',
-    name: 'Informants',
     deck: ['exiles'],
     suit: 'fox',
     type: 'craft',
     cost: ['fox'],
-    effect: 'In Evening, if you would draw cards, you may instead take a card from the discard pile.',
-    totalInDeck: 1
+    effect: 'In Birdsong, you may spend this card to force an enemy to move half their faction warriors, rounded up, from a clearing as you choose, ignoring rule.',
   },
   {
-    id: 'swap',
+    id: 'ex_informants',
+    name: 'Informants',
+    deck: ['exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['fox', 'fox'],
+    effect: 'In Evening, if you would draw cards, you may instead take one ambush card from the discard pile.',
+  },
+  {
+    id: 'ex_swap_meet',
     name: 'Swap Meet',
     deck: ['exiles'],
-    suit: 'bird',
+    suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'Once in Birdsong, may take a random card from another player, then give them a card.',
-    totalInDeck: 1
+    effect: 'Once in Birdsong, may take a random card from another player and then give them a card.',
   },
   {
-    id: 'tunnels',
+    id: 'ex_tunnels',
     name: 'Tunnels',
     deck: ['exiles'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'You treat clearings with your crafting pieces as adjacent.',
-    totalInDeck: 1
+    effect: 'You treat clearings with your crafting pieces as adjacent. You may ignore paths when moving between them.',
   },
   {
-    id: 'investments',
+    id: 'ex_league',
     name: 'League of Adventurous Mice',
     deck: ['exiles'],
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'Once in Daylight, may exhaust an item in your Crafted Items box to take a Move or Battle.',
-    totalInDeck: 1
+    effect: 'Once in Daylight, may exhaust an item in your Crafted Items box to take a move or initiate a battle.',
   },
   {
-    id: 'charm',
+    id: 'ex_murine',
+    name: 'Murine Broker',
+    deck: ['exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['mouse', 'mouse'],
+    effect: 'Whenever another player crafts an item, draw a card.',
+  },
+  {
+    id: 'ex_charm',
     name: 'Charm Offensive',
     deck: ['exiles'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'At start of Evening, may choose another player and score 1 VP. They choose to give you a card (score 1 VP) or not.',
-    totalInDeck: 1
+    effect: 'At start of Evening, may draw a card and choose another player to score one point.',
   },
   {
-    id: 'saboteurs',
+    id: 'ex_saboteurs',
     name: 'Saboteurs',
     deck: ['exiles'],
     suit: 'bird',
     type: 'craft',
     cost: ['?'],
-    effect: "In Daylight, discard this to discard an enemy's crafted card.",
-    totalInDeck: 3
+    effect: 'At start of Birdsong, may discard this card to discard an enemy\'s crafted card.',
   },
   {
-    id: 'eyrie_emigre',
+    id: 'ex_emigre',
     name: 'Eyrie Émigré',
     deck: ['exiles'],
     suit: 'bird',
     type: 'craft',
-    cost: ['bird', 'bird'],
-    effect: "At end of Daylight, move and then battle.",
-    totalInDeck: 1
+    cost: ['fox', 'fox'],
+    effect: 'At end of Birdsong, you must take a move, then you must battle in the destination clearing. Discard this if you did not take both actions.',
   },
   {
-    id: 'teaching',
+    id: 'ex_engravers',
     name: 'Master Engravers',
     deck: ['exiles'],
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse', 'mouse'],
-    effect: 'When you craft an item, score +1 VP.',
-    totalInDeck: 1
+    effect: 'Whenever you craft an item, score one extra point.',
   },
-  // Exiles Items
   {
-    id: 'ex_boot',
-    name: 'Boots',
-    deck: ['exiles'],
-    suit: 'bird', // Usually varied
+    id: 'item_visit_to_friends',
+    name: 'A Visit to Friends',
+    deck: ['standard', 'exiles'],
+    suit: 'rabbit',
     type: 'craft',
-    cost: ['?'],
-    effect: 'Craft Item',
+    cost: ['rabbit'],
+    effect: 'Item: Boot. Then discard.',
     vp: 1,
     itemIcon: 'boot',
-    totalInDeck: 2
   },
   {
-    id: 'ex_coin',
-    name: 'Coins',
-    deck: ['exiles'],
+    id: 'item_anvil',
+    name: 'Anvil',
+    deck: ['standard', 'exiles'],
     suit: 'fox',
     type: 'craft',
-    cost: ['fox', 'fox'],
-    effect: 'Craft Item',
-    vp: 3,
-    itemIcon: 'coin',
-    totalInDeck: 2
+    cost: ['fox'],
+    effect: 'Item: Hammer. Then discard.',
+    vp: 2,
+    itemIcon: 'hammer',
   },
   {
-    id: 'ex_sword',
-    name: 'Sword',
-    deck: ['exiles'],
-    suit: 'mouse',
+    id: 'item_arms_trader',
+    name: 'Arms Trader',
+    deck: ['standard', 'exiles'],
+    suit: 'bird',
     type: 'craft',
-    cost: ['mouse', 'mouse'],
-    effect: 'Craft Item',
+    cost: ['fox', 'fox'],
+    effect: 'Item: Sword. Then discard.',
     vp: 2,
     itemIcon: 'sword',
-    totalInDeck: 2
   },
   {
-    id: 'ex_tea',
-    name: 'Tea',
-    deck: ['exiles'],
+    id: 'item_bake_sale',
+    name: 'Bake Sale',
+    deck: ['standard', 'exiles'],
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
-    effect: 'Craft Item',
+    effect: 'Item: Coins. Then discard.',
+    vp: 3,
+    itemIcon: 'coin',
+  },
+  {
+    id: 'item_birdy_bindle',
+    name: 'Birdy Bindle',
+    deck: ['standard', 'exiles'],
+    suit: 'bird',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Bag. Then discard.',
+    vp: 1,
+    itemIcon: 'bag',
+  },
+  {
+    id: 'item_crossbow_bird',
+    name: 'Crossbow',
+    deck: ['standard', 'exiles'],
+    suit: 'bird',
+    type: 'craft',
+    cost: ['fox'],
+    effect: 'Item: Crossbow. Then discard.',
+    vp: 1,
+    itemIcon: 'crossbow',
+  },
+  {
+    id: 'item_crossbow_mouse',
+    name: 'Crossbow',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['fox'],
+    effect: 'Item: Crossbow. Then discard.',
+    vp: 1,
+    itemIcon: 'crossbow',
+  },
+  {
+    id: 'item_foxfolk_steel',
+    name: 'Foxfolk Steel',
+    deck: ['standard', 'exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['fox', 'fox'],
+    effect: 'Item: Sword. Then discard.',
+    vp: 2,
+    itemIcon: 'sword',
+  },
+  {
+    id: 'item_gently_used_knapsack',
+    name: 'Gently Used Knapsack',
+    deck: ['standard', 'exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Bag. Then discard.',
+    vp: 1,
+    itemIcon: 'bag',
+  },
+  {
+    id: 'item_investments',
+    name: 'Investments',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['rabbit', 'rabbit'],
+    effect: 'Item: Coins. Then discard.',
+    vp: 3,
+    itemIcon: 'coin',
+  },
+  {
+    id: 'item_mouse_in_a_sack',
+    name: 'Mouse-in-a-Sack',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Bag. Then discard.',
+    vp: 1,
+    itemIcon: 'bag',
+  },
+  {
+    id: 'item_protection_racket',
+    name: 'Protection Racket',
+    deck: ['standard', 'exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['rabbit', 'rabbit'],
+    effect: 'Item: Coins. Then discard.',
+    vp: 3,
+    itemIcon: 'coin',
+  },
+  {
+    id: 'item_root_tea_rabbit',
+    name: 'Root Tea',
+    deck: ['standard', 'exiles'],
+    suit: 'rabbit',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Tea. Then discard.',
     vp: 2,
     itemIcon: 'tea',
-    totalInDeck: 2
-  }
+  },
+  {
+    id: 'item_root_tea_fox',
+    name: 'Root Tea',
+    deck: ['standard', 'exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Tea. Then discard.',
+    vp: 2,
+    itemIcon: 'tea',
+  },
+  {
+    id: 'item_root_tea_mouse',
+    name: 'Root Tea',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Tea. Then discard.',
+    vp: 2,
+    itemIcon: 'tea',
+  },
+  {
+    id: 'item_smugglers_trail',
+    name: 'Smuggler\'s Trail',
+    deck: ['standard', 'exiles'],
+    suit: 'rabbit',
+    type: 'craft',
+    cost: ['mouse'],
+    effect: 'Item: Bag. Then discard.',
+    vp: 1,
+    itemIcon: 'bag',
+  },
+  {
+    id: 'item_sword',
+    name: 'Sword',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['fox', 'fox'],
+    effect: 'Item: Sword. Then discard.',
+    vp: 2,
+    itemIcon: 'sword',
+  },
+  {
+    id: 'item_travel_gear_fox',
+    name: 'Travel Gear',
+    deck: ['standard', 'exiles'],
+    suit: 'fox',
+    type: 'craft',
+    cost: ['rabbit'],
+    effect: 'Item: Boot. Then discard.',
+    vp: 1,
+    itemIcon: 'boot',
+  },
+  {
+    id: 'item_travel_gear_mouse',
+    name: 'Travel Gear',
+    deck: ['standard', 'exiles'],
+    suit: 'mouse',
+    type: 'craft',
+    cost: ['rabbit'],
+    effect: 'Item: Boot. Then discard.',
+    vp: 1,
+    itemIcon: 'boot',
+  },
+  {
+    id: 'item_woodland_runners',
+    name: 'Woodland Runners',
+    deck: ['standard', 'exiles'],
+    suit: 'bird',
+    type: 'craft',
+    cost: ['rabbit'],
+    effect: 'Item: Boot. Then discard.',
+    vp: 1,
+    itemIcon: 'boot',
+  },
 ];

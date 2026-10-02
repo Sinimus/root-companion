@@ -43,9 +43,19 @@ export default function SetupPage() {
 
   const maps = Object.values(MAPS);
 
+  // A faction cannot be played if its corresponding hireling is in play (Law A.6.5)
+  const excludedFactionIds = (config.useHirelings ? selectedHirelings : []).flatMap(hid => {
+    const replaced = HIRELINGS_DATA.find(h => h.id === hid)?.replacesFaction;
+    if (!replaced) return [];
+    return replaced === 'vagabond_1' ? ['vagabond_1', 'vagabond_2'] : [replaced];
+  });
+
+  // The Winter board prints no suits, so its suit markers are always dealt at random (Law A.1)
+  const useRandomSuits = config.randomSuits || config.mapId === 'winter';
+
   const handleSetTheStage = () => {
     // Generate Random Suits if needed
-    if (config.randomSuits) {
+    if (useRandomSuits) {
       const shuffled = [...DEFAULT_SUITS].sort(() => Math.random() - 0.5);
       const mapping: Record<number, Suit> = {};
       shuffled.forEach((s, i) => mapping[i + 1] = s);
@@ -296,7 +306,7 @@ export default function SetupPage() {
                        </h4>
                        <ul className="space-y-2 text-gray-400">
                           <li className="flex items-start gap-2"><span className="text-blue-500">•</span> <span>Place board: <strong>{MAPS[config.mapId]?.name}</strong></span></li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500">•</span> <span>{config.randomSuits ? "Place suit markers as shown on map above." : "Follow printed suits on board."}</span></li>
+                          <li className="flex items-start gap-2"><span className="text-blue-500">•</span> <span>{useRandomSuits ? "Place suit markers as shown on map above." : config.mapId === 'autumn' ? "Follow printed suits on board." : "Place suit markers as suggested on map above (or deal them at random)."}</span></li>
                           <li className="flex items-start gap-2"><span className="text-blue-500">•</span> <span>Place Ruins on all &quot;R&quot; slots (4 total).</span></li>
                           <li className="flex items-start gap-2"><span className="text-blue-500">•</span> <span>Place Item supply track at the top.</span></li>
                        </ul>
@@ -364,6 +374,7 @@ export default function SetupPage() {
               {config.method === 'draft' ? (
                   <AdSetDraft 
                     initialPlayerCount={config.playerCount as 2|3|4} 
+                    excludedFactionIds={excludedFactionIds}
                     onFinish={handleSelectionFinish} 
                   />
               ) : (

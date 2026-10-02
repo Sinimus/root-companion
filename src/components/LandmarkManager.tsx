@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { LANDMARKS_DATA } from '@/data/landmarks';
+import { LANDMARKS_DATA, LEGENDARY_FORGE_ITEMS } from '@/data/landmarks';
 import { ILandmark } from '@/types/engine';
 import { ArrowLeft, MapPin, Ship, Building, Trees, Store, Hammer, Plus, Minus, Shuffle, Eye, EyeOff } from 'lucide-react';
 
@@ -88,17 +88,17 @@ export function LandmarkManager({}: LandmarkManagerProps) {
   };
 
   const initializeBlackMarket = () => {
-    // Simulate creating a 3-card market deck (in a real game, these would be random cards)
+    // Three face-down cards drawn from the deck at setup
     setBlackMarketDeck(['🎴', '🎴', '🎴']);
   };
 
   const initializeLegendaryForge = () => {
-    // Start with empty forge - items will be added as they are crafted
+    // Empty until the Forge clearing's suit is chosen
     setLegendaryForgeItems([]);
   };
 
-  const addForgeItem = (item: string) => {
-    setLegendaryForgeItems(prev => [...prev, item]);
+  const setForgeSuit = (suit: keyof typeof LEGENDARY_FORGE_ITEMS) => {
+    setLegendaryForgeItems([...LEGENDARY_FORGE_ITEMS[suit]]);
   };
 
   const removeForgeItem = (index: number) => {
@@ -143,7 +143,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
             <MapPin className="w-8 h-8 text-amber-400" />
             Landmarks Manager
           </h1>
-          <p className="text-gray-400">Select and manage Marauder Expansion landmarks</p>
+          <p className="text-gray-400">Select and manage landmarks (Landmarks Pack, Underworld Expansion)</p>
         </div>
 
         {/* Controls */}
@@ -271,7 +271,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                         </div>
 
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-400">Cards remaining:</span>
+                          <span className="text-sm text-gray-400">Face-down cards (a swap keeps it at 3):</span>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => removeBlackMarketCard()}
@@ -322,15 +322,15 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                       <div className="bg-gray-800/50 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-3">
                           <h4 className="text-sm font-bold text-orange-300">Legendary Forge Items</h4>
-                          <span className="text-xs text-gray-500">Protected from battle</span>
+                          <span className="text-xs text-gray-500">Craft: +1 card, +1 VP</span>
                         </div>
 
                         <div className="mb-3">
-                          <div className="text-sm text-gray-400 mb-2">Crafted Items (2+ wood cost):</div>
+                          <div className="text-sm text-gray-400 mb-2">Items on the Forge card:</div>
 
                           {legendaryForgeItems.length === 0 ? (
                             <div className="text-center py-3 bg-gray-900/30 rounded-lg">
-                              <p className="text-xs text-gray-500 italic">No items crafted yet</p>
+                              <p className="text-xs text-gray-500 italic">No items on the card</p>
                             </div>
                           ) : (
                             <div className="space-y-2">
@@ -340,7 +340,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                                   <button
                                     onClick={() => removeForgeItem(index)}
                                     className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded transition-colors"
-                                    title="Remove item"
+                                    title="Item crafted"
                                   >
                                     <Minus className="w-3 h-3" />
                                   </button>
@@ -351,15 +351,15 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                         </div>
 
                         <div className="border-t border-gray-700 pt-3">
-                          <div className="text-sm text-gray-400 mb-2">Add crafted item:</div>
-                          <div className="grid grid-cols-2 gap-2">
-                            {['Sword', 'Hammer', 'Boots', 'Crossbow', 'Tea', 'Coin', 'Bag', 'Torches'].map(item => (
+                          <div className="text-sm text-gray-400 mb-2">Set up by the suit of the Forge clearing:</div>
+                          <div className="grid grid-cols-3 gap-2">
+                            {(['fox', 'mouse', 'rabbit'] as const).map(suit => (
                               <button
-                                key={item}
-                                onClick={() => addForgeItem(item)}
-                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded transition-colors"
+                                key={suit}
+                                onClick={() => setForgeSuit(suit)}
+                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded transition-colors capitalize"
                               >
-                                + {item}
+                                {suit}
                               </button>
                             ))}
                           </div>

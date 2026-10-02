@@ -32,29 +32,26 @@ export interface IFactionGuide {
   phases: ITurnPhase[];
 }
 
+// Timing of a hireling ability, per Law H.2.1 to H.2.4
+export type HirelingAbilityType = 'hired' | 'ability' | 'birdsong' | 'daylight';
+
+export interface IHirelingSide {
+  name: string;
+  setup?: string;
+  abilities: {
+    type: HirelingAbilityType;
+    effect: string;
+  }[];
+}
+
 export interface IHireling {
   id: string;
-  name: string;
-  description: string;
+  name: string; // Name of the promoted side
+  pack: string;
+  replacesFaction?: string; // Faction that cannot be played with this hireling (Law A.6.5)
   ruleReference?: string;
-  items?: string[]; // Pokud hireling používá items
-  controlType: 'die_roll' | 'passive';
-  promotedSide: {
-    abilities: {
-      title: string;
-      effect: string;
-      type: 'passive' | 'action' | 'setup';
-    }[];
-    markers: number; // Default control markers for promoted side
-  };
-  demotedSide: {
-    abilities: {
-      title: string;
-      effect: string;
-      type: 'passive' | 'action' | 'setup';
-    }[];
-    markers: number; // Default control markers for demoted side
-  };
+  promotedSide: IHirelingSide;
+  demotedSide: IHirelingSide;
   iconName: string; // lucide icon string match
 }
 

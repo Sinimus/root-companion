@@ -6,59 +6,62 @@
 
 import { FACTIONS_DATA, IFaction } from '@/data/factions';
 
+// Faction setup card draft, Law of Root A.8.2 and A.8.3.
+// All cards are dealt face up to a shared pool: one militant first, then one
+// card per player. Players choose from the pool; nobody holds cards in hand.
 export interface AdSetState {
-  poolFaction: string;
-  playerFactions: string[];
+  pool: string[]; // Faction ids in deal order
+  lockedFactionId: string | null; // Last card dealt, if an insurgent (A.8.2.II)
 }
 
-export function generateAdSetState(playerCount: number): AdSetState {
-  const militantFactions = FACTIONS_DATA.filter(f => f.type === 'militant');
-  const allFactions = FACTIONS_DATA;
+export interface AdSetOptions {
+  excludedFactionIds?: string[]; // Omitted factions (A.8.1) or replaced by a hireling (A.6.5)
+  includeSecondVagabond?: boolean; // A.8.1 recommends one Vagabond card
+  random?: () => number;
+}
+
+const SECOND_VAGABOND_ID = 'vagabond_2';
+
+function shuffle<T>(items: readonly T[], random: () => number): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+export function generateAdSetState(playerCount: number, options: AdSetOptions = {}): AdSetState {
+  const { excludedFactionIds = [], includeSecondVagabond = false, random = Math.random } = options;
 
   if (playerCount < 2 || playerCount > 4) {
     throw new Error(`Invalid player count: ${playerCount}. AdSet supports 2-4 players.`);
   }
 
-  // 2 players: Only militant factions
-  if (playerCount === 2) {
-    if (militantFactions.length < 2) {
-      throw new Error('Not enough militant factions for 2-player game');
-    }
+  const available = FACTIONS_DATA.filter(f =>
+    !excludedFactionIds.includes(f.id) &&
+    (includeSecondVagabond || f.id !== SECOND_VAGABOND_ID)
+  );
 
-    // Shuffle militant factions and assign to players
-    const shuffledMilitants = [...militantFactions].sort(() => Math.random() - 0.5);
-    const playerFactions = shuffledMilitants.slice(0, 2);
-
-    return {
-      poolFaction: shuffledMilitants.length > 2 ? shuffledMilitants[2].id : '',
-      playerFactions: playerFactions.map(f => f.id)
-    };
+  const militants = shuffle(available.filter(f => f.type === 'militant'), random);
+  const firstMilitant = militants[0];
+  if (!firstMilitant) {
+    throw new Error('No militant factions available for the pool');
   }
 
-  // 3+ players: 1 militant to pool, then distribute remaining
-  const shuffledMilitants = [...militantFactions].sort(() => Math.random() - 0.5);
-
-  // Take 1 militant for the pool
-  const poolMilitant = shuffledMilitants[0];
-  if (!poolMilitant) {
-    throw new Error('No militant factions available for pool');
+  // A.8.2.I: with two players the insurgent cards are removed before dealing
+  const insurgents = playerCount === 2 ? [] : available.filter(f => f.type === 'insurgent');
+  const rest = shuffle([...militants.slice(1), ...insurgents], random);
+  if (rest.length < playerCount) {
+    throw new Error(`Not enough faction setup cards for ${playerCount} players`);
   }
 
-  // Remaining militant factions + all insurgent factions
-  const remainingFactions = [
-    ...shuffledMilitants.slice(1),
-    ...allFactions.filter(f => f.type === 'insurgent')
-  ];
-
-  // Shuffle all remaining factions
-  const shuffledRemaining = remainingFactions.sort(() => Math.random() - 0.5);
-
-  // Deal factions to players
-  const playerFactions = shuffledRemaining.slice(0, playerCount);
+  const dealt = rest.slice(0, playerCount);
+  const last = dealt[dealt.length - 1];
 
   return {
-    poolFaction: poolMilitant.id,
-    playerFactions: playerFactions.map(f => f.id)
+    pool: [firstMilitant.id, ...dealt.map(f => f.id)],
+    lockedFactionId: last.type === 'insurgent' ? last.id : null
   };
 }
 
@@ -66,38 +69,21 @@ export function getFactionById(id: string): IFaction | undefined {
   return FACTIONS_DATA.find(f => f.id === id);
 }
 
-export function simulateDraftTurns(
-  initialState: AdSetState,
-  playerCount: number
-): Array<{playerIndex: number; poolChoice: string; handChoice: string}> {
-  const turns: Array<{playerIndex: number; poolChoice: string; handChoice: string}> = [];
-  const currentState = { 
-    ...initialState,
-    playerFactions: [...initialState.playerFactions]
+// A.8.2.II: the locked insurgent cannot be chosen until a militant faction has been chosen
+export function isChoosable(state: AdSetState, factionId: string, chosenFactionIds: string[]): boolean {
+  if (!state.pool.includes(factionId)) return false;
+  if (factionId !== state.lockedFactionId) return true;
+  return chosenFactionIds.some(id => getFactionById(id)?.type === 'militant');
+}
+
+export function chooseFaction(state: AdSetState, factionId: string): AdSetState {
+  return {
+    ...state,
+    pool: state.pool.filter(id => id !== factionId)
   };
+}
 
-  // Start from last player and go backwards (AdSet draft order)
-  for (let i = playerCount - 1; i >= 0; i--) {
-    const poolFaction = currentState.poolFaction;
-    const handFaction = currentState.playerFactions[i];
-
-    turns.push({
-      playerIndex: i,
-      poolChoice: poolFaction,
-      handChoice: handFaction
-    });
-
-    // For simulation purposes, randomly choose one
-    // In real implementation, this will be handled by user interaction
-    const choosesPool = Math.random() > 0.5;
-
-    if (choosesPool) {
-      // Player takes pool faction, hand faction goes to pool
-      currentState.playerFactions[i] = poolFaction;
-      currentState.poolFaction = handFaction;
-    }
-    // else: player keeps hand faction, pool stays the same
-  }
-
-  return turns;
+// A.8.3: starting with the last player in turn order and going counterclockwise
+export function draftOrder(playerCount: number): number[] {
+  return Array.from({ length: playerCount }, (_, i) => playerCount - 1 - i);
 }

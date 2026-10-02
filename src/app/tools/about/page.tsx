@@ -36,7 +36,7 @@ export default function AboutPage() {
           <div className="inline-flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-full px-4 py-1 text-sm text-gray-400">
             <span>Version 1.0.0</span>
             <span className="w-1 h-1 bg-gray-600 rounded-full"></span>
-            <span>Digital Law Updated Sept 2024</span>
+            <span>Digital Law: October 2025 edition</span>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ export default function AboutPage() {
                             <Shuffle className="w-4 h-4 text-purple-400" /> AdSet Draft
                         </h4>
                         <p className="text-sm text-gray-400 leading-relaxed">
-                            Advanced setup variant from Law of Root. Handles reverse-order drafting, militant pool management, and automatic faction assignment. Best for experienced players.
+                            Advanced setup variant from Law of Root. Handles the shared draft pool, the locked last insurgent and reverse-order choosing. Best for experienced players.
                         </p>
                     </div>
                     <div>
