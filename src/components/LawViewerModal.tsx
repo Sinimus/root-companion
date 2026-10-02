@@ -3,6 +3,7 @@
 import React from 'react';
 import { Book, X } from 'lucide-react';
 import { LawViewer } from './LawViewer';
+import { LAW_EDITION } from '@/data/law_full';
 
 interface Props {
   onClose: () => void;
@@ -20,7 +21,7 @@ export function LawViewerModal({ onClose, initialQuery }: Props) {
              <Book className="w-6 h-6 text-amber-500" />
              <div>
                 <h3 className="text-xl font-bold text-white font-serif tracking-wide">The Law of Root</h3>
-                <p className="text-xs text-gray-500">Digital Edition • Sept 2024</p>
+                <p className="text-xs text-gray-500">Digital Edition • {LAW_EDITION}</p>
              </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-full text-gray-400">

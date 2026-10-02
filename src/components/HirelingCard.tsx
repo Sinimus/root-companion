@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { IHireling } from '@/types/engine';
+import { IHireling, HirelingAbilityType } from '@/types/engine';
 import {
   Shield, Swords, Music, User, Plus, Minus, AlertTriangle,
-  ChevronDown, ChevronUp, RefreshCw, Crown, ArrowDown
+  RefreshCw, Crown, ArrowDown, Cat, Bird, Rabbit, Flame, KeyRound,
+  Ship, Sun, Pickaxe, Eye, Megaphone, Waves, Wheat
 } from 'lucide-react';
 
 interface HirelingCardProps {
@@ -19,10 +20,16 @@ interface HirelingCardProps {
 
 // Icon mapping for hirelings
 const ICON_MAP = {
-  Shield,
-  Swords,
-  Music,
-  User,
+  Shield, Swords, Music, User, Cat, Bird, Rabbit, Flame, KeyRound,
+  Ship, Sun, Pickaxe, Eye, Megaphone, Waves, Wheat,
+};
+
+// Ability timing labels, Law H.2.1 to H.2.4
+const ABILITY_LABELS: Record<HirelingAbilityType, { label: string; className: string }> = {
+  hired: { label: 'When hired', className: 'bg-yellow-900/30 text-yellow-400' },
+  ability: { label: 'Ability', className: 'bg-blue-900/30 text-blue-400' },
+  birdsong: { label: 'Start of Birdsong', className: 'bg-orange-900/30 text-orange-400' },
+  daylight: { label: 'Once per Daylight', className: 'bg-green-900/30 text-green-400' },
 };
 
 export function HirelingCard({
@@ -65,7 +72,7 @@ export function HirelingCard({
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-bold text-white text-lg">{hireling.name}</h3>
+            <h3 className="font-bold text-white text-lg">{currentSide.name}</h3>
             {isActive && (
               <div className="flex items-center gap-1">
                 {isPromoted ? (
@@ -85,15 +92,6 @@ export function HirelingCard({
               </div>
             )}
           </div>
-          {hireling.items && (
-            <div className="flex gap-1 mt-1">
-              {hireling.items.map((item, i) => (
-                <span key={i} className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded">
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
         <div className="flex flex-col gap-1">
           {isActive && onFlipState && (
@@ -132,7 +130,14 @@ export function HirelingCard({
       </div>
 
       {/* Description */}
-      <p className="text-gray-400 text-sm mb-3">{hireling.description}</p>
+      <p className="text-gray-400 text-sm mb-3">
+        {hireling.pack} · {hireling.promotedSide.name} / {hireling.demotedSide.name} (D)
+      </p>
+
+      {/* Setup */}
+      {currentSide.setup && (
+        <p className="text-red-300/80 text-xs italic mb-3">Setup: {currentSide.setup}</p>
+      )}
 
       {/* Abilities */}
       <div className="space-y-2 mb-3">
@@ -143,15 +148,12 @@ export function HirelingCard({
           `}>
             <div className="flex items-start gap-2">
               <span className={`
-                text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider
-                ${ability.type === 'passive' ? 'bg-blue-900/30 text-blue-400' :
-                  ability.type === 'action' ? 'bg-green-900/30 text-green-400' :
-                  'bg-yellow-900/30 text-yellow-400'}
+                text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0
+                ${ABILITY_LABELS[ability.type].className}
               `}>
-                {ability.type}
+                {ABILITY_LABELS[ability.type].label}
               </span>
               <div className="flex-1">
-                <h4 className="text-white font-bold text-sm mb-1">{ability.title}</h4>
                 <p className="text-gray-400 text-xs leading-relaxed">{ability.effect}</p>
               </div>
             </div>
@@ -159,13 +161,13 @@ export function HirelingCard({
         ))}
       </div>
 
-      {/* Control Markers (only for active promoted hirelings - demoted ones don't use pieces/markers) */}
-      {isActive && isPromoted && (
+      {/* Control Markers (both sides, Law H.1.2) */}
+      {isActive && (
         <div className="border-t border-gray-700 pt-3">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-bold text-gray-300">Control Markers</span>
             <div className="text-xs text-gray-500">
-              Default: {currentSide.markers}
+              Set to your control die roll
             </div>
           </div>
           <div className="flex items-center justify-between">
@@ -201,7 +203,7 @@ export function HirelingCard({
 
             {/* Visual marker indicators */}
             <div className="flex gap-1">
-              {Array.from({ length: currentSide.markers }, (_, i) => (
+              {Array.from({ length: Math.max(controlMarkers, 1) }, (_, i) => (
                 <div
                   key={i}
                   className={`
@@ -219,25 +221,16 @@ export function HirelingCard({
           {controlMarkers === 0 && (
             <div className="mt-2 flex items-center gap-2 text-red-500 text-sm font-bold">
               <AlertTriangle className="w-4 h-4" />
-              <span>RELEASE</span>
+              <span>PASS TO ANOTHER PLAYER (they roll for control)</span>
             </div>
           )}
-        </div>
-      )}
-
-      {/* Demoted hireling indicator */}
-      {isActive && !isPromoted && (
-        <div className="border-t border-gray-700 pt-3">
-          <div className="text-center">
-            <span className="text-sm text-gray-500 italic">Passive - No control markers needed</span>
-          </div>
         </div>
       )}
 
       {/* Rule Reference */}
       {hireling.ruleReference && (
         <div className="text-xs text-gray-500 font-mono text-center pt-2 border-t border-gray-800">
-          Ref: {hireling.ruleReference}
+          Law: Appendix {hireling.ruleReference}
         </div>
       )}
     </div>

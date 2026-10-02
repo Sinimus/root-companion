@@ -3,11 +3,12 @@ import { IFactionGuide } from '@/types/engine';
 export const VAGABOND_GUIDE: IFactionGuide = {
   factionId: 'vagabond_1',
   setup: [
-    '1. Place your Vagabond pawn in any forest.',
-    '2. Take starting items: 1 Boot, 1 Sword, 1 Torch, 1 Hammer, 1 Coin, 1 Bag.',
-    '3. Place all starting items in your satchel (face up/exhausted).',
-    '4. Set your starting relationship: Indifferent to all players.',
-    '5. Place your quest token on the quest track.'
+    '1. Choose a character card and place it in your Character Card slot.',
+    '2. Place your Vagabond pawn in any forest.',
+    '3. Shuffle the quest deck, draw 3 quests and place them face up near you.',
+    '4. Take the 4 ruins and the Bag, Boot, Hammer and Sword marked "R". Put one item under each ruin, shuffle and return the ruins to the map.',
+    '5. Take the "S" items listed on your character card. Tea, Coins and Bags go face up on their tracks, all other items face up in your Satchel.',
+    '6. Place a relationship marker for each other faction on the Indifferent space.'
   ],
   phases: [
     {
@@ -18,15 +19,15 @@ export const VAGABOND_GUIDE: IFactionGuide = {
         {
           id: 'refresh',
           title: 'Refresh',
-          description: 'Flip 3 exhausted items face up. Flip +2 more for each Tea in satchel.',
-          architectTip: 'Only refresh face-down (exhausted) items. Items you used last turn are exhausted.',
+          description: 'Flip 2 exhausted items face up per Tea face up on the Refresh track. Then flip 3 more exhausted items face up.',
+          architectTip: 'Tea you flip face up in this step does not count. Refresh does not repair: damaged items stay in the Damaged box.',
           ruleReference: '9.4.1',
         },
         {
           id: 'slip',
           title: 'Slip',
-          description: 'Move to an adjacent clearing or forest for FREE. Ignore all restrictions.',
-          architectTip: 'Best way to escape bad situations. Can move through hostile clearings without cost.',
+          description: 'Move to an adjacent clearing or forest without exhausting a Boot, even into a Hostile clearing.',
+          architectTip: 'Slip ignores effects that prevent moving OUT of a clearing (such as a Corvid snare). It is the only way to enter a forest.',
           ruleReference: '9.4.2',
         }
       ]
@@ -39,50 +40,50 @@ export const VAGABOND_GUIDE: IFactionGuide = {
         {
           id: 'actions_intro',
           title: 'Perform Actions',
-          description: 'Exhaust items to perform actions in any order.',
+          description: 'Exhaust items to perform actions in any order and number.',
           ruleReference: '9.5',
         },
         {
           id: 'move',
           title: 'Move',
-          description: 'Exhaust Boot. Move 2 clearings. Cost +1 Boot if moving into a Hostile clearing.',
-          architectTip: 'Movement costs are per clearing. Hostile means any enemy pieces present.',
+          description: 'Exhaust 1 Boot to move 1 clearing. Exhaust 1 extra Boot if the destination has warriors of a Hostile faction.',
+          architectTip: 'You ignore rule when moving (Nimble). You cannot move into a forest with this action, only out of one.',
           ruleReference: '9.5.1',
         },
         {
           id: 'explore',
           title: 'Explore',
-          description: 'Exhaust Torch. Take item from Ruin in clearing. Score 1 VP.',
-          architectTip: 'Ruins have 3 items. Once empty, no more VP from exploring there.',
+          description: 'Exhaust Torch. Take the item under a Ruin in your clearing. Score 1 VP.',
+          architectTip: 'Each ruin holds 1 item (2 with two Vagabonds). Taking the last item removes the ruin.',
           ruleReference: '9.5.3',
         },
         {
           id: 'aid',
           title: 'Aid',
-          description: 'Exhaust any Item. Give matching card to player in clearing. Take their Item. Improve Relationship.',
-          architectTip: 'Can only aid when you have items to give! Allies give better items. Hostile cannot be aided.',
+          description: 'Exhaust any 1 item and give a card matching your clearing to a player with pieces there. You may take 1 item from their Crafted Items box.',
+          architectTip: 'Aiding enough times in one turn advances the relationship and scores VP. You may Aid a Hostile faction to take items, but its marker does not move.',
           ruleReference: '9.5.4',
         },
         {
           id: 'quest',
           title: 'Quest',
-          description: 'Exhaust 2 items matching Quest (e.g., 2 Swords for Attack quest). Score VP OR Draw cards.',
-          architectTip: 'Score 1 VP per completed quest of that suit OR Draw 2 cards. Great for VP engine.',
+          description: 'Choose a Quest matching your clearing and exhaust the 2 items it lists. Score VP OR draw cards. Then draw a new quest.',
+          architectTip: 'Score 1 VP per completed quest of that suit (including this one) OR draw 2 cards.',
           ruleReference: '9.5.5',
         },
         {
           id: 'battle_strike',
           title: 'Battle / Strike',
-          description: 'Battle: Exhaust Sword, roll dice. Strike: Exhaust Crossbow to remove warrior without rolling.',
-          architectTip: 'Strike is guaranteed damage! Battle rolls dice but might miss.',
-          ruleReference: '9.5.2',
+          description: 'Battle: Exhaust Sword to initiate a battle. Strike: Exhaust Crossbow to remove 1 enemy warrior in your clearing without rolling.',
+          architectTip: 'In battle your maximum rolled hits equals your undamaged Swords. Strike can remove a building or token only if that enemy has no warriors there.',
+          ruleReference: '9.5.2, 9.5.6',
         },
         {
           id: 'repair_craft',
           title: 'Repair / Craft',
-          description: 'Repair: Exhaust Hammer to fix damaged item. Craft: Exhaust 2 Hammers matching clearing suit.',
-          architectTip: 'Crafting requires 2 Hammers! Can craft items, get cards, or remove tokens.',
-          ruleReference: '9.5.7',
+          description: 'Repair: Exhaust Hammer to move 1 damaged item to the Satchel. Craft: Exhaust 1 Hammer per crafting icon on the card.',
+          architectTip: 'To craft, your clearing must match every crafting icon on the card. A repaired item keeps its side (exhausted stays exhausted).',
+          ruleReference: '9.5.7, 9.5.8',
         }
       ]
     },
@@ -94,22 +95,22 @@ export const VAGABOND_GUIDE: IFactionGuide = {
         {
           id: 'rest',
           title: 'Rest',
-          description: 'If in a Forest: Repair all damaged items (flip face up).',
-          architectTip: 'Free repair! Only works in forests. Damaged items are face-down.',
+          description: 'If in a Forest: move all damaged items to your Satchel and flip them face up.',
+          architectTip: 'Free repair and refresh, only in forests. Damaged items sit in the Damaged box; face down means exhausted, not damaged.',
           ruleReference: '9.6.1',
         },
         {
           id: 'draw',
           title: 'Draw Cards',
-          description: 'Draw 1 card + 1 per Coin in satchel.',
-          architectTip: 'Coins give you more card draw, which means more flexibility in actions.',
+          description: 'Draw 1 card + 1 per Coin face up on the Coins track. Then discard down to 5 cards.',
+          architectTip: 'An exhausted Coin leaves its track and gives no draw this turn.',
           ruleReference: '9.6.2',
         },
         {
           id: 'limit',
-          title: 'Satchel Limit',
-          description: 'Discard items down to limit: 6 + 2 per Bag in satchel.',
-          architectTip: 'Must discard if over limit. Keep essential items, lose excess.',
+          title: 'Item Capacity',
+          description: 'Item limit: 6 + 2 per Bag face up on the Bags track. Count Satchel and Damaged box together and remove the excess.',
+          architectTip: 'Items on the Tea, Coins and Bags tracks do not count. Removed items leave the game permanently.',
           ruleReference: '9.6.4',
         }
       ]

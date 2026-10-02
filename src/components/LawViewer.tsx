@@ -9,6 +9,29 @@ interface Props {
   initialQuery?: string;
 }
 
+const RULE_NUMBER = /^(?:\d{1,2}|[ACGHKLMV])(?:\.[\dIVXa-h]+)*$/i;
+
+// A rule number such as "6.5.1" or "9.5, 9.6" finds that rule and everything beneath it,
+// without also matching "16.5.1". Anything else is a plain text search.
+export function searchLaw(rules: LawRule[], query: string): LawRule[] {
+  const terms = query.split(',').map(t => t.trim()).filter(Boolean);
+  if (terms.length > 0 && terms.every(t => RULE_NUMBER.test(t))) {
+    const refs = terms.map(t => t.toLowerCase());
+    return rules.filter(r => {
+      const id = r.id.toLowerCase();
+      return refs.some(ref => id === ref || id.startsWith(`${ref}.`) || (id.startsWith(ref) && /[a-h]$/.test(id.slice(ref.length))));
+    });
+  }
+
+  const lowerQ = query.trim().toLowerCase();
+  return rules.filter(r =>
+    r.id.toLowerCase().includes(lowerQ) ||
+    r.title.toLowerCase().includes(lowerQ) ||
+    r.text.toLowerCase().includes(lowerQ) ||
+    r.subsection.toLowerCase().includes(lowerQ)
+  );
+}
+
 export function LawViewer({ initialQuery = '' }: Props) {
   const [query, setQuery] = useState(initialQuery);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
@@ -32,13 +55,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
     }
 
     if (query.trim()) {
-      const lowerQ = query.toLowerCase();
-      result = result.filter(r => 
-        r.id.toLowerCase().includes(lowerQ) ||
-        r.title.toLowerCase().includes(lowerQ) ||
-        r.text.toLowerCase().includes(lowerQ) ||
-        r.subsection.toLowerCase().includes(lowerQ)
-      );
+      result = searchLaw(result, query);
     }
 
     return result;

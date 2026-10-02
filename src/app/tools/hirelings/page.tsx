@@ -65,7 +65,7 @@ export default function HirelingsPage() {
         ...prev,
         [hirelingId]: {
           id: hirelingId, // <--- Add this line
-          markers: 3, // Default 3 control markers
+          markers: 1, // Placeholder; the player sets it to their control die roll (Law H.1.2)
           isPromoted: true // Default to promoted state
         }
       }));
@@ -85,12 +85,8 @@ export default function HirelingsPage() {
       const current = prev[hirelingId];
       if (!current) return prev;
 
-      const newMarkers = current.markers + delta;
-      if (newMarkers <= 0) {
-        const newActive = { ...prev };
-        delete newActive[hirelingId];
-        return newActive;
-      }
+      // At 0 the hireling passes to another player, who rolls again (Law H.1.3)
+      const newMarkers = Math.max(0, current.markers + delta);
       return {
         ...prev,
         [hirelingId]: {
@@ -105,13 +101,10 @@ export default function HirelingsPage() {
     setActiveHirelings(prev => {
       const newActive: Record<string, ActiveHireling> = {};
       Object.entries(prev).forEach(([id, hireling]) => {
-        const newMarkers = hireling.markers - 1;
-        if (newMarkers > 0) {
-          newActive[id] = {
-            ...hireling,
-            markers: newMarkers
-          };
-        }
+        newActive[id] = {
+          ...hireling,
+          markers: Math.max(0, hireling.markers - 1)
+        };
       });
       return newActive;
     });
@@ -134,12 +127,6 @@ export default function HirelingsPage() {
 
   const availableHirelings = HIRELINGS_DATA.filter(h => !activeHirelings[h.id]);
   const activeHirelingsList = HIRELINGS_DATA.filter(h => activeHirelings[h.id]);
-
-  const getHirelingVPThreshold = (index: number) => {
-    // Hirelings unlock at 4, 8, 12 VP
-    const thresholds = [4, 8, 12];
-    return thresholds[index] || 16;
-  };
 
   return (
     <div className="min-h-screen bg-[#0a0c10] p-4 pb-20 pt-20 relative">
@@ -216,19 +203,13 @@ export default function HirelingsPage() {
           <div className="bg-gray-900/50 border border-gray-800 p-4 rounded-xl">
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="w-5 h-5 text-yellow-500" />
-              <h3 className="text-yellow-400 font-bold">Unlock Requirements</h3>
+              <h3 className="text-yellow-400 font-bold">Hireling Markers</h3>
             </div>
             <p className="text-gray-400 text-sm">
-              Hirelings become available when you reach certain VP thresholds:
+              A game uses exactly three hirelings. Hireling markers sit on the 4, 8 and 12 spaces of the score track.
+              When your score marker enters one of these spaces, take the marker and, at the end of your turn,
+              take any hireling card from the supply and roll for control.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
-              {HIRELINGS_DATA.map((hireling, index) => (
-                <div key={hireling.id} className="text-center">
-                  <div className="text-xs text-gray-500 mb-1">{hireling.name}</div>
-                  <div className="text-lg font-bold text-yellow-400">{getHirelingVPThreshold(index)} VP</div>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -252,19 +233,19 @@ export default function HirelingsPage() {
             <div className="bg-gray-900/50 border border-gray-800 p-4 rounded-xl">
               <h3 className="text-purple-300 font-bold mb-2">Gaining Control</h3>
               <ul className="text-sm text-gray-400 space-y-1">
-                <li>• Hirelings unlock at 4, 8, 12 VP</li>
-                <li>• When you gain a hireling, roll Control Die</li>
-                <li>• Start with 3 control markers by default</li>
-                <li>• Hirelings count for clearing control</li>
+                <li>• Reach the 4, 8 or 12 space to take a hireling at end of turn</li>
+                <li>• Roll the control die and place that many control markers</li>
+                <li>• Leader (or tied for most VP) counts only the gold pips</li>
+                <li>• You treat hireling pieces as your own only for rule</li>
               </ul>
             </div>
             <div className="bg-gray-900/50 border border-gray-800 p-4 rounded-xl">
               <h3 className="text-orange-300 font-bold mb-2">Losing Control</h3>
               <ul className="text-sm text-gray-400 space-y-1">
-                <li>• Lose 1 control marker each turn</li>
-                <li>• When markers reach 0, hireling is released</li>
-                <li>• Other players can then gain control</li>
-                <li>• Use &quot;End Turn Decay&quot; to simulate this</li>
+                <li>• End of your turn: remove 1 marker from each hireling gained on earlier turns</li>
+                <li>• With no markers left, give the hireling to any other player</li>
+                <li>• That player rolls for control immediately</li>
+                <li>• &quot;End Turn Decay&quot; removes one marker from each; add one back for a hireling gained this turn</li>
               </ul>
             </div>
           </div>

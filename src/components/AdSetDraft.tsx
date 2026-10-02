@@ -8,21 +8,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { generateAdSetState, getFactionById, AdSetState } from '@/utils/adsetLogic';
-import { Users, ArrowRight, ArrowLeft, Shuffle, CheckCircle, Play } from 'lucide-react';
+import { generateAdSetState, getFactionById, isChoosable, chooseFaction, AdSetState } from '@/utils/adsetLogic';
+import { Users, ArrowRight, Shuffle, CheckCircle, Play, Lock } from 'lucide-react';
 
 interface PlayerSelection {
   playerIndex: number;
   factionId: string;
-  chosenFrom: 'pool' | 'hand';
 }
 
 interface Props {
   onFinish?: (factions: string[]) => void;
   initialPlayerCount?: 2 | 3 | 4;
+  excludedFactionIds?: string[]; // Factions omitted or replaced by a hireling (Law A.6.5)
 }
 
-export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
+export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }: Props) {
   const [playerCount, setPlayerCount] = useState<2 | 3 | 4>(initialPlayerCount || 3);
   const [setupState, setSetupState] = useState<AdSetState | null>(null);
   const [currentTurn, setCurrentTurn] = useState<number>(-1);
@@ -31,7 +31,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
 
   const dealCards = () => {
     try {
-      const state = generateAdSetState(playerCount);
+      const state = generateAdSetState(playerCount, { excludedFactionIds });
       setSetupState(state);
       setCurrentTurn(playerCount - 1); // Start from last player
       setSelections([]);
@@ -42,39 +42,22 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
     }
   };
 
-  const makeSelection = (chooseFrom: 'pool' | 'hand') => {
+  const makeSelection = (factionId: string) => {
     if (!setupState || currentTurn < 0) return;
+    if (!isChoosable(setupState, factionId, selections.map(sel => sel.factionId))) return;
 
-    const poolFaction = setupState.poolFaction;
-    const handFaction = setupState.playerFactions[currentTurn];
+    const newSelections = [...selections, { playerIndex: currentTurn, factionId }];
+    setSelections(newSelections);
+    setSetupState(chooseFaction(setupState, factionId));
 
-    const newSelection: PlayerSelection = {
-      playerIndex: currentTurn,
-      factionId: chooseFrom === 'pool' ? poolFaction : handFaction,
-      chosenFrom: chooseFrom
-    };
-
-    setSelections(prev => [...prev, newSelection]);
-
-    // Update setup state for next turn
-    if (chooseFrom === 'pool') {
-      // Player takes pool faction, hand faction goes to pool
-      setSetupState(prev => ({
-        ...prev!,
-        poolFaction: handFaction,
-        playerFactions: prev!.playerFactions.map((faction, index) =>
-          index === currentTurn ? poolFaction : faction
-        )
-      }));
-    }
-    // If chooseFrom === 'hand', no changes needed - player keeps their hand faction
-
-    // Move to next turn
+    // Move to next turn (last player first, Law A.8.3)
     if (currentTurn > 0) {
       setCurrentTurn(currentTurn - 1);
     } else {
-      // Draft complete - return data to parent
-      const finalFactions = [...setupState!.playerFactions];
+      // Draft complete - return data to parent in seating order
+      const finalFactions = [...newSelections]
+        .sort((x, y) => x.playerIndex - y.playerIndex)
+        .map(sel => sel.factionId);
       if (onFinish) onFinish(finalFactions);
       setIsComplete(true);
     }
@@ -140,8 +123,9 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {Array.from({ length: playerCount }, (_, index) => {
-              const playerFactionId = setupState.playerFactions[index];
               const selection = selections.find(s => s.playerIndex === index);
+              if (!selection) return null;
+              const playerFactionId = selection.factionId;
 
               return (
                 <div key={index} className="bg-gray-800/50 p-4 rounded-lg">
@@ -149,11 +133,6 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
                     <h3 className="text-lg font-bold text-white">
                       Player {index + 1}
                     </h3>
-                    {selection && (
-                      <span className="text-xs text-gray-400">
-                        Chose from {selection.chosenFrom}
-                      </span>
-                    )}
                   </div>
                   <FactionCard factionId={playerFactionId} />
                   <Link
@@ -183,8 +162,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
   }
 
   if (setupState && currentTurn >= 0) {
-    const poolFaction = setupState.poolFaction;
-    const handFaction = setupState.playerFactions[currentTurn];
+    const chosenIds = selections.map(sel => sel.factionId);
 
     return (
       <div className="max-w-4xl mx-auto space-y-6">
@@ -203,36 +181,41 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
           <h2 className="text-2xl font-bold text-white mb-2">
             Player {currentTurn + 1}'s Turn
           </h2>
-          <p className="text-gray-300">Choose your faction from the options below</p>
+          <p className="text-gray-300">Choose one faction setup card from the pool and set it up immediately</p>
         </div>
 
-        {/* Faction Choices */}
+        {/* Faction Choices: the shared pool (Law A.8.3) */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Pool Faction */}
-          <div>
-            <h3 className="text-lg font-bold text-purple-400 mb-3 text-center">Pool Faction</h3>
-            <FactionCard factionId={poolFaction} isPool={true} />
-            <button
-              onClick={() => makeSelection('pool')}
-              className="w-full mt-4 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
-            >
-              <ArrowRight className="w-5 h-5" />
-              Choose Pool Faction
-            </button>
-          </div>
+          {setupState.pool.map(factionId => {
+            const choosable = isChoosable(setupState, factionId, chosenIds);
+            const isLocked = factionId === setupState.lockedFactionId;
 
-          {/* Hand Faction */}
-          <div>
-            <h3 className="text-lg font-bold text-gray-400 mb-3 text-center">Your Hand</h3>
-            <FactionCard factionId={handFaction} />
-            <button
-              onClick={() => makeSelection('hand')}
-              className="w-full mt-4 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
-            >
-              <CheckCircle className="w-5 h-5" />
-              Keep Hand Faction
-            </button>
-          </div>
+            return (
+              <div key={factionId}>
+                <FactionCard factionId={factionId} isPool={true} />
+                {isLocked && (
+                  <p className="mt-2 text-xs text-yellow-400 flex items-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    Last insurgent dealt: locked until a militant faction has been chosen
+                  </p>
+                )}
+                <button
+                  onClick={() => makeSelection(factionId)}
+                  disabled={!choosable}
+                  className={`
+                    w-full mt-4 px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2
+                    ${choosable
+                      ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                      : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                    }
+                  `}
+                >
+                  <ArrowRight className="w-5 h-5" />
+                  Choose
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Draft Progress */}
@@ -314,9 +297,10 @@ export function AdSetDraft({ onFinish, initialPlayerCount }: Props) {
             AdSet Draft Rules
           </h3>
           <div className="space-y-2 text-sm text-gray-400">
+            <p><strong>Pool:</strong> One militant card first, then one card per player, all face up.</p>
             <p><strong>2 Players:</strong> Only militant factions are used.</p>
-            <p><strong>3+ Players:</strong> One militant faction goes to the pool.</p>
-            <p><strong>Draft Order:</strong> Reverse player order (Last player first).</p>
+            <p><strong>Locked card:</strong> If the last card dealt is an insurgent, it cannot be chosen until a militant has been.</p>
+            <p><strong>Draft Order:</strong> Last player first, counterclockwise. Set up your faction as soon as you choose.</p>
           </div>
         </div>
 

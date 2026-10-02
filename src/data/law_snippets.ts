@@ -2,7 +2,7 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   // Core Concepts
   'rule': {
     title: 'Rule',
-    text: 'You rule a clearing if you have the MOST total Warriors + Buildings. Ties = nobody rules (except Eyrie always wins ties, Lizards in sympathetic clearings).'
+    text: 'You rule a clearing if you have the MOST total Warriors + Buildings. Tokens and pawns do not count. Ties = nobody rules (except: the Eyrie rule on ties if they have a piece there; the Lizard Cult rules any clearing with one of its Gardens).'
   },
   'move': {
     title: 'Move',
@@ -10,11 +10,11 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'battle': {
     title: 'Battle',
-    text: 'Roll dice equal to your warriors. Attacker takes the higher die, Defender takes the lower. Maximum hits = number of your warriors. Remove pieces 1:1.'
+    text: 'Roll the two battle dice. Attacker deals the higher roll, Defender the lower. Maximum rolled hits = number of your warriors in the clearing. Extra hits are not limited. Each hit removes one piece, warriors first.'
   },
   'craft': {
     title: 'Craft',
-    text: 'Activate pieces in clearings matching the card\'s suit to use the card\'s effect. Each piece can only be used once per turn for crafting.'
+    text: 'Activate crafting pieces in clearings matching the suits in the card\'s crafting cost. Each piece can only be activated once per turn.'
   },
   'recruit': {
     title: 'Recruit',
@@ -28,7 +28,7 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   // Marquise de Cat
   'march': {
     title: 'March (Marquise)',
-    text: 'Take up to 2 Move actions. Can move multiple warriors different distances, total cost cannot exceed 2 moves.'
+    text: 'Take up to 2 moves. You may move the same or separate groups of warriors.'
   },
   'overwork': {
     title: 'Overwork',
@@ -36,37 +36,37 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'build': {
     title: 'Build (Marquise)',
-    text: 'Spend Wood equal to the building\'s cost to place it in a clearing you rule. Sawmill = 1 Wood, Workshop = 2 Wood, Recruiter = 2 Wood.'
+    text: 'Choose a clearing you rule with an open slot. Pay the Wood cost shown at the top of the building\'s column on your board (it rises with each building of that type), using Wood connected through clearings you rule. Score the VP on the space uncovered.'
   },
 
   // Eyrie Dynasties
   'turmoil': {
     title: 'Turmoil',
-    text: 'If you cannot complete a Decree action: Lose 1 VP per Bird card in hand, discard your entire Decree, change your Leader, and your Daylight phase ends immediately.'
+    text: 'If you cannot fully take a Decree action: lose 1 VP per Bird card on the Decree (including Loyal Viziers), discard the Decree except the Loyal Viziers, replace your Leader, and end Daylight immediately.'
   },
   'decree': {
     title: 'Decree',
-    text: 'Your action plan for the turn. Must complete one action from each column (left to right), or suffer Turmoil.'
+    text: 'Your action plan for the turn. Resolve columns left to right and resolve EVERY card in each column, or suffer Turmoil.'
   },
 
   // Woodland Alliance
   'revolt': {
     title: 'Revolt',
-    text: 'Spend 2 Supporters. Destroy ALL enemy pieces (Buildings, Tokens, Warriors) in a sympathetic clearing. Place your Base + 3 Warriors there.'
+    text: 'Spend 2 Supporters matching a sympathetic clearing. Remove ALL enemy pieces there, place the matching Base and 1 Warrior per sympathetic clearing of that suit, and gain 1 Officer.'
   },
   'organize': {
     title: 'Organize',
-    text: 'Remove 1 of your warriors from the map to place a Sympathy token in that same clearing.'
+    text: 'Remove 1 Alliance warrior from an unsympathetic clearing to place a Sympathy token there, and score the VP on the space uncovered.'
   },
   'spread': {
     title: 'Spread Sympathy',
-    text: 'Place Sympathy tokens in clearings adjacent to your existing Sympathy. Cost increases with distance from starting sympathy.'
+    text: 'Place a Sympathy token in an unsympathetic clearing adjacent to a sympathetic one. Spend matching Supporters equal to the cost printed above the token on your Sympathy track (+1 under Martial Law).'
   },
 
   // Vagabond
   'aid': {
     title: 'Aid',
-    text: 'Exhaust any item + Give matching card to player in clearing. Take one of their items. Your relationship improves (Indifferent -> Allied -> Hostile cycle).'
+    text: 'Exhaust any item and give a card matching your clearing to a player with pieces there. You may take one item from their Crafted Items box. Enough Aid in one turn advances that faction along the Allied track; a Hostile faction can be aided but its marker does not move.'
   },
   'explore': {
     title: 'Explore',
@@ -78,17 +78,17 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'repair': {
     title: 'Repair',
-    text: 'Exhaust Hammer. Fix one damaged (face-down) item, flipping it face-up.'
+    text: 'Exhaust Hammer. Move one damaged item from the Damaged box to your Satchel, keeping it on its current side.'
   },
   'quest': {
     title: 'Quest',
-    text: 'Exhaust 2 items matching the Quest symbol. Either score 1 VP per completed quest of that suit OR draw 2 cards.'
+    text: 'Choose a Quest matching your clearing and exhaust the 2 items it lists. Either score 1 VP per completed quest of that suit OR draw 2 cards.'
   },
 
   // Riverfolk Company
   'commit': {
     title: 'Commit',
-    text: 'Move warriors from Funds box to Committed box. These warriors can be used for actions this turn.'
+    text: 'Move a warrior from the Funds box to the Committed box to pay for an action. Committed funds return to Funds next Birdsong; spent funds go back to their owner\'s supply.'
   },
   'dividends': {
     title: 'Dividends',
@@ -96,7 +96,7 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'services': {
     title: 'Services',
-    text: 'Other players can pay you to use your Hirelings: Hand Cards, Riverboats (movement), or Mercenaries (extra actions).'
+    text: 'At the start of their Birdsong other players may buy Riverfolk services by paying warriors into your Payments box: Hand Card (take a card from the Riverfolk hand), Riverboats (treat rivers as paths), Mercenaries (treat Riverfolk warriors as their own for rule and battle).'
   },
 
   // Lizard Cult
@@ -106,39 +106,39 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'convert': {
     title: 'Convert',
-    text: 'Spend 2 Acolytes. Remove one enemy warrior in an Outcast clearing and replace it with one of your Acolytes.'
+    text: 'Spend 2 Acolytes. Replace one enemy warrior in an Outcast clearing with a Cult warrior.'
   },
   'sanctify': {
     title: 'Sanctify',
-    text: 'Spend 3 Acolytes. Score 1 VP for each Garden in an Outcast clearing where you have an Acolyte.'
+    text: 'Spend 3 Acolytes. Replace one enemy building in an Outcast clearing with a Garden of the Outcast suit.'
   },
   'rituals': {
     title: 'Rituals',
-    text: 'Reveal cards from hand to perform actions. Cards are not discarded unless specified (Sacrifice ritual).'
+    text: 'Reveal cards from hand, one ritual per card. Revealed cards return to your hand in Evening, except cards spent to Score. Sacrifice requires revealing a bird card.'
   },
 
-  // Duchy of Burgundy
+  // Underground Duchy
   'sway': {
     title: 'Sway',
-    text: 'Reveal cards matching clearings you occupy to gain a Minister of that suit. Bird cards help but are discarded.'
+    text: 'Choose an unswayed Minister of a rank (Squire, Noble, Lord) you still have a Crown for. Reveal the number of cards it lists; each card needs its own matching clearing with a Duchy piece. Revealed bird cards are discarded in Evening.'
   },
   'dig': {
     title: 'Dig',
-    text: 'Spend a card matching the clearing to place a Tunnel. Allows instant movement of warriors from Burrow to any tunnel.'
+    text: 'Spend a card to place a Tunnel in a matching clearing without one, then move 1 to 4 warriors from the Burrow to that clearing.'
   },
   'parliament': {
     title: 'Parliament',
-    text: 'Perform actions based on your Swayed Ministers. Duke = 3 actions, Duchess = 2 actions, Knight = 1 action.'
+    text: 'Take the action of each Swayed Minister once, in any order. Every Minister has its own action (for example Captain: battle; Banker: spend cards for VP; Earl of Stone: 1 VP per Citadel on the map).'
   },
 
   // Corvid Conspiracy
   'trick': {
     title: 'Trick',
-    text: 'Swap two Plot tokens on the map. Can exchange positions to manipulate the board.'
+    text: 'Swap two Plot tokens on the map. Both must be face up or both face down.'
   },
   'flip': {
     title: 'Flip',
-    text: 'Reveal a face-down Plot token. Score 1 VP immediately for each face-up Plot on the map.'
+    text: 'Flip a face-down Plot face up in a clearing with a Corvid warrior. Score 1 VP for each face-up Plot on the map, then resolve a Bomb or Extortion.'
   },
   'plot': {
     title: 'Plot',
@@ -148,39 +148,39 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   // Keepers in Iron
   'delve': {
     title: 'Delve',
-    text: 'Move Keeper into a forest to find a Relic. Check if your Retinue card suit matches any forest adjacency.'
+    text: 'After Battle, in a clearing you rule with a Keeper warrior: flip a Relic in an adjacent forest and move it into the clearing. If you rule fewer clearings adjacent to that forest than the Relic\'s value, discard the Retinue card used.'
   },
   'recover': {
     title: 'Recover',
-    text: 'Move a Relic to a Waystation. Score 3 VP immediately. Check if your Retinue card suit matches the Waystation suit.'
+    text: 'Take a Relic from a clearing with a Waystation of the same type and place it on your board. Score its value (+2 VP if you filled a Relics column). If you rule fewer clearings of that suit than the Relic\'s value, discard the Retinue card used.'
   },
   'retinue': {
     title: 'Retinue',
-    text: 'Your hand of cards that determines available actions. Each card provides specific actions based on its suit.'
+    text: 'Cards tucked into the three columns of your faction board. The column sets the action (Move / Battle then Delve / Move or Recover), the card\'s suit sets the clearing. Maximum 10 cards.'
   },
 
-  // Hundred Hills
+  // Lord of the Hundreds
   'raze': {
     title: 'Raze',
-    text: 'Remove all enemy buildings and tokens in clearings with your Mobs. Roll Mob Die and may spread Mob to adjacent clearing.'
+    text: 'In each clearing with a Mob: remove all enemy buildings and tokens and take an item from a ruin there. Then roll the Mob Die and place a Mob in a matching clearing adjacent to a Mob.'
   },
   'incite': {
     title: 'Incite',
-    text: 'Discard a card to place a Mob token in a matching clearing. Mobs spread automatically during Raze.'
+    text: 'Spend a card to place a Mob token in a matching clearing that has no Mob and has a Hundreds warrior.'
   },
   'oppress': {
     title: 'Oppress',
-    text: 'Score 1 VP for each clearing you Rule that has NO enemy pieces. Complete control required.'
+    text: 'Count clearings you Rule with a Hundreds piece and NO enemy pieces. 1-2 clearings: 1 VP. 3-4: 2 VP. 5: 3 VP. 6+: 4 VP.'
   },
   'mood': {
     title: 'Mood',
-    text: 'Choose one of three Mood cards each turn. Provides special bonuses but restricts which Items you can hold.'
+    text: 'Each Birdsong you must switch to a different Mood card. You cannot pick a Mood whose item is in your Hoard. There are 8 Moods, each granting an ability for the turn.'
   },
 
   // Additional Core Terms
   'ambush': {
     title: 'Ambush',
-    text: 'Card played by defender before dice roll. Deals 2 automatic hits. Cancelled if attacker also plays Ambush.'
+    text: 'Played by the defender before the roll, matching the clearing. Deals 2 hits immediately. Cancelled if the attacker also plays a matching Ambush.'
   },
   'favor': {
     title: 'Favor Cards',
@@ -188,6 +188,6 @@ export const LAW_SNIPPETS: Record<string, { title: string; text: string }> = {
   },
   'partisans': {
     title: 'Partisan Cards',
-    text: 'Exiles deck only. Deal extra hits in battle but require discarding matching cards from hand.'
+    text: 'Exiles and Partisans deck only. In battle in clearings of the card\'s suit you may deal 1 extra hit, then discard all your cards except those of that suit.'
   }
 };

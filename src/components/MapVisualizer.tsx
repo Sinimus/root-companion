@@ -29,7 +29,7 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
        <svg viewBox="0 0 100 100" className="w-full h-full relative z-10">
           {/* Special Feature: LAKE */}
           {mapId === 'lake' && (
-             <circle cx="50" cy="50" r="25" fill="#3B82F6" fillOpacity="0.2" stroke="#3B82F6" strokeWidth="0.5" strokeDasharray="2 2" />
+             <ellipse cx="50" cy="55" rx="20" ry="16" fill="#3B82F6" fillOpacity="0.2" stroke="#3B82F6" strokeWidth="0.5" strokeDasharray="2 2" />
           )}
 
           {/* Paths */}
@@ -42,7 +42,7 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
                  key={idx}
                  x1={from.x} y1={from.y}
                  x2={to.x} y2={to.y}
-                 stroke={path.isClosed ? "#8b5a2b" : "#fff"}
+                 stroke={path.isClosed ? "#8b5a2b" : path.river ? "#3B82F6" : "#fff"}
                  strokeWidth={path.isClosed ? "3" : "2"}
                  strokeOpacity={path.isClosed ? "0.4" : "0.6"}
                  strokeDasharray={path.isClosed ? "1 1" : "none"}
@@ -89,7 +89,7 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
                   {c.hasRuin && (
                     <rect x={c.x - 2.5} y={c.y + 3.5} width="5" height="1.5" fill="#333" rx="0.2" />
                   )}
-                  {mapId === 'lake' && c.id === 1 && (
+                  {c.ferryStart && (
                     <foreignObject x={c.x + 4} y={c.y - 4} width="6" height="6">
                         <Anchor className="text-blue-600 w-full h-full drop-shadow-sm" />
                     </foreignObject>

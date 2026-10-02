@@ -80,10 +80,10 @@ export default function DeckPage() {
                           <div className="space-y-2">
                              <h4 className="font-bold text-white text-sm">Key Features:</h4>
                              <ul className="space-y-1 text-sm text-gray-300">
-                                <li>• <strong>Ambush:</strong> 5 cards (1/suit + 2 birds)</li>
+                                <li>• <strong>Ambush:</strong> 5 cards (fox, rabbit, mouse + 2 birds)</li>
                                 <li>• <strong>Dominance:</strong> 4 cards</li>
                                 <li>• <strong>Item Crafting:</strong> Focus on VP generation</li>
-                                <li>• <strong>Stand and Deliver:</strong> Card draw mechanics</li>
+                                <li>• <strong>Stand and Deliver:</strong> Take a random card from an enemy, who scores a point</li>
                              </ul>
                           </div>
                        </div>
@@ -103,13 +103,13 @@ export default function DeckPage() {
                                <Zap className="w-4 h-4" />
                                Partisan Cards
                              </h3>
-                             <p className="text-xs text-gray-400">Deal extra hits in battle but require discarding matching cards from hand.</p>
+                             <p className="text-xs text-gray-400">In battle in clearings of their suit, deal one extra hit, then discard all your cards except that suit.</p>
                           </div>
 
                           <div className="bg-gray-800 p-3 rounded-lg">
                              <h4 className="font-bold text-white text-sm mb-2">Key Cards:</h4>
                              <ul className="space-y-1 text-xs text-gray-400">
-                                <li>• <strong>Coffin Makers:</strong> Score points when warriors die</li>
+                                <li>• <strong>Coffin Makers:</strong> Score one point per five removed warriors collected</li>
                                 <li>• <strong>Corvid Planners:</strong> Move without ruling clearings</li>
                                 <li>• <strong>False Orders:</strong> Force enemy warrior movement</li>
                                 <li>• <strong>Saboteurs:</strong> Discard enemy crafted cards</li>

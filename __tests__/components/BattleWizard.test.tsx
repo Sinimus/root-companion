@@ -144,7 +144,21 @@ describe('BattleWizard Component', () => {
 
     const scores = screen.getAllByText(/[0-9]+/, { selector: '.text-5xl' });
     expect(scores[0]).toHaveTextContent('0'); // Attacker hit reduced to 0
-    expect(screen.getByText(/Defender ignores ALL rolled hits taken/)).toBeInTheDocument();
+    expect(screen.getByText(/Defender ignores all ROLLED hits taken/)).toBeInTheDocument();
+  });
+
+  it('keeps extra hits when Armorers ignores the rolled hits (Law 4.3.5.I)', async () => {
+    render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
+
+    fireEvent.click(screen.getByText('Advanced Cards'));
+    fireEvent.click(screen.getByLabelText(/Armorers/));
+    fireEvent.click(screen.getByLabelText(/Brutal Tactics/));
+
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0.9).mockReturnValueOnce(0.1); // 3, 0
+    fireEvent.click(screen.getByText('FIGHT'));
+
+    const scores = screen.getAllByText(/[0-9]+/, { selector: '.text-5xl' });
+    expect(scores[0]).toHaveTextContent('1'); // 3 rolled hits ignored, 1 extra hit lands
   });
 
   it('correctly calculates Ambush (+2 Defender Hits)', async () => {
