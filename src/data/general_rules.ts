@@ -25,7 +25,7 @@ export const DECK_INFO = {
     features: [
       'No Favors: Less board nuking.',
       'Partisans: In battle in clearings of their suit, deal 1 extra hit, then discard all your cards except that suit.',
-      'Coffin Makers: Score points when warriors die.',
+      'Coffin Makers: Collects removed warriors; score one point per five at start of Birdsong.',
       'False Orders: Move enemy warriors.',
       'Corvid Planners: Ignore Rule for movement.'
     ]

@@ -245,7 +245,7 @@ export default function HirelingsPage() {
                 <li>• End of your turn: remove 1 marker from each hireling gained on earlier turns</li>
                 <li>• With no markers left, give the hireling to any other player</li>
                 <li>• That player rolls for control immediately</li>
-                <li>• Use &quot;End Turn Decay&quot; to remove one marker from each</li>
+                <li>• &quot;End Turn Decay&quot; removes one marker from each; add one back for a hireling gained this turn</li>
               </ul>
             </div>
           </div>
