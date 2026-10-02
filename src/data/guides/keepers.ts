@@ -3,11 +3,12 @@ import { IFactionGuide } from '@/types/engine';
 export const KEEPERS_GUIDE: IFactionGuide = {
   factionId: 'keepers',
   setup: [
-    '1. Place your 3 starting Waystations in 3 different clearings.',
-    '2. Place 1 Warrior on each Waystation.',
-    '3. Place 3 additional Warriors in clearings with Waystations.',
-    '4. Place your Keeper of Keys token in a clearing with a Waystation.',
-    '5. Place 1 Relic in each of 3 different forests.'
+    '1. Shuffle all 12 Relics face down (value hidden) and place one randomly in each forest. Form a supply of 15 Warriors.',
+    '2. Place 4 Warriors in a corner clearing that is not another player\'s starting corner (diagonally opposite one if possible).',
+    '3. Place 4 Warriors in a map-edge clearing adjacent to that corner.',
+    '4. Place the remaining Relics randomly, as evenly as possible, among forests not adjacent to clearings with your warriors.',
+    '5. Tuck one Faithful Retainer card into each Retinue slot.',
+    '6. Place your 3 Waystations on the Waystations spaces of your faction board.'
   ],
   phases: [
     {
@@ -18,21 +19,21 @@ export const KEEPERS_GUIDE: IFactionGuide = {
         {
           id: 'encamp',
           title: 'Encamp',
-          description: 'Replace one of your warriors with a Waystation in the same clearing.',
+          description: 'Once per clearing, you may replace a Keeper warrior with a Waystation (either side up).',
           architectTip: 'Waystations give crafting slots and help you Rule. Build them in key clearings.',
           ruleReference: '15.4.1',
         },
         {
           id: 'decamp',
           title: 'Decamp',
-          description: 'Replace one of your Waystations with a warrior in the same clearing.',
+          description: 'Once per clearing, you may replace a Waystation with a Keeper warrior.',
           architectTip: 'Sometimes you need warriors more than Waystations. Flexibility is key.',
           ruleReference: '15.4.2',
         },
         {
           id: 'recruit',
           title: 'Recruit',
-          description: 'Discard a card matching the clearing suit to place 2 warriors at a matching Waystation.',
+          description: 'Any number of times: spend a card to place 2 warriors at a matching Waystation.',
           architectTip: 'Recruit 2 warriors at once! Great for building numbers quickly.',
           ruleReference: '15.4.3',
         }
@@ -52,10 +53,9 @@ export const KEEPERS_GUIDE: IFactionGuide = {
         {
           id: 'retinue',
           title: 'Act with Retinue',
-          description: 'Perform actions for each card in Retinue: Move, Battle, Delve (find Relic), Recover (score Relic).',
-          architectTip: 'Delve: Move Keeper into forest to get Relic. Recover: Return Relic to Waystation to score 3 VP.',
+          description: 'Left to right, you may act once per card in each Retinue column, in a clearing matching the card: Move / Battle then Delve / Move or Recover.',
+          architectTip: 'Delve: in a clearing you rule with a Keeper warrior, flip a Relic in an adjacent forest and move it into the clearing. Recover: take a Relic matching a Waystation in its clearing and score its value (1 to 3), +2 VP for filling a Relics column. Ruling fewer clearings than the Relic\'s value costs you the Retinue card.',
           ruleReference: '15.5.2',
-          required: true,
         }
       ]
     },
@@ -67,15 +67,15 @@ export const KEEPERS_GUIDE: IFactionGuide = {
         {
           id: 'live_off_land',
           title: 'Live Off the Land',
-          description: 'Remove 1 warrior from each of your clearings with 4+ total Keepers (warriors + waystations).',
+          description: 'Remove 1 Keeper warrior from each clearing that has 4 or more Keeper warriors.',
           architectTip: 'Limits your army size in each clearing. Balance between control and overpopulation.',
           ruleReference: '15.6.1',
         },
         {
           id: 'gather',
           title: 'Gather Retinue',
-          description: 'Add one card from hand to Retinue OR shift one card to the next day section.',
-          architectTip: 'Build your Retinue over time for more actions. Plan which cards for which days.',
+          description: 'Add any number of cards from hand to any Retinue slots, OR shift one Retinue card to a different slot. Maximum 10 cards.',
+          architectTip: 'Build your Retinue over time for more actions. The column sets the action, the suit sets the clearing.',
           ruleReference: '15.6.2',
         },
         {

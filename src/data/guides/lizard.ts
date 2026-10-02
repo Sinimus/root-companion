@@ -3,11 +3,11 @@ import { IFactionGuide } from '@/types/engine';
 export const LIZARD_GUIDE: IFactionGuide = {
   factionId: 'cult',
   setup: [
-    '1. Place your Garden in a corner clearing.',
-    '2. Place 3 Gardens in adjacent clearings.',
-    '3. Place 1 Warrior in each Garden clearing.',
-    '4. Place your Lost Souls track at 0.',
-    '5. Draw 5 starting cards.'
+    '1. Form a supply of 25 Warriors.',
+    '2. Place 4 Warriors and 1 Garden of the matching suit in a corner clearing that is not another player\'s starting corner (diagonally opposite one if possible).',
+    '3. Place 1 Warrior in each clearing adjacent to that corner.',
+    '4. Place the Outcast marker on any suit space of the Outcast box.',
+    '5. Place your 14 remaining Gardens on the matching spaces of your Gardens tracks.'
   ],
   phases: [
     {
@@ -18,22 +18,22 @@ export const LIZARD_GUIDE: IFactionGuide = {
         {
           id: 'adjust_outcast',
           title: 'Adjust Outcast',
-          description: 'Check Lost Souls cards. Most common suit becomes Outcast. If tie, choose.',
-          architectTip: 'If Outcast suit stays the same, it becomes HATED (-1 cost for conspiracies this turn).',
+          description: 'Check Lost Souls cards, ignoring birds. The suit with the most cards becomes the Outcast. On a tie the marker stays where it is and flips to Hated.',
+          architectTip: 'If the Outcast suit stays the same, it becomes HATED (-1 Acolyte cost for conspiracies this turn).',
           ruleReference: '10.4.1',
         },
         {
           id: 'discard_souls',
           title: 'Discard Lost Souls',
-          description: 'Move all cards from Lost Souls box to the discard pile.',
-          architectTip: 'Clears your Lost Souls for new converts this turn.',
+          description: 'Move all cards from the Lost Souls pile to the discard pile.',
+          architectTip: 'Every card any player spends or discards goes to Lost Souls first, so the whole table shapes your next Outcast.',
           ruleReference: '10.4.2',
         },
         {
           id: 'conspiracies',
           title: 'Perform Conspiracies',
           description: 'Spend Acolytes in Outcast clearings: Crusade (2 acolytes), Convert (2 acolytes), Sanctify (3 acolytes).',
-          architectTip: 'Crusade: Place Garden + Warrior. Convert: Enemy warrior becomes acolyte. Sanctify: Score VP.',
+          architectTip: 'Crusade: battle in an Outcast clearing, or move from one and then battle in the destination. Convert: replace an enemy warrior with a Cult warrior. Sanctify: replace an enemy building with a Garden of the Outcast suit.',
           ruleReference: '10.4.3',
         }
       ]
@@ -46,8 +46,8 @@ export const LIZARD_GUIDE: IFactionGuide = {
         {
           id: 'rituals',
           title: 'Perform Rituals',
-          description: 'Reveal cards from hand to perform: Build (2 matching suit), Recruit (1 matching), Score (2 matching), Sacrifice (any 2).',
-          architectTip: 'Hatred of Birds: Bird cards are NOT wild for rituals (except Sacrifice). Must match suit exactly.',
+          description: 'Reveal cards from hand, one ritual per card: Build (Garden in a matching clearing you rule), Recruit (Warrior in a matching clearing), Score (spend the card to score for Gardens of its suit, once per suit per turn), Sacrifice (reveal a bird to place a Warrior in the Acolytes box).',
+          architectTip: 'Hatred of Birds: Bird cards are NOT wild for rituals. A bird card can only be revealed for Sacrifice.',
           ruleReference: '10.5',
         }
       ]
@@ -61,20 +61,20 @@ export const LIZARD_GUIDE: IFactionGuide = {
           id: 'return_cards',
           title: 'Return Cards',
           description: 'Return all cards revealed for rituals to your hand.',
-          architectTip: 'Your ritual cards are not consumed! You can reuse them next turn.',
+          architectTip: 'Revealed cards come back to your hand, except cards spent to Score, which go to Lost Souls.',
           ruleReference: '10.6.1',
         },
         {
           id: 'craft',
           title: 'Craft',
-          description: 'Craft using Gardens matching the Outcast suit.',
-          architectTip: 'Only Gardens in Outcast suit clearings can craft. Plan your Outcast choice carefully.',
+          description: 'Craft by activating Gardens whose printed suit matches the Outcast suit.',
+          architectTip: 'Only Gardens of the Outcast suit can craft. Plan your Outcast carefully.',
           ruleReference: '10.6.2',
         },
         {
           id: 'draw',
           title: 'Draw & Discard',
-          description: 'Draw 1 card +1 per bonus icon on Gardens track. Discard down to 5.',
+          description: 'Draw 1 card +1 per uncovered draw bonus. Discard down to 5.',
           architectTip: 'Build more Gardens to increase card draw and crafting capacity.',
           ruleReference: '10.6.3',
         }

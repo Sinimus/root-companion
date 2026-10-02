@@ -3,11 +3,10 @@ import { IFactionGuide } from '@/types/engine';
 export const HUNDREDS_GUIDE: IFactionGuide = {
   factionId: 'hundreds',
   setup: [
-    '1. Place your Stronghold in a corner clearing.',
-    '2. Place your Warlord in the Stronghold clearing.',
-    '3. Place 5 Warriors in the Stronghold clearing.',
-    '4. Place your Mob Die on the Warlord space.',
-    '5. Choose a starting Mood and draw 5 cards.'
+    '1. Form supplies of 20 Warriors, 1 Warlord and 6 Strongholds.',
+    '2. Place your Warlord, 4 Warriors and 1 Stronghold in a corner clearing that is not another player\'s starting corner (diagonally opposite one if possible).',
+    '3. Place the four "R" items randomly under the ruins, unless this has already been done.',
+    '4. Place the Stubborn mood card on your Mood Card slot.'
   ],
   phases: [
     {
@@ -18,7 +17,7 @@ export const HUNDREDS_GUIDE: IFactionGuide = {
         {
           id: 'raze',
           title: 'Raze',
-          description: 'Remove enemy buildings/tokens in clearings with Mobs. Roll Mob Die to spread Mob to adjacent clearing.',
+          description: 'In each clearing with a Mob: remove all enemy buildings and tokens and take 1 item from a ruin there. Then roll the Mob Die once and place a Mob in a matching clearing without one that is adjacent to a Mob.',
           architectTip: 'Mobs are your main weapon! Spread them to pressure multiple areas.',
           ruleReference: '14.4.1',
         },
@@ -32,14 +31,14 @@ export const HUNDREDS_GUIDE: IFactionGuide = {
         {
           id: 'anoint',
           title: 'Anoint',
-          description: 'If Warlord is off-map, replace one of your warriors with Warlord in any clearing you rule.',
+          description: 'If the Warlord is off the map, replace any Hundreds warrior on the map with the Warlord. If you cannot, place the Warlord in any clearing.',
           architectTip: 'Keep Warlord safe but active! Dead Warlord = big problems.',
           ruleReference: '14.4.3',
         },
         {
           id: 'mood',
           title: 'Choose Mood',
-          description: 'Select a new Mood card. Cannot choose Mood if you have matching Item in your Hoard.',
+          description: 'You must switch to a different Mood card. You cannot choose a Mood whose item is in your Hoard.',
           architectTip: 'Moods give special abilities but restrict Item choices. Plan ahead!',
           ruleReference: '14.4.4',
         }
@@ -59,14 +58,14 @@ export const HUNDREDS_GUIDE: IFactionGuide = {
         {
           id: 'command',
           title: 'Command',
-          description: 'Take actions equal to Command value: Move, Battle, Build Stronghold.',
-          architectTip: 'Looters: In battle, you can choose to deal 0 hits to steal an Item instead (if you rule clearing).',
+          description: 'Take up to Command actions: Move, Battle, Build (spend a card to place a Stronghold in a matching clearing you rule).',
+          architectTip: 'Looters: As attacker you may declare a loot. You deal no rolled hits (extra hits still count); if you rule the clearing after the battle, take 1 item from the defender\'s Crafted Items box.',
           ruleReference: '14.5.2',
         },
         {
           id: 'advance',
           title: 'Advance',
-          description: 'Take actions equal to Prowess value: Move Warlord (and army with him), Battle.',
+          description: 'Up to Prowess times: move the Warlord with any Hundreds warriors, then you may battle in the Warlord\'s clearing.',
           architectTip: 'Warlord moves with army! Use this to threaten multiple areas quickly.',
           ruleReference: '14.5.3',
         }
@@ -80,15 +79,15 @@ export const HUNDREDS_GUIDE: IFactionGuide = {
         {
           id: 'incite',
           title: 'Incite',
-          description: 'Discard a card to place a Mob token in a matching clearing.',
+          description: 'Any number of times: spend a card to place a Mob token in a matching clearing that has no Mob and has a Hundreds warrior (the Warlord counts).',
           architectTip: 'Mobs spread automatically during Raze. Place them strategically!',
           ruleReference: '14.6.1',
         },
         {
           id: 'oppress',
           title: 'Oppress',
-          description: 'Score 1 VP for each clearing you Rule that has NO enemy pieces.',
-          architectTip: 'Control clearings completely to score VPs. Remove enemy presence to maximize scoring.',
+          description: 'Count clearings you Rule that have a Hundreds piece and NO enemy pieces. 1-2 clearings: 1 VP. 3-4: 2 VP. 5: 3 VP. 6+: 4 VP.',
+          architectTip: 'Any enemy piece, even a single token, disqualifies the clearing. Mobs clear buildings and tokens for you.',
           ruleReference: '14.6.2',
         },
         {

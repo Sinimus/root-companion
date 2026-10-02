@@ -3,11 +3,11 @@ import { IFactionGuide } from '@/types/engine';
 export const MARQUISE_GUIDE: IFactionGuide = {
   factionId: 'marquise',
   setup: [
-    '1. Place Keep token in a corner clearing.',
-    '2. Place 1 Warrior in each adjacent clearing.',
-    '3. Place 1 Warrior in each other clearing (except opposite corner).',
-    '4. Place 1 Sawmill, 1 Workshop, 1 Recruiter in the Keep clearing.',
-    '5. Fill your tracks with buildings.'
+    '1. Form supplies of 25 Warriors and 8 Wood. Place the Keep token in a corner clearing.',
+    '2. Place 1 Warrior in the Keep clearing and in each adjacent clearing.',
+    '3. Place 1 Warrior in each other clearing, except the diagonally opposite corner.',
+    '4. Place 1 Sawmill, 1 Workshop, 1 Recruiter among the Keep clearing and its adjacent clearings, in any combination.',
+    '5. Fill your Buildings tracks with the remaining 5 Sawmills, 5 Workshops and 5 Recruiters, leaving the leftmost space of each track empty.'
   ],
   strategy: {
     summary: "Control and Production. You are the engine builder. Keep it cool, control is everything.",
@@ -32,9 +32,9 @@ export const MARQUISE_GUIDE: IFactionGuide = {
       title: 'Daylight',
       color: 'border-yellow-500',
       steps: [
-        { id: 'craft', title: 'Craft', description: 'Activate Workshops to craft cards. (Spend slots, not wood).', ruleReference: '6.5.1' },
-        { id: 'actions', title: 'Actions', description: 'Take up to 3 Actions (+1 per Bird card spent):', ruleReference: '6.5.2',
-          architectTip: 'Battle: Fight. March: 2 Moves. Recruit: 1 Warrior at every Recruiter. Build: Spend Wood to place building. Overwork: Spend card to place Wood.'
+        { id: 'craft', title: 'Craft', description: 'Activate Workshops to craft cards. (Each Workshop once per turn; crafting does not cost wood.)', ruleReference: '6.5' },
+        { id: 'actions', title: 'Actions', description: 'Take up to 3 Actions (+1 per Bird card spent):', ruleReference: '6.5',
+          architectTip: 'Battle: Fight. March: 2 Moves. Recruit: 1 Warrior at every Recruiter (once per turn). Build: Spend Wood to place building. Overwork: Spend card to place Wood.'
         }
       ]
     },
@@ -43,7 +43,7 @@ export const MARQUISE_GUIDE: IFactionGuide = {
       title: 'Evening',
       color: 'border-indigo-500',
       steps: [
-        { id: 'draw', title: 'Draw', description: 'Draw 1 card + 1 per bonus on Recruiter track. Discard > 5.', ruleReference: '6.6' }
+        { id: 'draw', title: 'Draw', description: 'Draw 1 card + 1 per uncovered draw bonus. Discard down to 5.', ruleReference: '6.6' }
       ]
     }
   ]

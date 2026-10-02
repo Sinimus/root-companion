@@ -3,11 +3,11 @@ import { IFactionGuide } from '@/types/engine';
 export const RIVERFOLK_GUIDE: IFactionGuide = {
   factionId: 'riverfolk',
   setup: [
-    '1. Place your Outposts in clearings matching the 3 suits on your starting cards.',
-    '2. Place 1 Warrior on each Outpost.',
-    '3. Place 2 Warriors in the Payments box.',
-    '4. Place 1 Warrior on each of your starting cards.',
-    '5. Place your Trade Post on the 3 VP space.'
+    '1. Form a supply of 15 Warriors.',
+    '2. Place 4 Warriors in any clearings touching the river.',
+    '3. Place your 9 Trade Posts on the matching spaces of your Trade Posts tracks.',
+    '4. Place 3 Warriors in your Payments box.',
+    '5. Place 1 service marker on any space of each Services track to set your starting prices.'
   ],
   phases: [
     {
@@ -25,14 +25,14 @@ export const RIVERFOLK_GUIDE: IFactionGuide = {
         {
           id: 'dividends',
           title: 'Score Dividends',
-          description: 'If you have a Trade Post on map: Score 1 VP per 2 Funds in your Funds box.',
-          architectTip: 'Trade Post is your primary VP engine. Build it early and keep Funds flowing.',
+          description: 'If any Trade Post is on the map: Score 1 VP per 2 Funds in your Funds box.',
+          architectTip: 'Scored before Gather Funds, so warriors in Payments and Committed do not count. Only funds you kept unspent last turn score.',
           ruleReference: '11.4.2',
         },
         {
           id: 'gather',
           title: 'Gather Funds',
-          description: 'Move all warriors from Payments, Committed boxes, and Trade Posts to the Funds box.',
+          description: 'Move all warriors on your faction board (Payments, Committed, Trade Posts tracks) to the Funds box.',
           architectTip: 'Your income phase! Funds = Actions. More warriors = more Funds = more actions.',
           ruleReference: '11.4.3',
         }
@@ -46,8 +46,8 @@ export const RIVERFOLK_GUIDE: IFactionGuide = {
         {
           id: 'actions',
           title: 'Operations',
-          description: 'Commit or Spend Funds to: Move (1 Fund), Battle (1 Fund), Craft (2 Funds), Draw (1 Fund), Recruit (1 Fund).',
-          architectTip: 'Establish Trade Post: Spend 2 Funds matching the ruler of the target clearing. Critical for VP scoring.',
+          description: 'Commit Funds to: Move (1), Battle (1), Draw (1), Craft (1 Fund per crafting icon, placed on empty Trade Posts track spaces of the matching suits). Spend Funds to: Recruit (1, in a clearing with a river), Establish Trade Post (2).',
+          architectTip: 'Establish Trade Post: choose a ruled clearing without a Trade Post and spend 2 Funds of the player who rules it; place the matching Trade Post and 1 Warrior and score. Committed funds come back next Birdsong, spent funds return to their owner.',
           ruleReference: '11.5',
         }
       ]
@@ -61,14 +61,14 @@ export const RIVERFOLK_GUIDE: IFactionGuide = {
           id: 'discard',
           title: 'Discard',
           description: 'Discard cards down to 5.',
-          architectTip: 'Keep cards that match your desired services. You need cards to price services.',
+          architectTip: 'Your hand is public and is what Hand Card buyers shop from. You do not draw in Evening; drawing is a Daylight action.',
           ruleReference: '11.6.1',
         },
         {
           id: 'prices',
           title: 'Set Costs',
-          description: 'Set prices for Services by placing cards face down: Hand Card (1), Riverboats (2), Mercenaries (3).',
-          architectTip: 'Players can pay you to use these! Set high prices if they need your services badly.',
+          description: 'You may move each service marker (Hand Card, Riverboats, Mercenaries) to any space on its track, setting a new cost.',
+          architectTip: 'Buyers pay at the start of their Birdsong by placing their own warriors in your Payments box. Set high prices if they need your services badly.',
           ruleReference: '11.6.2',
         }
       ]
