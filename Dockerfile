@@ -51,7 +51,9 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+# Listen on IPv4 and IPv6: the platform healthcheck calls http://localhost:3000,
+# and busybox wget resolves localhost to ::1 first
+ENV HOSTNAME "::"
 
 # Start the application
 CMD ["node", "server.js"]
