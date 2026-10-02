@@ -62,7 +62,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Trigger Coolify redeploy
+        env:
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
-          curl --silent --fail --request GET \
+          status=$(curl --silent --output /dev/null --write-out "%{http_code}" --request GET \
             "https://coolify.sinimus.com/api/v1/deploy?uuid=r5zbopaf9k1ovpsecui3pxw9&force=false" \
-            --header "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
+            --header "Authorization: Bearer ${COOLIFY_TOKEN}")
+          echo "Coolify deploy API returned HTTP ${status}"
+          test "${status}" -ge 200 && test "${status}" -lt 300

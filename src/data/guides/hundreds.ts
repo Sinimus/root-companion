@@ -106,7 +106,7 @@ export const HUNDREDS_GUIDE: IFactionGuide = {
       { title: "Warlord", text: "Protect Leader and Strongholds at all costs. They are your best lever to recruit." },
       { title: "Consistency", text: "Slow and steady expansion. Maintain clear clearings for Oppress score." },
       { title: "Items", text: "Move toward Ruins. Collect identical items to keep mood choice wide." },
-      { title: "Moods", text: "Start with ROWDY as cards are difficult to get. Relentless is strong." }
+      { title: "Moods", text: "You begin as Stubborn and must switch every Birdsong. Go ROWDY first, as cards are difficult to get. Relentless is strong." }
     ]
   }
 };

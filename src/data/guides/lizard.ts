@@ -82,7 +82,7 @@ export const LIZARD_GUIDE: IFactionGuide = {
     }
   ],
   strategy: {
-    summary: "Convert & Sacrifice. Resource Cycling + Rotating Trump Suit. Gardens have supreme rule. Dead warriors become Acolytes.",
+    summary: "Convert & Sacrifice. Resource Cycling + Rotating Trump Suit. Gardens have supreme rule. Warriors lost while defending become Acolytes.",
     tips: [
       { title: "Cards", text: "Cards are everything. Craft cards that give you more cards. Buy from Riverfolks." },
       { title: "Outcast", text: "Try to make the Outcast Hated for conspiracy discount. Influence the Lost Soul Pile." },
