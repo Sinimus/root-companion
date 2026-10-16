@@ -102,9 +102,24 @@ export function maxRolledHits(items: VagabondItem[]): number {
   return items.filter((item) => item.type === 'Sword' && !item.damaged).length;
 }
 
-// 9.5.7: a repaired item keeps its current side
+// 9.5.7: id of the first face-up, undamaged Hammer that can pay for a repair
+export function repairHammerId(items: VagabondItem[], itemId: string): string | null {
+  const hammer = items.find(
+    (item) => item.type === 'Hammer' && !item.exhausted && !item.damaged && item.id !== itemId,
+  );
+  return hammer ? hammer.id : null;
+}
+
+// 9.5.7: exhaust one face-up Hammer; the repaired item keeps its current side
 export function repair(items: VagabondItem[], itemId: string): VagabondItem[] {
-  return items.map((item) => (item.id === itemId ? { ...item, damaged: false } : item));
+  const hammerId = repairHammerId(items, itemId);
+  const target = items.find((item) => item.id === itemId);
+  if (!target?.damaged || hammerId === null) return items;
+  return items.map((item) => {
+    if (item.id === itemId) return { ...item, damaged: false };
+    if (item.id === hammerId) return { ...item, exhausted: true };
+    return item;
+  });
 }
 
 // 9.6.1: in a forest, all damaged items return to the Satchel face up

@@ -9,6 +9,7 @@ import {
   itemLimit,
   itemLoad,
   maxRolledHits,
+  repairHammerId,
   repair,
   rest,
   trackItemIds,
@@ -107,10 +108,43 @@ describe('Vagabond logic', () => {
       ).toBe(2);
     });
 
-    it('repair keeps the item on its current side (9.5.7)', () => {
-      expect(repair([item('1', 'Boot', true, true)], '1')[0]).toEqual(
-        item('1', 'Boot', true, false),
+    it('repair exhausts a face-up hammer and keeps the item on its current side (9.5.7)', () => {
+      const after = repair(
+        [item('1', 'Boot', true, true), item('2', 'Hammer'), item('3', 'Sword')],
+        '1',
       );
+      expect(after[0]).toEqual(item('1', 'Boot', true, false));
+      expect(after[1]).toEqual(item('2', 'Hammer', true, false));
+      expect(after[2]).toEqual(item('3', 'Sword'));
+    });
+
+    it('repair without any hammer returns the same array', () => {
+      const items = [item('1', 'Boot', true, true), item('2', 'Sword')];
+      expect(repair(items, '1')).toBe(items);
+    });
+
+    it('repair with only an exhausted or only a damaged hammer returns the same array', () => {
+      const exhaustedHammer = [item('1', 'Boot', true, true), item('2', 'Hammer', true)];
+      expect(repair(exhaustedHammer, '1')).toBe(exhaustedHammer);
+
+      const damagedHammer = [item('1', 'Boot', true, true), item('2', 'Hammer', false, true)];
+      expect(repair(damagedHammer, '1')).toBe(damagedHammer);
+    });
+
+    it('a damaged hammer cannot repair itself, but another face-up hammer can (9.5.7)', () => {
+      const alone = [item('1', 'Hammer', false, true)];
+      expect(repair(alone, '1')).toBe(alone);
+
+      const after = repair([item('1', 'Hammer', false, true), item('2', 'Hammer')], '1');
+      expect(after[0]).toEqual(item('1', 'Hammer', false, false));
+      expect(after[1]).toEqual(item('2', 'Hammer', true, false));
+    });
+
+    it('repairHammerId returns null when no usable hammer exists', () => {
+      expect(repairHammerId([item('1', 'Boot')], '1')).toBeNull();
+      expect(repairHammerId([item('1', 'Hammer', true), item('2', 'Boot')], '2')).toBeNull();
+      expect(repairHammerId([item('1', 'Hammer', false, true), item('2', 'Boot')], '2')).toBeNull();
+      expect(repairHammerId([item('1', 'Hammer'), item('2', 'Boot')], '2')).toBe('1');
     });
   });
 });
