@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import {
   Swords,
   Dices,
   AlertCircle,
   ShieldAlert,
-  Info,
   Shield,
   Skull,
   Flame,
@@ -17,31 +16,15 @@ import {
 import { FACTIONS_DATA } from '@/data/factions';
 import { IGameSession } from '@/types/engine';
 import { resolveBattle } from '@/utils/battleLogic';
+import { Tooltip } from './Tooltip';
 
 interface BattleProps {
   defaultAttackerId?: string;
   onClose: () => void;
 }
 
-function Tooltip({ text }: { text: string }) {
-  const [show, setShow] = useState(false);
-  return (
-    <div
-      className="relative inline-block ml-1"
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-    >
-      <Info className="w-4 h-4 text-gray-500 hover:text-blue-400 cursor-help" />
-      {show && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-gray-900 border border-gray-600 p-3 rounded-sm text-xs text-gray-200 shadow-xl z-50 pointer-events-none leading-tight">
-          {text}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
+  const uid = useId();
   const [activeSession, setActiveSession] = useState<IGameSession | null>(null);
   const [attackerId, setAttackerId] = useState(defaultAttackerId || 'marquise');
   const [defenderId, setDefenderId] = useState('eyrie');
@@ -146,7 +129,11 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <Swords className="w-5 h-5 text-red-500" /> Battle Sim 5.1
           </h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-white p-2">
+          <button
+            onClick={onClose}
+            aria-label="Close battle simulator"
+            className="text-gray-400 hover:text-white p-2"
+          >
             ✕
           </button>
         </div>
@@ -192,13 +179,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
           <div className="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
             <p className="text-[10px] uppercase text-gray-500 font-bold mb-2">Battle Conditions</p>
 
-            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+            <label
+              htmlFor={`${uid}-defenseless`}
+              className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+            >
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm text-gray-300">Defenseless</span>
                 <Tooltip text="Defender has no warriors in the clearing (4.3.5.II): attacker +1 hit, defender deals no rolled hits. A Vagabond defender without an undamaged sword is defenseless automatically (9.2.4)." />
               </div>
               <input
+                id={`${uid}-defenseless`}
                 type="checkbox"
                 checked={isDefenseless}
                 onChange={(e) => setIsDefenseless(e.target.checked)}
@@ -206,13 +197,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               />
             </label>
 
-            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+            <label
+              htmlFor={`${uid}-ambush`}
+              className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+            >
               <div className="flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-red-500" />
                 <span className="text-sm text-gray-300">Ambush!</span>
                 <Tooltip text="Defender plays Ambush card. Deals 2 hits immediately." />
               </div>
               <input
+                id={`${uid}-ambush`}
                 type="checkbox"
                 checked={isAmbush}
                 onChange={(e) => {
@@ -224,13 +219,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             </label>
 
             {isAmbush && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm pl-6">
+              <label
+                htmlFor={`${uid}-ambush-foiled`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm pl-6"
+              >
                 <div className="flex items-center gap-2">
                   <Swords className="w-4 h-4 text-gray-500" />
                   <span className="text-sm text-gray-300">Foiled by attacker's ambush</span>
                   <Tooltip text="The attacker played an ambush matching the clearing: the defender's ambush is discarded and deals no hits (4.3.1.I)." />
                 </div>
                 <input
+                  id={`${uid}-ambush-foiled`}
                   type="checkbox"
                   checked={isAmbushFoiled}
                   onChange={(e) => setIsAmbushFoiled(e.target.checked)}
@@ -240,13 +239,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {!isVagabondAttacker && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+              <label
+                htmlFor={`${uid}-attacker-warriors`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+              >
                 <div className="flex items-center gap-2">
                   <Swords className="w-4 h-4 text-red-400" />
                   <span className="text-sm text-gray-300">Attacking warriors</span>
                   <Tooltip text="Rolled hits are limited by the warriors in the clearing of battle (4.3.3.I). Leave empty for no limit." />
                 </div>
                 <input
+                  id={`${uid}-attacker-warriors`}
                   type="number"
                   value={attackerWarriors ?? ''}
                   min={0}
@@ -261,13 +264,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {!isVagabondDefender && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+              <label
+                htmlFor={`${uid}-defender-warriors`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+              >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-blue-400" />
                   <span className="text-sm text-gray-300">Defending warriors</span>
                   <Tooltip text="Rolled hits are limited by the warriors in the clearing of battle (4.3.3.I). Leave empty for no limit." />
                 </div>
                 <input
+                  id={`${uid}-defender-warriors`}
                   type="number"
                   value={defenderWarriors ?? ''}
                   min={0}
@@ -283,29 +290,43 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
             {/* Advanced Cards Section */}
             <div className="border-t border-gray-800 pt-2 mt-2">
-              <button
-                onClick={() => setShowAdvancedCards(!showAdvancedCards)}
-                className="flex items-center justify-between w-full cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
-              >
-                <div className="flex items-center gap-2">
+              <div className="flex items-center w-full hover:bg-gray-800/50 p-1 rounded-sm">
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedCards(!showAdvancedCards)}
+                  aria-expanded={showAdvancedCards}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <Crown className="w-4 h-4 text-purple-500" />
                   <span className="text-sm font-bold text-purple-300">Advanced Cards</span>
-                  <Tooltip text="Special cards that drastically alter combat math (Exiles & Partisans)" />
-                </div>
-                <div className={showAdvancedCards ? 'rotate-180' : ''}>
-                  <Flame className="w-4 h-4 text-gray-400 transition-transform" />
-                </div>
-              </button>
+                </button>
+                <Tooltip text="Special cards that drastically alter combat math (Exiles & Partisans)" />
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedCards(!showAdvancedCards)}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="flex-1 flex justify-end cursor-pointer"
+                >
+                  <span className={showAdvancedCards ? 'inline-block rotate-180' : 'inline-block'}>
+                    <Flame className="w-4 h-4 text-gray-400 transition-transform" />
+                  </span>
+                </button>
+              </div>
 
               {showAdvancedCards && (
                 <div className="space-y-2 mt-2 p-2 bg-gray-900/30 rounded-sm">
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-armorers`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-blue-500" />
                       <span className="text-sm text-gray-300">Armorers</span>
                       <Tooltip text="Defender discards to ignore all rolled hits taken." />
                     </div>
                     <input
+                      id={`${uid}-armorers`}
                       type="checkbox"
                       checked={armorersActive}
                       onChange={(e) => setArmorersActive(e.target.checked)}
@@ -313,13 +334,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-sappers`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Swords className="w-4 h-4 text-green-500" />
                       <span className="text-sm text-gray-300">Sappers</span>
                       <Tooltip text="Defender discards to deal +1 hit." />
                     </div>
                     <input
+                      id={`${uid}-sappers`}
                       type="checkbox"
                       checked={sappersActive}
                       onChange={(e) => setSappersActive(e.target.checked)}
@@ -327,13 +352,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-brutal-tactics`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Skull className="w-4 h-4 text-red-500" />
                       <span className="text-sm text-gray-300">Brutal Tactics</span>
                       <Tooltip text="Attacker discards for +1 hit, defender scores 1 VP." />
                     </div>
                     <input
+                      id={`${uid}-brutal-tactics`}
                       type="checkbox"
                       checked={brutalTacticsActive}
                       onChange={(e) => setBrutalTacticsActive(e.target.checked)}
@@ -341,13 +370,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-command-warren`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Crown className="w-4 h-4 text-purple-500" />
                       <span className="text-sm text-gray-300">Command Warren</span>
                       <Tooltip text="Allows battle at start of Daylight phase (instead of Evening)." />
                     </div>
                     <input
+                      id={`${uid}-command-warren`}
                       type="checkbox"
                       checked={commandWarrenActive}
                       onChange={(e) => setCommandWarrenActive(e.target.checked)}
@@ -368,6 +401,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setVagabondSwords((s) => Math.max(0, s - 1))}
+                    aria-label="Remove one undamaged sword"
                     className="w-6 h-6 bg-gray-700 rounded-sm text-white"
                   >
                     -
@@ -375,6 +409,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                   <span className="font-bold w-4 text-center">{vagabondSwords}</span>
                   <button
                     onClick={() => setVagabondSwords((s) => s + 1)}
+                    aria-label="Add one undamaged sword"
                     className="w-6 h-6 bg-gray-700 rounded-sm text-white"
                   >
                     +
@@ -384,13 +419,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {isCorvidDefender && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
+              <label
+                htmlFor={`${uid}-corvid-plot`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2"
+              >
                 <div className="flex items-center gap-2">
                   <Skull className="w-4 h-4 text-purple-400" />
                   <span className="text-sm text-purple-200">Facedown Plot?</span>
                   <Tooltip text="Embedded Agents: If a plot is hidden in clearing, Corvid gets +1 hit." />
                 </div>
                 <input
+                  id={`${uid}-corvid-plot`}
                   type="checkbox"
                   checked={hasCorvidPlot}
                   onChange={(e) => setHasCorvidPlot(e.target.checked)}
@@ -400,13 +439,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {(isKeeperAttacker || isKeeperDefender) && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
+              <label
+                htmlFor={`${uid}-keepers-relic`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2"
+              >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-300">Keepers have Relic?</span>
                   <Tooltip text="Devout Knights: If they have Relic and Warrior, they ignore first hit." />
                 </div>
                 <input
+                  id={`${uid}-keepers-relic`}
                   type="checkbox"
                   checked={keeperHasRelic}
                   onChange={(e) => setKeeperHasRelic(e.target.checked)}
@@ -418,13 +461,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             {isHundredsAttacker && (
               <div className="border-t border-gray-800 pt-2 mt-2 flex flex-col gap-2">
                 {!isVagabondDefender && (
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-hundreds-loot`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Coins className="w-4 h-4 text-yellow-500" />
                       <span className="text-sm text-yellow-200">Loot the defender</span>
                       <Tooltip text="No rolled hits; take an item from the defender's Crafted Items box if you rule the clearing after the battle (14.2.5). Not against the Vagabond." />
                     </div>
                     <input
+                      id={`${uid}-hundreds-loot`}
                       type="checkbox"
                       checked={hundredsLoot}
                       onChange={(e) => setHundredsLoot(e.target.checked)}
@@ -445,13 +492,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                   />
                 </label>
                 {hundredsWarlord && (
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                  <label
+                    htmlFor={`${uid}-hundreds-wrathful`}
+                    className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
+                  >
                     <div className="flex items-center gap-2">
                       <Flame className="w-4 h-4 text-red-500" />
                       <span className="text-sm text-red-300">Wrathful Mood?</span>
                       <Tooltip text="Warlord gives +1 hit when attacking." />
                     </div>
                     <input
+                      id={`${uid}-hundreds-wrathful`}
                       type="checkbox"
                       checked={hundredsWrathful}
                       onChange={(e) => setHundredsWrathful(e.target.checked)}
@@ -463,13 +514,17 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {isHundredsDefender && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
+              <label
+                htmlFor={`${uid}-hundreds-stubborn`}
+                className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2"
+              >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-orange-500" />
                   <span className="text-sm text-orange-200">Stubborn (warlord's clearing)</span>
                   <Tooltip text="Ignore the first hit taken in the warlord's clearing (14.7.7)." />
                 </div>
                 <input
+                  id={`${uid}-hundreds-stubborn`}
                   type="checkbox"
                   checked={hundredsStubborn}
                   onChange={(e) => setHundredsStubborn(e.target.checked)}

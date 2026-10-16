@@ -25,7 +25,11 @@ export function LawViewerModal({ onClose, initialQuery }: Props) {
               <p className="text-xs text-gray-500">Digital Edition • {LAW_EDITION}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-full text-gray-400">
+          <button
+            onClick={onClose}
+            aria-label="Close law viewer"
+            className="p-2 hover:bg-gray-800 rounded-full text-gray-400"
+          >
             <X className="w-6 h-6" />
           </button>
         </div>
