@@ -59,12 +59,13 @@ The app is served on `http://localhost:3000`. The compose file builds the local 
 
 ## CI/CD and deployment
 
-The workflow `.github/workflows/ci-cd.yml` has two jobs.
+The workflow `.github/workflows/ci-cd.yml` has three jobs.
 
 1. **test**: checkout, pnpm, Node 24, `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm test`. Runs on pushes and pull requests to `main` or `master`, and on manual dispatch.
-2. **build-and-push**: runs only after `test` passes, and only for a push or manual dispatch on `main` or `master`. It logs in to GHCR with `GITHUB_TOKEN`, builds the Dockerfile and pushes `ghcr.io/<owner>/<repo>` with the tags `latest` and `sha-<short sha>`. It then sends a POST to the Coolify deploy API and fails the job unless the HTTP status is 2xx. The request authenticates with the repository secret `COOLIFY_TOKEN`.
+2. **docker-build**: runs only after `test` passes, and only on pull requests. It builds the production image from the Dockerfile without pushing it and checks that the container answers on port 3000, so a broken Dockerfile fails before the merge deploys it.
+3. **build-and-push**: runs only after `test` passes, and only for a push or manual dispatch on `main` or `master`. It logs in to GHCR with `GITHUB_TOKEN`, builds the Dockerfile and pushes `ghcr.io/<owner>/<repo>` with the tags `latest` and `sha-<short sha>`. It then sends a POST to the Coolify deploy API and fails the job unless the HTTP status is 2xx. The request authenticates with the repository secret `COOLIFY_TOKEN`.
 
-Pull requests run the test job only. To redeploy without a commit, start the workflow manually from the Actions tab.
+Pull requests run the test and docker-build jobs; only a push or manual dispatch on `main` or `master` deploys. To redeploy without a commit, start the workflow manually from the Actions tab.
 
 ## Data sources and maintenance
 
