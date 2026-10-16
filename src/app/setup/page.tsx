@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AdSetDraft } from '@/components/AdSetDraft';
 import { SetupWizard } from '@/components/SetupWizard'; // Reach Calculator
-import { dealsRandomSuits } from '@/utils/setupLogic';
+import { dealsRandomSuits, dealSuitMarkers } from '@/utils/setupLogic';
 import { MapVisualizer } from '@/components/MapVisualizer';
 import {
   ArrowLeft,
@@ -21,7 +21,7 @@ import {
   Info,
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { MAPS, DEFAULT_SUITS } from '@/data/maps';
+import { MAPS } from '@/data/maps';
 import { Suit } from '@/types/engine';
 import { HIRELINGS_DATA } from '@/data/hirelings';
 import { LANDMARKS_DATA } from '@/data/landmarks';
@@ -68,12 +68,9 @@ export default function SetupPage() {
   const useRandomSuits = dealsRandomSuits(config.mapId, config.randomSuits);
 
   const handleSetTheStage = () => {
-    // Generate Random Suits if needed
+    // Generate Random Suits if needed (Law A.1: a fair deal, one marker per clearing)
     if (useRandomSuits) {
-      const shuffled = [...DEFAULT_SUITS].sort(() => Math.random() - 0.5);
-      const mapping: Record<number, Suit> = {};
-      shuffled.forEach((s, i) => (mapping[i + 1] = s));
-      setSuitMapping(mapping);
+      setSuitMapping(dealSuitMarkers());
     } else {
       setSuitMapping(undefined);
     }
@@ -411,16 +408,16 @@ export default function SetupPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center pt-4">
+            <div className="flex justify-between items-center gap-3 pt-4">
               <button
                 onClick={() => setStep('config')}
-                className="text-gray-500 hover:text-white font-bold transition-colors flex items-center gap-2"
+                className="shrink-0 text-gray-500 hover:text-white font-bold transition-colors flex items-center gap-2"
               >
                 <ArrowLeft className="w-5 h-5" /> BACK
               </button>
               <button
                 onClick={() => setStep('selection')}
-                className="px-10 py-4 bg-white text-black font-black text-xl rounded-full hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-3"
+                className="px-6 sm:px-10 py-4 bg-white text-black font-black text-lg sm:text-xl rounded-full hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-3"
               >
                 {config.method === 'draft' ? 'PROCEED TO DRAFT' : 'SELECT FACTIONS'}{' '}
                 <ArrowRight className="w-6 h-6" />

@@ -10,6 +10,10 @@ export interface IClearingDef {
   isCoastal?: boolean; // For Lake Map
   ferryStart?: boolean; // For Lake Map: corner clearing where the Ferry starts
   isPass?: boolean; // For Mountain Map
+  // True on the four corner clearings. Derived from the layout coordinates
+  // (nearest clearing to each corner of the 0..100 square), not printed on
+  // the board; Law setup texts place starting pieces in "corner clearings".
+  isCorner?: boolean;
 }
 
 export interface IPathDef {
@@ -38,18 +42,18 @@ export const AUTUMN_MAP: IMapDef = {
   id: 'autumn',
   name: 'Autumn Map',
   clearings: [
-    { id: 1, x: 13, y: 10, defaultSuit: 'fox', slots: 1 },
+    { id: 1, x: 13, y: 10, defaultSuit: 'fox', slots: 1, isCorner: true },
     { id: 2, x: 62, y: 7, defaultSuit: 'rabbit', slots: 2 },
-    { id: 3, x: 88, y: 10, defaultSuit: 'mouse', slots: 2 },
+    { id: 3, x: 88, y: 10, defaultSuit: 'mouse', slots: 2, isCorner: true },
     { id: 4, x: 15, y: 32, defaultSuit: 'mouse', slots: 2 },
     { id: 5, x: 51, y: 20, defaultSuit: 'rabbit', slots: 2, hasRuin: true },
     { id: 6, x: 71, y: 34, defaultSuit: 'mouse', slots: 2 },
     { id: 7, x: 92, y: 37, defaultSuit: 'fox', slots: 2 },
     { id: 8, x: 41, y: 45, defaultSuit: 'fox', slots: 2, hasRuin: true },
     { id: 9, x: 67, y: 67, defaultSuit: 'mouse', slots: 2 },
-    { id: 10, x: 20, y: 79, defaultSuit: 'rabbit', slots: 1 },
+    { id: 10, x: 20, y: 79, defaultSuit: 'rabbit', slots: 1, isCorner: true },
     { id: 11, x: 50, y: 83, defaultSuit: 'fox', slots: 2, hasRuin: true },
-    { id: 12, x: 88, y: 79, defaultSuit: 'rabbit', slots: 2, hasRuin: true },
+    { id: 12, x: 88, y: 79, defaultSuit: 'rabbit', slots: 2, hasRuin: true, isCorner: true },
   ],
   paths: [
     { from: 1, to: 2 },
@@ -85,18 +89,18 @@ export const WINTER_MAP: IMapDef = {
   id: 'winter',
   name: 'Winter Map',
   clearings: [
-    { id: 1, x: 13, y: 13, defaultSuit: 'fox', slots: 1 },
+    { id: 1, x: 13, y: 13, defaultSuit: 'fox', slots: 1, isCorner: true },
     { id: 2, x: 39, y: 18, defaultSuit: 'rabbit', slots: 2 },
     { id: 3, x: 61, y: 24, defaultSuit: 'mouse', slots: 2 },
-    { id: 4, x: 88, y: 23, defaultSuit: 'fox', slots: 1 },
+    { id: 4, x: 88, y: 23, defaultSuit: 'fox', slots: 1, isCorner: true },
     { id: 5, x: 15, y: 42, defaultSuit: 'mouse', slots: 1 },
     { id: 6, x: 36, y: 50, defaultSuit: 'rabbit', slots: 2, hasRuin: true },
     { id: 7, x: 62, y: 47, defaultSuit: 'fox', slots: 2, hasRuin: true },
     { id: 8, x: 93, y: 61, defaultSuit: 'mouse', slots: 1 },
-    { id: 9, x: 15, y: 81, defaultSuit: 'rabbit', slots: 1 },
+    { id: 9, x: 15, y: 81, defaultSuit: 'rabbit', slots: 1, isCorner: true },
     { id: 10, x: 38, y: 87, defaultSuit: 'mouse', slots: 1, hasRuin: true },
     { id: 11, x: 59, y: 74, defaultSuit: 'fox', slots: 1, hasRuin: true },
-    { id: 12, x: 85, y: 87, defaultSuit: 'rabbit', slots: 2 },
+    { id: 12, x: 85, y: 87, defaultSuit: 'rabbit', slots: 2, isCorner: true },
   ],
   paths: [
     { from: 1, to: 2 },
@@ -129,18 +133,27 @@ export const LAKE_MAP: IMapDef = {
   id: 'lake',
   name: 'Lake Map',
   clearings: [
-    { id: 1, x: 16, y: 20, defaultSuit: 'fox', slots: 1 },
+    { id: 1, x: 16, y: 20, defaultSuit: 'fox', slots: 1, isCorner: true },
     { id: 2, x: 46, y: 16, defaultSuit: 'mouse', slots: 1 },
     { id: 3, x: 67, y: 26, defaultSuit: 'fox', slots: 2 },
-    { id: 4, x: 87, y: 34, defaultSuit: 'rabbit', slots: 1 },
+    { id: 4, x: 87, y: 34, defaultSuit: 'rabbit', slots: 1, isCorner: true },
     { id: 5, x: 32, y: 37, defaultSuit: 'mouse', slots: 3, hasRuin: true, isCoastal: true },
     { id: 6, x: 13, y: 51, defaultSuit: 'rabbit', slots: 1 },
     { id: 7, x: 64, y: 49, defaultSuit: 'rabbit', slots: 3, hasRuin: true, isCoastal: true },
     { id: 8, x: 84, y: 59, defaultSuit: 'mouse', slots: 3, hasRuin: true },
     { id: 9, x: 33, y: 67, defaultSuit: 'rabbit', slots: 3, hasRuin: true, isCoastal: true },
-    { id: 10, x: 13, y: 83, defaultSuit: 'mouse', slots: 1 },
+    { id: 10, x: 13, y: 83, defaultSuit: 'mouse', slots: 1, isCorner: true },
     { id: 11, x: 43, y: 87, defaultSuit: 'fox', slots: 1 },
-    { id: 12, x: 84, y: 80, defaultSuit: 'fox', slots: 2, isCoastal: true, ferryStart: true },
+    {
+      id: 12,
+      x: 84,
+      y: 80,
+      defaultSuit: 'fox',
+      slots: 2,
+      isCoastal: true,
+      ferryStart: true,
+      isCorner: true,
+    },
   ],
   paths: [
     { from: 1, to: 2 },
@@ -171,18 +184,18 @@ export const MOUNTAIN_MAP: IMapDef = {
   id: 'mountain',
   name: 'Mountain Map',
   clearings: [
-    { id: 1, x: 11, y: 17, defaultSuit: 'fox', slots: 2 },
+    { id: 1, x: 11, y: 17, defaultSuit: 'fox', slots: 2, isCorner: true },
     { id: 2, x: 53, y: 16, defaultSuit: 'mouse', slots: 1 },
-    { id: 3, x: 81, y: 22, defaultSuit: 'rabbit', slots: 2 },
+    { id: 3, x: 81, y: 22, defaultSuit: 'rabbit', slots: 2, isCorner: true },
     { id: 4, x: 29, y: 34, defaultSuit: 'rabbit', slots: 3, hasRuin: true },
     { id: 5, x: 49, y: 40, defaultSuit: 'fox', slots: 2, hasRuin: true, isPass: true }, // The Pass
     { id: 6, x: 9, y: 57, defaultSuit: 'rabbit', slots: 1 },
     { id: 7, x: 89, y: 51, defaultSuit: 'mouse', slots: 1 },
     { id: 8, x: 61, y: 63, defaultSuit: 'mouse', slots: 3, hasRuin: true },
     { id: 9, x: 33, y: 67, defaultSuit: 'fox', slots: 3, hasRuin: true },
-    { id: 10, x: 13, y: 82, defaultSuit: 'mouse', slots: 2 },
+    { id: 10, x: 13, y: 82, defaultSuit: 'mouse', slots: 2, isCorner: true },
     { id: 11, x: 55, y: 86, defaultSuit: 'rabbit', slots: 1 },
-    { id: 12, x: 84, y: 79, defaultSuit: 'fox', slots: 2 },
+    { id: 12, x: 84, y: 79, defaultSuit: 'fox', slots: 2, isCorner: true },
   ],
   paths: [
     { from: 1, to: 4 },
