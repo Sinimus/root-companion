@@ -11,7 +11,7 @@ import {
   Target,
   Sparkles,
   MapPin,
-  Github
+  CodeXml
 } from 'lucide-react';
 
 export default function AboutPage() {
@@ -136,7 +136,7 @@ export default function AboutPage() {
 
             <div className="flex justify-center gap-6">
                 <a href="https://github.com/Sinimus/root-companion" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-                    <Github className="w-5 h-5" />
+                    <CodeXml className="w-5 h-5" />
                     <span>Source Code</span>
                 </a>
             </div>
