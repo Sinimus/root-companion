@@ -352,7 +352,9 @@ export default function SetupPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-blue-500">•</span>{' '}
-                      <span>Place Ruins on all &quot;R&quot; slots (4 total).</span>
+                      <span>
+                        Place Ruins on all &quot;R&quot; slots (4 total, wall symbol on the map).
+                      </span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-blue-500">•</span>{' '}
