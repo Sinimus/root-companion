@@ -2,11 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { Swords, Book, ScrollText, X, Settings2 } from 'lucide-react';
-import { BattleWizard } from '@/components/BattleWizard';
-import { GlossaryModal } from '@/components/GlossaryModal';
-import { LawViewerModal } from '@/components/LawViewerModal';
+import dynamic from 'next/dynamic';
 import { clsx } from 'clsx';
 import { LAW_EVENT_NAME } from '@/utils/events';
+
+const BattleWizard = dynamic(
+  () => import('@/components/BattleWizard').then((m) => m.BattleWizard),
+  { ssr: false },
+);
+
+const GlossaryModal = dynamic(
+  () => import('@/components/GlossaryModal').then((m) => m.GlossaryModal),
+  { ssr: false },
+);
+
+const LawViewerModal = dynamic(
+  () => import('@/components/LawViewerModal').then((m) => m.LawViewerModal),
+  { ssr: false },
+);
 
 export function GlobalTools() {
   const [activeTool, setActiveTool] = useState<'battle' | 'glossary' | 'law' | null>(null);
@@ -14,10 +27,10 @@ export function GlobalTools() {
   const [lawQuery, setLawQuery] = useState('');
 
   useEffect(() => {
-    const handleOpenLaw = (e: any) => {
+    const handleOpenLaw = ((e: CustomEvent<{ ruleId?: string }>) => {
       setLawQuery(e.detail?.ruleId || '');
       setActiveTool('law');
-    };
+    }) as EventListener;
 
     window.addEventListener(LAW_EVENT_NAME, handleOpenLaw);
     return () => window.removeEventListener(LAW_EVENT_NAME, handleOpenLaw);
@@ -43,6 +56,7 @@ export function GlobalTools() {
             }}
             className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-amber-500 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-xs group"
             title="The Law of Root"
+            aria-label="The Law of Root"
           >
             <ScrollText className="w-5 h-5 group-hover:scale-110 transition-transform" />
           </button>
@@ -55,6 +69,7 @@ export function GlobalTools() {
             }}
             className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-blue-400 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-xs group"
             title="Glossary Reference"
+            aria-label="Glossary Reference"
           >
             <Book className="w-5 h-5 group-hover:scale-110 transition-transform" />
           </button>
@@ -67,6 +82,7 @@ export function GlobalTools() {
             }}
             className="w-12 h-12 bg-red-900/80 hover:bg-red-800 text-white rounded-full shadow-lg flex items-center justify-center border border-red-700/50 backdrop-blur-xs group"
             title="Quick Battle"
+            aria-label="Quick Battle"
           >
             <Swords className="w-5 h-5 group-hover:rotate-12 transition-transform" />
           </button>
