@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AdSetDraft } from '@/components/AdSetDraft';
 import { SetupWizard } from '@/components/SetupWizard'; // Reach Calculator
+import { dealsRandomSuits } from '@/utils/setupLogic';
 import { MapVisualizer } from '@/components/MapVisualizer';
 import {
   ArrowLeft,
@@ -63,8 +64,8 @@ export default function SetupPage() {
     return replaced === 'vagabond_1' ? ['vagabond_1', 'vagabond_2'] : [replaced];
   });
 
-  // The Winter board prints no suits, so its suit markers are always dealt at random (Law A.1)
-  const useRandomSuits = config.randomSuits || config.mapId === 'winter';
+  // Variant maps always get randomly dealt suit markers (Law A.1)
+  const useRandomSuits = dealsRandomSuits(config.mapId, config.randomSuits);
 
   const handleSetTheStage = () => {
     // Generate Random Suits if needed
@@ -277,7 +278,8 @@ export default function SetupPage() {
                   <label className="flex items-center gap-2 cursor-pointer text-gray-300 text-sm bg-black/20 px-4 py-2 rounded-xl border border-gray-800 hover:border-gray-600 transition-colors">
                     <input
                       type="checkbox"
-                      checked={config.randomSuits}
+                      checked={useRandomSuits}
+                      disabled={config.mapId !== 'autumn'}
                       onChange={(e) => setConfig({ ...config, randomSuits: e.target.checked })}
                       className="w-4 h-4 rounded-sm accent-orange-500"
                     />
@@ -348,9 +350,7 @@ export default function SetupPage() {
                       <span>
                         {useRandomSuits
                           ? 'Place suit markers as shown on map above.'
-                          : config.mapId === 'autumn'
-                            ? 'Follow printed suits on board.'
-                            : 'Place suit markers as suggested on map above (or deal them at random).'}
+                          : 'Follow printed suits on board.'}
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
