@@ -14,8 +14,8 @@ A comprehensive, rule-compliant tactical assistant for **Root: A Game of Woodlan
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18.x or higher
-- npm or yarn
+- Node.js 24 (see `.nvmrc`)
+- pnpm 10 (enable it with `corepack enable pnpm`; the version is pinned in `package.json`)
 
 ### Installation
 ```bash
@@ -23,14 +23,14 @@ A comprehensive, rule-compliant tactical assistant for **Root: A Game of Woodlan
 git clone https://github.com/Sinimus/root-companion.git
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run in development mode
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
-npm run start
+pnpm build
+pnpm start
 ```
 
 ## 🐳 Docker Support
