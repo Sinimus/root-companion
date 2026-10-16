@@ -78,7 +78,7 @@ export default function FactionTurnPage({ params }: { params: Promise<{ factionI
       {/* Ambient Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div
-          className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`}
+          className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`}
         />
       </div>
 

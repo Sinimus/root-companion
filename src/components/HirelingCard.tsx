@@ -87,8 +87,8 @@ export function HirelingCard({
       ${
         isActive
           ? isPromoted
-            ? 'bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border-yellow-600/50 shadow-lg shadow-yellow-500/20'
-            : 'bg-gradient-to-br from-gray-800/40 to-gray-900/60 border-gray-600/50 shadow-lg shadow-gray-500/20'
+            ? 'bg-linear-to-br from-yellow-900/20 to-orange-900/20 border-yellow-600/50 shadow-lg shadow-yellow-500/20'
+            : 'bg-linear-to-br from-gray-800/40 to-gray-900/60 border-gray-600/50 shadow-lg shadow-gray-500/20'
           : 'bg-gray-900/60 border-gray-800 hover:border-gray-600 hover:bg-gray-900/80'
       }
     `}
@@ -234,7 +234,7 @@ export function HirelingCard({
 
               <span
                 className={`
-                font-bold text-lg min-w-[3rem] text-center
+                font-bold text-lg min-w-12 text-center
                 ${controlMarkers === 0 ? 'text-red-500 animate-pulse' : 'text-white'}
               `}
               >
@@ -243,7 +243,7 @@ export function HirelingCard({
 
               <button
                 onClick={() => onUpdateMarkers(1)}
-                className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded transition-colors"
+                className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
               >
                 <Plus className="w-4 h-4" />
               </button>

@@ -286,7 +286,7 @@ export default function SetupPage() {
                       type="checkbox"
                       checked={config.randomSuits}
                       onChange={(e) => setConfig({ ...config, randomSuits: e.target.checked })}
-                      className="w-4 h-4 rounded accent-orange-500"
+                      className="w-4 h-4 rounded-sm accent-orange-500"
                     />
                     Randomize Suits
                   </label>
@@ -295,7 +295,7 @@ export default function SetupPage() {
                       type="checkbox"
                       checked={config.useLandmarks}
                       onChange={(e) => setConfig({ ...config, useLandmarks: e.target.checked })}
-                      className="w-4 h-4 rounded accent-amber-500"
+                      className="w-4 h-4 rounded-sm accent-amber-500"
                     />
                     Include Landmarks
                   </label>
@@ -304,7 +304,7 @@ export default function SetupPage() {
                       type="checkbox"
                       checked={config.useHirelings}
                       onChange={(e) => setConfig({ ...config, useHirelings: e.target.checked })}
-                      className="w-4 h-4 rounded accent-purple-500"
+                      className="w-4 h-4 rounded-sm accent-purple-500"
                     />
                     Include Hirelings
                   </label>
@@ -381,7 +381,7 @@ export default function SetupPage() {
                         {selectedHirelings.map((hid) => (
                           <span
                             key={hid}
-                            className="bg-purple-900/30 border border-purple-500/30 px-2 py-1 rounded text-xs font-bold text-purple-200"
+                            className="bg-purple-900/30 border border-purple-500/30 px-2 py-1 rounded-sm text-xs font-bold text-purple-200"
                           >
                             {HIRELINGS_DATA.find((h) => h.id === hid)?.name}
                           </span>
@@ -398,7 +398,7 @@ export default function SetupPage() {
                         {selectedLandmarks.map((lid) => (
                           <span
                             key={lid}
-                            className="bg-amber-900/30 border border-amber-500/30 px-2 py-1 rounded text-xs font-bold text-amber-200"
+                            className="bg-amber-900/30 border border-amber-500/30 px-2 py-1 rounded-sm text-xs font-bold text-amber-200"
                           >
                             {LANDMARKS_DATA.find((l) => l.id === lid)?.name}
                           </span>

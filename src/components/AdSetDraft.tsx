@@ -192,7 +192,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
         </div>
 
         {/* Current Player */}
-        <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-800/50 rounded-xl p-6 text-center">
+        <div className="bg-linear-to-r from-blue-900/30 to-purple-900/30 border border-blue-800/50 rounded-xl p-6 text-center">
           <h2 className="text-2xl font-bold text-white mb-2">Player {currentTurn + 1}'s Turn</h2>
           <p className="text-gray-300">
             Choose one faction setup card from the pool and set it up immediately
@@ -334,7 +334,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
         <div className="text-center">
           <button
             onClick={dealCards}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-bold text-lg transition-all transform hover:scale-105 flex items-center gap-3 mx-auto"
+            className="px-8 py-4 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-bold text-lg transition-all transform hover:scale-105 flex items-center gap-3 mx-auto"
           >
             <Shuffle className="w-6 h-6" />
             {initialPlayerCount ? 'Start Draft' : 'Deal Cards'}

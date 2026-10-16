@@ -1,8 +1,108 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --font-root: Root, serif;
+  --font-woodland: Woodland, sans-serif;
+  --font-faction: Faction, sans-serif;
+
+  --background-image-wood-pattern: url('/assets/bg-wood.jpg');
+  --background-image-wood-texture: url('/assets/bg-wood.jpg');
+  --background-image-paper-texture: url('/assets/paper-texture.jpg');
+  --background-image-map-bg: url('/assets/map-texture.jpg');
+  --background-image-theme-woodland: url('/assets/bg-wood.jpg');
+  --background-image-theme-paper: url('/assets/paper-texture.jpg');
+
+  --background-color-wood: #8b4513;
+  --background-color-wood-light: #a0522d;
+  --background-color-paper: #f5e6d3;
+  --background-color-map: #d2b48c;
+
+  --color-faction-marquise: #cd5c5c;
+  --color-faction-eyrie: #4169e1;
+  --color-faction-alliance: #228b22;
+  --color-faction-vagabond: #ffd700;
+  --color-faction-corvid: #8b008b;
+  --color-faction-hundreds: #ff6347;
+  --color-faction-keepers: #708090;
+  --color-faction-river: #4682b4;
+
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-wood-glow: woodGlow 3s ease-in-out infinite alternate;
+  --animate-theme-glow: themeGlow 4s ease-in-out infinite alternate;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes woodGlow {
+    0% {
+      box-shadow: 0 0 20px rgba(139, 69, 19, 0.3);
+    }
+    100% {
+      box-shadow: 0 0 30px rgba(139, 69, 19, 0.6);
+    }
+  }
+  @keyframes themeGlow {
+    0% {
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+    }
+    100% {
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
 
 /*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /* Tailwind CSS v4 no longer gives buttons a pointer cursor; keep the v3 look */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  /*
 ========================================
   CUSTOM FONTS FOR ROOT THEME
 ========================================
@@ -14,28 +114,29 @@
 ========================================
 */
 
-@font-face {
-  font-family: 'Root';
-  src: url('/fonts/root-font.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+  @font-face {
+    font-family: 'Root';
+    src: url('/fonts/root-font.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
-@font-face {
-  font-family: 'Woodland';
-  src: url('/fonts/woodland-font.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+  @font-face {
+    font-family: 'Woodland';
+    src: url('/fonts/woodland-font.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
-@font-face {
-  font-family: 'Faction';
-  src: url('/fonts/faction-font.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  @font-face {
+    font-family: 'Faction';
+    src: url('/fonts/faction-font.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 }
 
 @layer base {
@@ -88,7 +189,7 @@
 }
 
 .card-wooden {
-  @apply bg-gradient-to-br from-yellow-900 to-amber-800 border-2 border-amber-600 shadow-lg;
+  @apply bg-linear-to-br from-yellow-900 to-amber-800 border-2 border-amber-600 shadow-lg;
 }
 
 .faction-marquise {

@@ -147,7 +147,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
         {panelItems.map((type) => (
           <div key={type} className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={`p-2 bg-gray-800 rounded ${getItemColor(type)}`}>
+              <div className={`p-2 bg-gray-800 rounded-sm ${getItemColor(type)}`}>
                 {getItemIcon(type)}
               </div>
               <div>
@@ -172,13 +172,13 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
                 <Minus className="w-4 h-4" />
               </button>
 
-              <span className="text-xl font-bold text-white min-w-[3rem] text-center">
+              <span className="text-xl font-bold text-white min-w-12 text-center">
                 {items[type]}
               </span>
 
               <button
                 onClick={() => updateItemCount(type, 1)}
-                className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded transition-colors"
+                className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
               >
                 <Plus className="w-4 h-4" />
               </button>

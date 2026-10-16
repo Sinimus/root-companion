@@ -79,7 +79,7 @@ export function CardDatabaseViewer() {
             placeholder="Search cards..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-8 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50"
+            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-8 py-2 text-sm text-white focus:outline-hidden focus:border-blue-500/50"
           />
           {query && (
             <button
@@ -98,7 +98,7 @@ export function CardDatabaseViewer() {
             <button
               onClick={() => setDeckFilter('all')}
               className={clsx(
-                'px-3 py-1.5 rounded text-xs font-bold transition-colors',
+                'px-3 py-1.5 rounded-sm text-xs font-bold transition-colors',
                 deckFilter === 'all' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white',
               )}
             >
@@ -107,7 +107,7 @@ export function CardDatabaseViewer() {
             <button
               onClick={() => setDeckFilter('standard')}
               className={clsx(
-                'px-3 py-1.5 rounded text-xs font-bold transition-colors flex items-center gap-1',
+                'px-3 py-1.5 rounded-sm text-xs font-bold transition-colors flex items-center gap-1',
                 deckFilter === 'standard'
                   ? 'bg-blue-900/60 text-blue-200'
                   : 'text-gray-400 hover:text-white',
@@ -118,7 +118,7 @@ export function CardDatabaseViewer() {
             <button
               onClick={() => setDeckFilter('exiles')}
               className={clsx(
-                'px-3 py-1.5 rounded text-xs font-bold transition-colors flex items-center gap-1',
+                'px-3 py-1.5 rounded-sm text-xs font-bold transition-colors flex items-center gap-1',
                 deckFilter === 'exiles'
                   ? 'bg-orange-900/60 text-orange-200'
                   : 'text-gray-400 hover:text-white',
@@ -135,7 +135,7 @@ export function CardDatabaseViewer() {
                 key={suit}
                 onClick={() => setSuitFilter(suit as Suit | 'all')}
                 className={clsx(
-                  'px-3 py-1.5 rounded text-xs font-bold transition-colors capitalize',
+                  'px-3 py-1.5 rounded-sm text-xs font-bold transition-colors capitalize',
                   suitFilter === suit ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white',
                 )}
               >
@@ -168,7 +168,7 @@ export function CardDatabaseViewer() {
                 <span
                   key={i}
                   className={clsx(
-                    'w-4 h-4 rounded-sm flex items-center justify-center text-[10px] uppercase font-bold border border-white/20',
+                    'w-4 h-4 rounded-xs flex items-center justify-center text-[10px] uppercase font-bold border border-white/20',
                     c === 'fox'
                       ? 'bg-red-600'
                       : c === 'mouse'
@@ -200,7 +200,7 @@ export function CardDatabaseViewer() {
                   <span
                     key={d}
                     className={clsx(
-                      'text-[10px] px-1.5 py-0.5 rounded uppercase font-bold tracking-wider',
+                      'text-[10px] px-1.5 py-0.5 rounded-sm uppercase font-bold tracking-wider',
                       d === 'standard'
                         ? 'bg-blue-900/40 text-blue-200'
                         : 'bg-orange-900/40 text-orange-200',
@@ -211,7 +211,7 @@ export function CardDatabaseViewer() {
                 ))}
               </div>
               {card.vp && (
-                <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded text-white">
+                <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-sm text-white">
                   {card.vp} VP
                 </span>
               )}

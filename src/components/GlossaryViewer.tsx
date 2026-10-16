@@ -23,7 +23,7 @@ export function GlossaryViewer() {
             placeholder="Search glossary terms..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 transition-colors font-mono text-sm"
+            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-gray-600 focus:outline-hidden focus:border-blue-500/50 transition-colors font-mono text-sm"
           />
         </div>
       </div>
@@ -41,7 +41,7 @@ export function GlossaryViewer() {
                 <div className="flex justify-between items-baseline mb-2">
                   <h4 className="font-bold text-xl text-blue-200">{item.term}</h4>
                   {item.ruleReference && (
-                    <span className="text-xs font-mono text-gray-500 bg-black/20 px-2 py-1 rounded">
+                    <span className="text-xs font-mono text-gray-500 bg-black/20 px-2 py-1 rounded-sm">
                       §{item.ruleReference}
                     </span>
                   )}

@@ -104,7 +104,7 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
               )}
               {c.ferryStart && (
                 <foreignObject x={c.x + 4} y={c.y - 4} width="6" height="6">
-                  <Anchor className="text-blue-600 w-full h-full drop-shadow-sm" />
+                  <Anchor className="text-blue-600 w-full h-full drop-shadow-xs" />
                 </foreignObject>
               )}
             </g>

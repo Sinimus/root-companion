@@ -28,7 +28,7 @@ export default function SetupGuidePage() {
 
         <button
           onClick={toggleVariant}
-          className="text-xs font-bold uppercase tracking-wider bg-gray-800 px-3 py-1.5 rounded border border-gray-700 hover:bg-gray-700 flex items-center gap-2"
+          className="text-xs font-bold uppercase tracking-wider bg-gray-800 px-3 py-1.5 rounded-sm border border-gray-700 hover:bg-gray-700 flex items-center gap-2"
         >
           <RefreshCw className="w-3 h-3" />
           {variant === 'advanced' ? 'Advanced Setup (AdSet)' : 'Standard Setup'}
@@ -51,7 +51,7 @@ export default function SetupGuidePage() {
 
         {/* Content */}
         <div className="bg-gray-900/50 border border-gray-800 p-8 rounded-2xl min-h-[350px] flex flex-col shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-red-500 opacity-50" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-orange-500 to-red-500 opacity-50" />
 
           <h2 className="text-2xl font-bold text-white mb-6">{current.title}</h2>
           <p className="text-lg text-gray-300 leading-relaxed mb-6">{current.content}</p>

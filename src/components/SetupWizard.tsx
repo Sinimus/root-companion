@@ -65,7 +65,7 @@ export function SetupWizard({ onFinish }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6 pb-32">
-      <div className="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-2xl border border-gray-800 backdrop-blur-sm sticky top-4 z-10 shadow-xl">
+      <div className="flex flex-col gap-4 bg-gray-900/50 p-6 rounded-2xl border border-gray-800 backdrop-blur-xs sticky top-4 z-10 shadow-xl">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white tracking-tight">Game Setup</h1>
@@ -77,7 +77,7 @@ export function SetupWizard({ onFinish }: Props) {
             <select
               value={playerCount}
               onChange={(e) => setPlayerCount(Number(e.target.value))}
-              className="bg-transparent text-white font-bold outline-none cursor-pointer appearance-none pr-2"
+              className="bg-transparent text-white font-bold outline-hidden cursor-pointer appearance-none pr-2"
             >
               {[2, 3, 4, 5, 6].map((n) => (
                 <option key={n} value={n}>
@@ -158,7 +158,7 @@ export function SetupWizard({ onFinish }: Props) {
                 </span>
                 <span
                   className={clsx(
-                    'px-2 py-0.5 rounded text-xs font-mono font-bold',
+                    'px-2 py-0.5 rounded-sm text-xs font-mono font-bold',
                     isSelected ? 'bg-black/40 text-white' : 'bg-gray-800 text-gray-500',
                   )}
                 >

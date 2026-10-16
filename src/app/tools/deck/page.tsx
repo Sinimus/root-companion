@@ -12,7 +12,7 @@ export default function DeckPage() {
   return (
     <div className="min-h-screen bg-[#0a0c10] pb-20 pt-6 relative flex flex-col">
       {/* Navigation */}
-      <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row items-center justify-between sticky top-0 z-40 bg-[#0a0c10]/95 backdrop-blur border-b border-gray-800 gap-4 md:gap-0">
+      <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row items-center justify-between sticky top-0 z-40 bg-[#0a0c10]/95 backdrop-blur-sm border-b border-gray-800 gap-4 md:gap-0">
         <div className="w-full md:w-auto flex justify-start">
           <Link
             href="/"

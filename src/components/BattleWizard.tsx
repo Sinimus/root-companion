@@ -31,7 +31,7 @@ function Tooltip({ text }: { text: string }) {
     >
       <Info className="w-4 h-4 text-gray-500 hover:text-blue-400 cursor-help" />
       {show && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-gray-900 border border-gray-600 p-3 rounded text-xs text-gray-200 shadow-xl z-50 pointer-events-none leading-tight">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-gray-900 border border-gray-600 p-3 rounded-sm text-xs text-gray-200 shadow-xl z-50 pointer-events-none leading-tight">
           {text}
         </div>
       )}
@@ -205,7 +205,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur p-4 animate-in fade-in">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in">
       <div className="bg-gray-950 border border-gray-700 rounded-2xl w-full max-w-md flex flex-col max-h-[90vh] shadow-2xl">
         <div className="bg-gray-900 p-4 border-b border-gray-800 flex justify-between items-center rounded-t-2xl">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -225,7 +225,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               <select
                 value={attackerId}
                 onChange={(e) => setAttackerId(e.target.value)}
-                className="w-full bg-gray-800 text-white border border-gray-700 rounded p-2 text-sm font-bold"
+                className="w-full bg-gray-800 text-white border border-gray-700 rounded-sm p-2 text-sm font-bold"
               >
                 {sortedFactions.map((f) => (
                   <option key={f.id} value={f.id}>
@@ -242,7 +242,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               <select
                 value={defenderId}
                 onChange={(e) => setDefenderId(e.target.value)}
-                className="w-full bg-gray-800 text-white border border-gray-700 rounded p-2 text-sm font-bold"
+                className="w-full bg-gray-800 text-white border border-gray-700 rounded-sm p-2 text-sm font-bold"
               >
                 {sortedFactions.map((f) => (
                   <option key={f.id} value={f.id}>
@@ -257,7 +257,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
           <div className="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
             <p className="text-[10px] uppercase text-gray-500 font-bold mb-2">Battle Conditions</p>
 
-            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm text-gray-300">Defenseless</span>
@@ -271,7 +271,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               />
             </label>
 
-            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+            <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
               <div className="flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-red-500" />
                 <span className="text-sm text-gray-300">Ambush!</span>
@@ -289,7 +289,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             <div className="border-t border-gray-800 pt-2 mt-2">
               <button
                 onClick={() => setShowAdvancedCards(!showAdvancedCards)}
-                className="flex items-center justify-between w-full cursor-pointer hover:bg-gray-800/50 p-1 rounded"
+                className="flex items-center justify-between w-full cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm"
               >
                 <div className="flex items-center gap-2">
                   <Crown className="w-4 h-4 text-purple-500" />
@@ -302,8 +302,8 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               </button>
 
               {showAdvancedCards && (
-                <div className="space-y-2 mt-2 p-2 bg-gray-900/30 rounded">
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                <div className="space-y-2 mt-2 p-2 bg-gray-900/30 rounded-sm">
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-blue-500" />
                       <span className="text-sm text-gray-300">Armorers</span>
@@ -317,7 +317,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                     <div className="flex items-center gap-2">
                       <Swords className="w-4 h-4 text-green-500" />
                       <span className="text-sm text-gray-300">Sappers</span>
@@ -331,7 +331,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                     <div className="flex items-center gap-2">
                       <Skull className="w-4 h-4 text-red-500" />
                       <span className="text-sm text-gray-300">Brutal Tactics</span>
@@ -345,7 +345,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                     <div className="flex items-center gap-2">
                       <Crown className="w-4 h-4 text-purple-500" />
                       <span className="text-sm text-gray-300">Command Warren</span>
@@ -359,7 +359,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                     />
                   </label>
 
-                  <div className="text-xs text-gray-500 italic p-2 bg-gray-800/30 rounded">
+                  <div className="text-xs text-gray-500 italic p-2 bg-gray-800/30 rounded-sm">
                     Context: Command Warren allows battle at start of daylight
                   </div>
                 </div>
@@ -372,14 +372,14 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setVagabondSwords((s) => Math.max(0, s - 1))}
-                    className="w-6 h-6 bg-gray-700 rounded text-white"
+                    className="w-6 h-6 bg-gray-700 rounded-sm text-white"
                   >
                     -
                   </button>
                   <span className="font-bold w-4 text-center">{vagabondSwords}</span>
                   <button
                     onClick={() => setVagabondSwords((s) => s + 1)}
-                    className="w-6 h-6 bg-gray-700 rounded text-white"
+                    className="w-6 h-6 bg-gray-700 rounded-sm text-white"
                   >
                     +
                   </button>
@@ -388,7 +388,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {isCorvidDefender && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded border-t border-gray-800 pt-2">
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
                 <div className="flex items-center gap-2">
                   <Skull className="w-4 h-4 text-purple-400" />
                   <span className="text-sm text-purple-200">Facedown Plot?</span>
@@ -404,7 +404,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {(isKeeperAttacker || isKeeperDefender) && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded border-t border-gray-800 pt-2">
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-300">Keepers have Relic?</span>
@@ -421,7 +421,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
             {isHundredsAttacker && (
               <div className="border-t border-gray-800 pt-2 mt-2 flex flex-col gap-2">
-                <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                   <div className="flex items-center gap-2">
                     <Crown className="w-4 h-4 text-orange-500" />
                     <span className="text-sm text-orange-200">Warlord in battle?</span>
@@ -434,7 +434,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                   />
                 </label>
                 {hundredsWarlord && (
-                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded">
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                     <div className="flex items-center gap-2">
                       <Flame className="w-4 h-4 text-red-500" />
                       <span className="text-sm text-red-300">Wrathful Mood?</span>
@@ -452,7 +452,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
             )}
 
             {isEyrieAttacker && (
-              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded border-t border-gray-800 pt-2">
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-300">Commander Leader?</span>
                 </div>
@@ -476,8 +476,8 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
           {roll && (
             <div className="space-y-4 animate-in zoom-in-95 duration-200">
               <div className="flex justify-center gap-4 text-xs text-gray-500 font-mono">
-                <div className="bg-black px-3 py-1 rounded">D1: {roll.d1}</div>
-                <div className="bg-black px-3 py-1 rounded">D2: {roll.d2}</div>
+                <div className="bg-black px-3 py-1 rounded-sm">D1: {roll.d1}</div>
+                <div className="bg-black px-3 py-1 rounded-sm">D2: {roll.d2}</div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-center">

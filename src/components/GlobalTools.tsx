@@ -25,7 +25,7 @@ export function GlobalTools() {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 z-[90] flex flex-col items-end gap-3">
+      <div className="fixed bottom-6 right-6 z-90 flex flex-col items-end gap-3">
         {/* Expanded Menu */}
         <div
           className={clsx(
@@ -41,7 +41,7 @@ export function GlobalTools() {
               setActiveTool('law');
               setIsExpanded(false);
             }}
-            className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-amber-500 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-sm group"
+            className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-amber-500 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-xs group"
             title="The Law of Root"
           >
             <ScrollText className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -53,7 +53,7 @@ export function GlobalTools() {
               setActiveTool('glossary');
               setIsExpanded(false);
             }}
-            className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-blue-400 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-sm group"
+            className="w-12 h-12 bg-gray-800 hover:bg-gray-700 text-blue-400 rounded-full shadow-lg flex items-center justify-center border border-gray-700 backdrop-blur-xs group"
             title="Glossary Reference"
           >
             <Book className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -65,7 +65,7 @@ export function GlobalTools() {
               setActiveTool('battle');
               setIsExpanded(false);
             }}
-            className="w-12 h-12 bg-red-900/80 hover:bg-red-800 text-white rounded-full shadow-lg flex items-center justify-center border border-red-700/50 backdrop-blur-sm group"
+            className="w-12 h-12 bg-red-900/80 hover:bg-red-800 text-white rounded-full shadow-lg flex items-center justify-center border border-red-700/50 backdrop-blur-xs group"
             title="Quick Battle"
           >
             <Swords className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -79,7 +79,7 @@ export function GlobalTools() {
             'w-14 h-14 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center border-2 backdrop-blur-md group',
             isExpanded
               ? 'bg-gray-800 border-gray-600 text-white rotate-90'
-              : 'bg-gradient-to-br from-orange-600 to-orange-800 border-orange-400/30 text-white',
+              : 'bg-linear-to-br from-orange-600 to-orange-800 border-orange-400/30 text-white',
           )}
           aria-label="Toggle Tools"
         >

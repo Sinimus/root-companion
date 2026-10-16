@@ -110,7 +110,7 @@ export function TurnGuide({ guide }: Props) {
               e.stopPropagation();
               openLaw(part);
             }}
-            className="text-amber-500 font-mono font-bold cursor-pointer hover:bg-amber-900/30 rounded px-1 -mx-1 transition-colors"
+            className="text-amber-500 font-mono font-bold cursor-pointer hover:bg-amber-900/30 rounded-sm px-1 -mx-1 transition-colors"
           >
             {part}
           </span>
@@ -134,7 +134,7 @@ export function TurnGuide({ guide }: Props) {
     <div className="max-w-2xl mx-auto pb-32 relative">
       {/* Generic Modal */}
       {activeModal && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-70 flex items-center justify-center p-6 bg-black/90 backdrop-blur-xs animate-in fade-in">
           <div className="bg-gray-900 border border-gray-600 p-6 rounded-xl shadow-2xl max-w-sm w-full relative">
             <button
               onClick={() => setActiveModal(null)}
@@ -152,7 +152,7 @@ export function TurnGuide({ guide }: Props) {
 
       {/* Setup Modal */}
       {showSetupInfo && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-6 bg-black/90 backdrop-blur-xs animate-in fade-in">
           <div className="bg-gray-900 border border-gray-600 p-6 rounded-xl shadow-2xl max-w-md w-full relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setShowSetupInfo(false)}
@@ -165,7 +165,7 @@ export function TurnGuide({ guide }: Props) {
             </h4>
             <div className="space-y-3 text-gray-200">
               {guide.setup.map((step, i) => (
-                <div key={i} className="bg-black/30 p-3 rounded border border-white/5 text-sm">
+                <div key={i} className="bg-black/30 p-3 rounded-sm border border-white/5 text-sm">
                   {step}
                 </div>
               ))}
@@ -176,7 +176,7 @@ export function TurnGuide({ guide }: Props) {
 
       {/* Strategy Modal */}
       {showStrategy && guide.strategy && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-6 bg-black/90 backdrop-blur-xs animate-in fade-in">
           <div className="bg-gray-900 border border-yellow-600/50 p-6 rounded-xl shadow-2xl max-w-md w-full relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setShowStrategy(false)}
@@ -204,14 +204,14 @@ export function TurnGuide({ guide }: Props) {
       <div className="grid grid-cols-2 gap-2 px-4 py-2 mb-2">
         <button
           onClick={() => setShowSetupInfo(true)}
-          className="text-xs font-bold text-gray-500 hover:text-white flex items-center justify-center gap-1 uppercase tracking-wider bg-gray-900/50 p-2 rounded"
+          className="text-xs font-bold text-gray-500 hover:text-white flex items-center justify-center gap-1 uppercase tracking-wider bg-gray-900/50 p-2 rounded-sm"
         >
           <MapPin className="w-3 h-3" /> Setup
         </button>
         {guide.strategy && (
           <button
             onClick={() => setShowStrategy(true)}
-            className="text-xs font-bold text-yellow-600 hover:text-yellow-400 flex items-center justify-center gap-1 uppercase tracking-wider bg-gray-900/50 p-2 rounded"
+            className="text-xs font-bold text-yellow-600 hover:text-yellow-400 flex items-center justify-center gap-1 uppercase tracking-wider bg-gray-900/50 p-2 rounded-sm"
           >
             <Lightbulb className="w-3 h-3" /> Strategy
           </button>
@@ -276,7 +276,7 @@ export function TurnGuide({ guide }: Props) {
                       : 'border-gray-600 group-hover:border-gray-400',
                   )}
                 >
-                  {isDone && <Check className="w-4 h-4 text-black stroke-[4]" />}
+                  {isDone && <Check className="w-4 h-4 text-black stroke-4" />}
                 </div>
                 <div className="space-y-3 flex-1">
                   <div className="flex justify-between items-start gap-2">
@@ -296,7 +296,7 @@ export function TurnGuide({ guide }: Props) {
                             e.stopPropagation();
                             openLaw(step.ruleReference);
                           }}
-                          className="text-xs text-blue-400 font-mono bg-blue-900/30 px-2 py-0.5 rounded border border-blue-800 hover:bg-blue-800 transition-colors"
+                          className="text-xs text-blue-400 font-mono bg-blue-900/30 px-2 py-0.5 rounded-sm border border-blue-800 hover:bg-blue-800 transition-colors"
                         >
                           §{step.ruleReference}
                         </button>
@@ -328,11 +328,11 @@ export function TurnGuide({ guide }: Props) {
         })}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0a0c10] via-[#0a0c10]/95 to-transparent z-30 safe-area-pb">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-linear-to-t from-[#0a0c10] via-[#0a0c10]/95 to-transparent z-30 safe-area-pb">
         <div className="max-w-2xl mx-auto flex gap-3">
           <Link
             href="/play"
-            className="flex-1 py-3 rounded-xl font-bold text-gray-400 bg-gray-900/80 hover:bg-gray-800 border border-gray-800 backdrop-blur transition-colors text-center"
+            className="flex-1 py-3 rounded-xl font-bold text-gray-400 bg-gray-900/80 hover:bg-gray-800 border border-gray-800 backdrop-blur-sm transition-colors text-center"
           >
             All Factions
           </Link>

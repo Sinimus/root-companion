@@ -47,7 +47,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold text-white border-b border-gray-800 pb-2">App Guide</h2>
 
           {/* Game Setup Section */}
-          <div className="bg-gradient-to-r from-green-900/20 to-green-800/10 border border-green-800/50 rounded-xl p-6">
+          <div className="bg-linear-to-r from-green-900/20 to-green-800/10 border border-green-800/50 rounded-xl p-6">
             <h3 className="text-xl font-bold text-green-400 mb-4 flex items-center gap-2">
               <PlayCircle className="w-6 h-6" />
               Game Setup Tools
@@ -75,7 +75,7 @@ export default function AboutPage() {
           </div>
 
           {/* Battle Sim Section */}
-          <div className="bg-gradient-to-r from-red-900/20 to-red-800/10 border border-red-800/50 rounded-xl p-6">
+          <div className="bg-linear-to-r from-red-900/20 to-red-800/10 border border-red-800/50 rounded-xl p-6">
             <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">
               <Swords className="w-6 h-6" />
               Battle Simulator 5.0

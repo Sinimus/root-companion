@@ -275,7 +275,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                 return (
                   <div
                     key={landmarkId}
-                    className="bg-gradient-to-br from-amber-900/20 to-amber-800/10 border border-amber-600/50 rounded-xl p-6"
+                    className="bg-linear-to-br from-amber-900/20 to-amber-800/10 border border-amber-600/50 rounded-xl p-6"
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-2 bg-amber-800/50 rounded-lg">
@@ -321,13 +321,13 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                               <Minus className="w-4 h-4" />
                             </button>
 
-                            <span className="font-bold text-lg text-white min-w-[3rem] text-center">
+                            <span className="font-bold text-lg text-white min-w-12 text-center">
                               {blackMarketDeck.length}
                             </span>
 
                             <button
                               onClick={() => setBlackMarketDeck((prev) => [...prev, '🎴'])}
-                              className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded transition-colors"
+                              className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
                             >
                               <Plus className="w-4 h-4" />
                             </button>
@@ -378,7 +378,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                                   <span className="text-sm text-white">{item}</span>
                                   <button
                                     onClick={() => removeForgeItem(index)}
-                                    className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded transition-colors"
+                                    className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded-sm transition-colors"
                                     title="Item crafted"
                                   >
                                     <Minus className="w-3 h-3" />
@@ -398,7 +398,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                               <button
                                 key={suit}
                                 onClick={() => setForgeSuit(suit)}
-                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded transition-colors capitalize"
+                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded-sm transition-colors capitalize"
                               >
                                 {suit}
                               </button>

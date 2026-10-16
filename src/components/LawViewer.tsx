@@ -97,7 +97,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
             placeholder="Search rules (e.g., 'A.1.2', 'ambush', 'setup')..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-10 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-amber-500/50 transition-colors font-mono text-sm"
+            className="w-full bg-black/40 border border-gray-700 rounded-lg pl-10 pr-10 py-3 text-white placeholder:text-gray-600 focus:outline-hidden focus:border-amber-500/50 transition-colors font-mono text-sm"
           />
           {query && (
             <button
@@ -114,7 +114,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
         {/* Sidebar */}
         <div
           className={clsx(
-            'w-64 bg-gray-900/90 backdrop-blur border-r border-gray-800 overflow-y-auto custom-scrollbar absolute md:static z-20 h-full transition-transform duration-300',
+            'w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-800 overflow-y-auto custom-scrollbar absolute md:static z-20 h-full transition-transform duration-300',
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
           )}
         >
@@ -165,7 +165,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
 
             {Object.entries(groupedRules).map(([sub, rules]) => (
               <div key={sub} className="space-y-4">
-                <h4 className="text-lg font-bold text-amber-500/80 sticky top-0 bg-[#0F1115]/95 backdrop-blur py-2 border-b border-gray-800 z-10 px-2 md:px-0">
+                <h4 className="text-lg font-bold text-amber-500/80 sticky top-0 bg-[#0F1115]/95 backdrop-blur-sm py-2 border-b border-gray-800 z-10 px-2 md:px-0">
                   {sub}
                 </h4>
                 <div className="space-y-3">
