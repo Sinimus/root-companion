@@ -10,6 +10,7 @@ interface TooltipProps {
 export function Tooltip({ text }: TooltipProps) {
   const tooltipId = useId();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const pointerFocusRef = useRef(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [pinned, setPinned] = useState(false);
@@ -55,20 +56,20 @@ export function Tooltip({ text }: TooltipProps) {
         aria-label="More information"
         aria-expanded={visible}
         aria-describedby={visible ? tooltipId : undefined}
-        onClick={() => {
-          if (visible) {
-            setHovered(false);
-            setPinned(false);
-            setFocusDismissed(true);
-          } else {
-            setPinned(true);
-          }
+        onClick={() => setPinned((p) => !p)}
+        onPointerDown={() => {
+          pointerFocusRef.current = true;
         }}
         onFocus={() => {
-          setFocused(true);
-          setFocusDismissed(false);
+          // A press focuses the button too; only keyboard focus shows the bubble by itself.
+          if (!pointerFocusRef.current) {
+            setFocused(true);
+            setFocusDismissed(false);
+          }
+          pointerFocusRef.current = false;
         }}
         onBlur={() => {
+          pointerFocusRef.current = false;
           setFocused(false);
           setFocusDismissed(false);
         }}

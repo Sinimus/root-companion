@@ -97,4 +97,29 @@ describe('Tooltip Component', () => {
     const tooltip = screen.getByRole('tooltip');
     expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
   });
+
+  it('a press (focus caused by a pointer) opens it once and a second press closes it', () => {
+    render(<Tooltip text="Some help" />);
+    const trigger = getTrigger();
+
+    // Chrome on Android focuses the button before the click event.
+    fireEvent.pointerDown(trigger);
+    fireEvent.focus(trigger);
+    fireEvent.click(trigger);
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    fireEvent.pointerDown(trigger);
+    fireEvent.click(trigger);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('a click while the mouse hovers pins it, and it stays after the mouse leaves', () => {
+    render(<Tooltip text="Some help" />);
+    const trigger = getTrigger();
+
+    firePointerEvent(trigger, 'pointerOver', 'mouse');
+    fireEvent.click(trigger);
+    firePointerEvent(trigger, 'pointerOut', 'mouse');
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+  });
 });
