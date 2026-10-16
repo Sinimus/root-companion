@@ -44,6 +44,19 @@ const SUIT_NAMES: Record<Suit, string> = {
 
 const LEGEND_SUIT_ORDER: Suit[] = ['fox', 'rabbit', 'mouse', 'bird'];
 
+// A ruined wall (three broken bars on a dark tile), deliberately not a letter: the suit
+// letters F, M and R already sit in the clearings. Drawn in a 5 x 5 box.
+function RuinShapes() {
+  return (
+    <>
+      <rect width="5" height="5" rx="1" fill="#292524" stroke="#fff" strokeWidth="0.6" />
+      <rect x="0.9" y="1.4" width="0.9" height="2.7" fill="#fff" />
+      <rect x="2.05" y="2.6" width="0.9" height="1.5" fill="#fff" />
+      <rect x="3.2" y="1.9" width="0.9" height="2.2" fill="#fff" />
+    </>
+  );
+}
+
 export function MapVisualizer({ mapId, suitMapping }: Props) {
   const mapData = MAPS[mapId] || MAPS['autumn'];
   const clearings = mapData.clearings;
@@ -241,28 +254,8 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
 
                 {/* Ruin badge at the lower right */}
                 {c.hasRuin && (
-                  <g data-ruin="true">
-                    <rect
-                      x={c.x + 4.5}
-                      y={c.y + 4.5}
-                      width="5"
-                      height="5"
-                      rx="1"
-                      fill="#292524"
-                      stroke="#fff"
-                      strokeWidth="0.6"
-                    />
-                    <text
-                      x={c.x + 7}
-                      y={c.y + 7}
-                      dy="1.2"
-                      textAnchor="middle"
-                      fontSize="3.4"
-                      fontWeight="700"
-                      fill="#fff"
-                    >
-                      R
-                    </text>
+                  <g data-ruin="true" transform={`translate(${c.x + 4.5} ${c.y + 4.5})`}>
+                    <RuinShapes />
                   </g>
                 )}
 
@@ -311,9 +304,9 @@ export function MapVisualizer({ mapId, suitMapping }: Props) {
             Corner
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="w-3.5 h-3.5 rounded-[3px] bg-[#292524] text-white text-[9px] font-bold inline-flex items-center justify-center">
-              R
-            </span>
+            <svg viewBox="0 0 5 5" className="w-3.5 h-3.5" aria-hidden="true">
+              <RuinShapes />
+            </svg>
             Ruin
           </span>
           {hasRiver && (

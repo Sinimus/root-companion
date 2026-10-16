@@ -107,7 +107,7 @@ export default function SetupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] p-4 pb-20 pt-6">
+    <div className="min-h-screen bg-[#0a0c10] p-4 pb-32 pt-6">
       {/* Navigation Header */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-8">
         <Link
@@ -408,16 +408,16 @@ export default function SetupPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center gap-3 pt-4">
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-between items-stretch sm:items-center gap-6 sm:gap-3 pt-4">
               <button
                 onClick={() => setStep('config')}
-                className="shrink-0 text-gray-500 hover:text-white font-bold transition-colors flex items-center gap-2"
+                className="self-start shrink-0 py-2 text-gray-500 hover:text-white font-bold transition-colors flex items-center gap-2"
               >
                 <ArrowLeft className="w-5 h-5" /> BACK
               </button>
               <button
                 onClick={() => setStep('selection')}
-                className="px-6 sm:px-10 py-4 bg-white text-black font-black text-lg sm:text-xl rounded-full hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center gap-3"
+                className="px-6 sm:px-10 py-4 bg-white text-black font-black text-lg sm:text-xl rounded-full hover:bg-gray-200 hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"
               >
                 {config.method === 'draft' ? 'PROCEED TO DRAFT' : 'SELECT FACTIONS'}{' '}
                 <ArrowRight className="w-6 h-6" />
