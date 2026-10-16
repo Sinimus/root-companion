@@ -178,4 +178,16 @@ describe('BattleWizard Component', () => {
     const scores = screen.getAllByText(/[0-9]+/, { selector: '.text-5xl' });
     expect(scores[1]).toHaveTextContent('3'); // 1 rolled + 2 ambush
   });
+
+  it('shows the Foiled by ambush checkbox only while Ambush is ticked', () => {
+    render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
+
+    expect(screen.queryByLabelText(/Foiled by attacker's ambush/)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText(/Ambush!/));
+    expect(screen.getByLabelText(/Foiled by attacker's ambush/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText(/Ambush!/));
+    expect(screen.queryByLabelText(/Foiled by attacker's ambush/)).not.toBeInTheDocument();
+  });
 });

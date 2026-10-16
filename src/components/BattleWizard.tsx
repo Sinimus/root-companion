@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { FACTIONS_DATA } from '@/data/factions';
 import { IGameSession } from '@/types/engine';
+import { resolveBattle } from '@/utils/battleLogic';
 
 interface BattleProps {
   defaultAttackerId?: string;
@@ -71,6 +72,11 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   // Toggles
   const [isDefenseless, setIsDefenseless] = useState(false);
   const [isAmbush, setIsAmbush] = useState(false);
+  const [isAmbushFoiled, setIsAmbushFoiled] = useState(false);
+
+  // Warriors in the clearing of battle (4.3.3.I); null = not entered, no cap
+  const [attackerWarriors, setAttackerWarriors] = useState<number | null>(null);
+  const [defenderWarriors, setDefenderWarriors] = useState<number | null>(null);
 
   // Advanced Cards
   const [armorersActive, setArmorersActive] = useState(false);
@@ -88,7 +94,6 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   const [eyrieCommander, setEyrieCommander] = useState(false);
 
   // Context Checks
-  const isAllianceDefender = defenderId === 'alliance';
   const isVagabondAttacker = attackerId.startsWith('vagabond');
   const isVagabondDefender = defenderId.startsWith('vagabond');
   const isCorvidDefender = defenderId === 'corvid';
@@ -101,108 +106,32 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
     setRoll({ d1: Math.floor(Math.random() * 4), d2: Math.floor(Math.random() * 4) });
   };
 
-  let attackerHits = 0;
-  let defenderHits = 0;
-  const notes: string[] = [];
+  const result = roll
+    ? resolveBattle({
+        roll,
+        attackerId,
+        defenderId,
+        vagabondSwords,
+        attackerWarriors,
+        defenderWarriors,
+        isDefenseless,
+        isAmbush,
+        isAmbushFoiled,
+        armorersActive,
+        sappersActive,
+        brutalTacticsActive,
+        commandWarrenActive,
+        hasCorvidPlot,
+        keeperHasRelic,
+        hundredsWrathful,
+        hundredsWarlord,
+        eyrieCommander,
+      })
+    : null;
 
-  if (roll) {
-    const rawHigh = Math.max(roll.d1, roll.d2);
-    const rawLow = Math.min(roll.d1, roll.d2);
-
-    let rawAttacker = rawHigh;
-    let rawDefender = rawLow;
-
-    // 1. Guerrilla War
-    if (isAllianceDefender) {
-      rawAttacker = rawLow;
-      rawDefender = rawHigh;
-      notes.push('Guerrilla War: Alliance defends with higher roll.');
-    }
-
-    // 2. Vagabond Cap
-    if (isVagabondAttacker) {
-      if (rawAttacker > vagabondSwords) {
-        rawAttacker = vagabondSwords;
-        notes.push(`Vagabond: Hits limited by number of swords (${vagabondSwords}).`);
-      }
-    }
-    // Law 9.2.6 caps the Vagabond's rolled hits as defender too
-    if (isVagabondDefender && rawDefender > vagabondSwords) {
-      rawDefender = vagabondSwords;
-      notes.push(`Vagabond: Hits limited by number of swords (${vagabondSwords}).`);
-    }
-
-    // 3. Base Hits (rolled hits; the attacker's extra hits are counted apart, Law 4.3.5.I)
-    let attackerExtraHits = 0;
-    defenderHits = rawDefender;
-
-    // 4. Modifiers Calculation
-
-    // AMBUSH: Defender deals 2 extra hits immediately
-    if (isAmbush) {
-      defenderHits += 2;
-      notes.push('AMBUSH: +2 Defender Hits (Applied immediately).');
-    }
-
-    // DEFENSELESS: Attacker deals +1 hit
-    if (isDefenseless) {
-      attackerExtraHits += 1;
-      notes.push('Defenseless: +1 Attacker Hit.');
-    }
-
-    // SAPPERS: Defender deals +1 extra hit
-    if (sappersActive) {
-      defenderHits += 1;
-      notes.push('Sappers: Defender deals +1 hit.');
-    }
-
-    // BRUTAL TACTICS: Attacker +1 hit, Defender scores VP (VP logic not tracked here)
-    if (brutalTacticsActive) {
-      attackerExtraHits += 1;
-      notes.push('Brutal Tactics: Attacker deals +1 hit, Defender scores 1 VP.');
-    }
-
-    // FACTION BONUSES
-    if (isHundredsAttacker && hundredsWarlord && hundredsWrathful) {
-      attackerExtraHits += 1;
-      notes.push('Wrathful Warlord: +1 Attacker Hit.');
-    }
-
-    if (isEyrieAttacker && eyrieCommander) {
-      attackerExtraHits += 1;
-      notes.push('Commander: +1 Attacker Hit.');
-    }
-
-    if (isCorvidDefender && hasCorvidPlot) {
-      defenderHits += 1;
-      notes.push('Embedded Agents: +1 Defender Hit (Facedown Plot).');
-    }
-
-    // 5. Damage Prevention / Reduction (Apply LAST)
-
-    // ARMORERS: "In battle, may discard this to ignore all rolled hits taken."
-    // Only rolled hits are ignored; extra hits still land (Law 4.3.5.I, 4.3.5.III).
-    if (armorersActive) {
-      rawAttacker = 0;
-      notes.push('Armorers: Defender ignores all ROLLED hits taken (extra hits still count).');
-    }
-    attackerHits = rawAttacker + attackerExtraHits;
-
-    // DEVOUT KNIGHTS (Keepers): Ignore first hit taken
-    if (isKeeperDefender && keeperHasRelic && attackerHits > 0) {
-      attackerHits -= 1;
-      notes.push('DEVOUT KNIGHTS: Keepers ignore 1 hit taken.');
-    }
-
-    if (isKeeperAttacker && keeperHasRelic && defenderHits > 0) {
-      defenderHits -= 1;
-      notes.push('DEVOUT KNIGHTS: Keepers ignore 1 hit taken.');
-    }
-
-    if (commandWarrenActive) {
-      notes.push('Command Warren: Battle can occur at start of Daylight phase.');
-    }
-  }
+  const attackerHits = result?.attackerHits ?? 0;
+  const defenderHits = result?.defenderHits ?? 0;
+  const notes = result?.notes ?? [];
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in">
@@ -261,7 +190,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm text-gray-300">Defenseless</span>
-                <Tooltip text="Defender has no warriors in clearing. +1 Hit." />
+                <Tooltip text="Defender has no warriors in the clearing (4.3.5.II): attacker +1 hit, defender deals no rolled hits. A Vagabond defender without an undamaged sword is defenseless automatically (9.2.4)." />
               </div>
               <input
                 type="checkbox"
@@ -280,10 +209,71 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
               <input
                 type="checkbox"
                 checked={isAmbush}
-                onChange={(e) => setIsAmbush(e.target.checked)}
+                onChange={(e) => {
+                  setIsAmbush(e.target.checked);
+                  if (!e.target.checked) setIsAmbushFoiled(false);
+                }}
                 className="accent-red-500 w-4 h-4"
               />
             </label>
+
+            {isAmbush && (
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm pl-6">
+                <div className="flex items-center gap-2">
+                  <Swords className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-300">Foiled by attacker's ambush</span>
+                  <Tooltip text="The attacker played an ambush matching the clearing: the defender's ambush is discarded and deals no hits (4.3.1.I)." />
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isAmbushFoiled}
+                  onChange={(e) => setIsAmbushFoiled(e.target.checked)}
+                  className="accent-red-500 w-4 h-4"
+                />
+              </label>
+            )}
+
+            {!isVagabondAttacker && (
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                <div className="flex items-center gap-2">
+                  <Swords className="w-4 h-4 text-red-400" />
+                  <span className="text-sm text-gray-300">Attacking warriors</span>
+                  <Tooltip text="Rolled hits are limited by the warriors in the clearing of battle (4.3.3.I). Leave empty for no limit." />
+                </div>
+                <input
+                  type="number"
+                  value={attackerWarriors ?? ''}
+                  min={0}
+                  max={25}
+                  placeholder="any"
+                  onChange={(e) => {
+                    setAttackerWarriors(e.target.value === '' ? null : Number(e.target.value));
+                  }}
+                  className="w-20 bg-gray-800 text-white border border-gray-700 rounded-sm p-2 text-sm font-bold text-center"
+                />
+              </label>
+            )}
+
+            {!isVagabondDefender && (
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm text-gray-300">Defending warriors</span>
+                  <Tooltip text="Rolled hits are limited by the warriors in the clearing of battle (4.3.3.I). Leave empty for no limit." />
+                </div>
+                <input
+                  type="number"
+                  value={defenderWarriors ?? ''}
+                  min={0}
+                  max={25}
+                  placeholder="any"
+                  onChange={(e) => {
+                    setDefenderWarriors(e.target.value === '' ? null : Number(e.target.value));
+                  }}
+                  className="w-20 bg-gray-800 text-white border border-gray-700 rounded-sm p-2 text-sm font-bold text-center"
+                />
+              </label>
+            )}
 
             {/* Advanced Cards Section */}
             <div className="border-t border-gray-800 pt-2 mt-2">
