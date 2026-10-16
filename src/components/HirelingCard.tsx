@@ -35,6 +35,8 @@ interface HirelingCardProps {
   onFlipState?: () => void;
   initialPromoted?: boolean;
   isActive?: boolean;
+  gainedThisTurn?: boolean;
+  onToggleGainedThisTurn?: () => void;
 }
 
 // Icon mapping for hirelings
@@ -73,6 +75,8 @@ export function HirelingCard({
   onFlipState,
   initialPromoted = true,
   isActive = false,
+  gainedThisTurn = false,
+  onToggleGainedThisTurn,
 }: HirelingCardProps) {
   const [isPromoted, setIsPromoted] = useState(initialPromoted);
   const Icon = ICON_MAP[hireling.iconName as keyof typeof ICON_MAP] || User;
@@ -268,6 +272,18 @@ export function HirelingCard({
               ))}
             </div>
           </div>
+
+          {onToggleGainedThisTurn && (
+            <label className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+              <input
+                type="checkbox"
+                checked={gainedThisTurn}
+                onChange={onToggleGainedThisTurn}
+                className="accent-purple-500"
+              />
+              Gained this turn (no decay, H.1.3)
+            </label>
+          )}
 
           {controlMarkers === 0 && (
             <div className="mt-2 flex items-center gap-2 text-red-500 text-sm font-bold">
