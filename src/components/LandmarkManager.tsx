@@ -1,10 +1,23 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LANDMARKS_DATA, LEGENDARY_FORGE_ITEMS } from '@/data/landmarks';
 import { ILandmark } from '@/types/engine';
-import { ArrowLeft, MapPin, Ship, Building, Trees, Store, Hammer, Plus, Minus, Shuffle, Eye, EyeOff } from 'lucide-react';
+import {
+  ArrowLeft,
+  MapPin,
+  Ship,
+  Building,
+  Trees,
+  Store,
+  Hammer,
+  Plus,
+  Minus,
+  Shuffle,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
 
 interface LandmarkManagerProps {}
 
@@ -62,7 +75,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
   };
 
   const toggleLandmark = (landmarkId: string) => {
-    setSelectedLandmarks(prev => {
+    setSelectedLandmarks((prev) => {
       if (prev.includes(landmarkId)) {
         // If removing Black Market, clear its deck
         if (landmarkId === 'black-market') {
@@ -72,7 +85,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
         if (landmarkId === 'legendary-forge') {
           setLegendaryForgeItems([]);
         }
-        return prev.filter(id => id !== landmarkId);
+        return prev.filter((id) => id !== landmarkId);
       } else {
         // If adding Black Market, initialize its deck
         if (landmarkId === 'black-market') {
@@ -102,7 +115,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
   };
 
   const removeForgeItem = (index: number) => {
-    setLegendaryForgeItems(prev => prev.filter((_, i) => i !== index));
+    setLegendaryForgeItems((prev) => prev.filter((_, i) => i !== index));
   };
 
   const getIcon = (iconName: string) => {
@@ -112,7 +125,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
   const randomizeLandmarks = () => {
     const shuffled = [...LANDMARKS_DATA].sort(() => Math.random() - 0.5);
     const randomCount = Math.floor(Math.random() * 2) + 1; // 1-2 landmarks
-    const newSelection = shuffled.slice(0, randomCount).map(l => l.id);
+    const newSelection = shuffled.slice(0, randomCount).map((l) => l.id);
 
     setSelectedLandmarks(newSelection);
 
@@ -125,14 +138,17 @@ export function LandmarkManager({}: LandmarkManagerProps) {
   };
 
   const removeBlackMarketCard = () => {
-    setBlackMarketDeck(prev => prev.slice(0, -1));
+    setBlackMarketDeck((prev) => prev.slice(0, -1));
   };
 
   return (
     <main className="min-h-screen bg-[#0a0c10] text-white p-4 pb-20 pt-20">
       {/* Header */}
       <div className="absolute top-6 left-6 z-40">
-        <Link href="/" className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium">
+        <Link
+          href="/"
+          className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium"
+        >
           <ArrowLeft className="w-5 h-5" /> Menu
         </Link>
       </div>
@@ -143,14 +159,18 @@ export function LandmarkManager({}: LandmarkManagerProps) {
             <MapPin className="w-8 h-8 text-amber-400" />
             Landmarks Manager
           </h1>
-          <p className="text-gray-400">Select and manage landmarks (Landmarks Pack, Underworld Expansion)</p>
+          <p className="text-gray-400">
+            Select and manage landmarks (Landmarks Pack, Underworld Expansion)
+          </p>
         </div>
 
         {/* Controls */}
         <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-6 mb-6">
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-400">Selected: {selectedLandmarks.length} landmarks</span>
+              <span className="text-sm text-gray-400">
+                Selected: {selectedLandmarks.length} landmarks
+              </span>
               <button
                 onClick={randomizeLandmarks}
                 className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
@@ -174,7 +194,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
         <div className="space-y-6 mb-8">
           <h2 className="text-2xl font-bold text-white mb-4">Available Landmarks</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            {LANDMARKS_DATA.map(landmark => {
+            {LANDMARKS_DATA.map((landmark) => {
               const Icon = getIcon(landmark.icon || 'MapPin');
               const isSelected = selectedLandmarks.includes(landmark.id);
 
@@ -184,29 +204,31 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                   onClick={() => toggleLandmark(landmark.id)}
                   className={`
                     p-6 rounded-xl border-2 cursor-pointer transition-all
-                    ${isSelected
-                      ? 'bg-amber-900/20 border-amber-600/50 shadow-lg shadow-amber-500/20'
-                      : 'bg-gray-900/60 border-gray-800 hover:border-gray-600 hover:bg-gray-900/80'
+                    ${
+                      isSelected
+                        ? 'bg-amber-900/20 border-amber-600/50 shadow-lg shadow-amber-500/20'
+                        : 'bg-gray-900/60 border-gray-800 hover:border-gray-600 hover:bg-gray-900/80'
                     }
                   `}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`
+                    <div
+                      className={`
                       p-3 rounded-lg transition-colors
                       ${isSelected ? 'bg-amber-800/50 text-amber-300' : 'bg-gray-800 text-gray-400'}
-                    `}>
+                    `}
+                    >
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="text-xl font-bold text-white">{landmark.name}</h3>
-                        <span className={`
+                        <span
+                          className={`
                           text-xs px-2 py-1 rounded-full font-medium
-                          ${isSelected
-                            ? 'bg-amber-600 text-white'
-                            : 'bg-gray-700 text-gray-300'
-                          }
-                        `}>
+                          ${isSelected ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-300'}
+                        `}
+                        >
                           {isSelected ? 'Selected' : 'Available'}
                         </span>
                       </div>
@@ -225,7 +247,9 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                         {landmark.gameplayEffect && (
                           <div>
                             <h4 className="text-sm font-bold text-green-400 mb-1">Effect</h4>
-                            <p className="text-xs text-gray-400 italic">{landmark.gameplayEffect}</p>
+                            <p className="text-xs text-gray-400 italic">
+                              {landmark.gameplayEffect}
+                            </p>
                           </div>
                         )}
                       </div>
@@ -242,14 +266,17 @@ export function LandmarkManager({}: LandmarkManagerProps) {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-4">Selected Landmarks</h2>
             <div className="grid gap-4 md:grid-cols-2">
-              {selectedLandmarks.map(landmarkId => {
-                const landmark = LANDMARKS_DATA.find(l => l.id === landmarkId);
+              {selectedLandmarks.map((landmarkId) => {
+                const landmark = LANDMARKS_DATA.find((l) => l.id === landmarkId);
                 if (!landmark) return null;
 
                 const Icon = getIcon(landmark.icon || 'MapPin');
 
                 return (
-                  <div key={landmarkId} className="bg-gradient-to-br from-amber-900/20 to-amber-800/10 border border-amber-600/50 rounded-xl p-6">
+                  <div
+                    key={landmarkId}
+                    className="bg-linear-to-br from-amber-900/20 to-amber-800/10 border border-amber-600/50 rounded-xl p-6"
+                  >
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-2 bg-amber-800/50 rounded-lg">
                         <Icon className="w-5 h-5 text-amber-300" />
@@ -266,34 +293,41 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                             onClick={() => setShowMarketDeck(!showMarketDeck)}
                             className="text-amber-400 hover:text-amber-300 transition-colors"
                           >
-                            {showMarketDeck ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            {showMarketDeck ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
                           </button>
                         </div>
 
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-400">Face-down cards (a swap keeps it at 3):</span>
+                          <span className="text-sm text-gray-400">
+                            Face-down cards (a swap keeps it at 3):
+                          </span>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => removeBlackMarketCard()}
                               disabled={blackMarketDeck.length === 0}
                               className={`
                                 p-1 rounded transition-colors
-                                ${blackMarketDeck.length > 0
-                                  ? 'bg-red-800 hover:bg-red-700 text-red-300'
-                                  : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                                ${
+                                  blackMarketDeck.length > 0
+                                    ? 'bg-red-800 hover:bg-red-700 text-red-300'
+                                    : 'bg-gray-800 text-gray-600 cursor-not-allowed'
                                 }
                               `}
                             >
                               <Minus className="w-4 h-4" />
                             </button>
 
-                            <span className="font-bold text-lg text-white min-w-[3rem] text-center">
+                            <span className="font-bold text-lg text-white min-w-12 text-center">
                               {blackMarketDeck.length}
                             </span>
 
                             <button
-                              onClick={() => setBlackMarketDeck(prev => [...prev, '🎴'])}
-                              className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded transition-colors"
+                              onClick={() => setBlackMarketDeck((prev) => [...prev, '🎴'])}
+                              className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
                             >
                               <Plus className="w-4 h-4" />
                             </button>
@@ -321,7 +355,9 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                     {landmarkId === 'legendary-forge' && (
                       <div className="bg-gray-800/50 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-sm font-bold text-orange-300">Legendary Forge Items</h4>
+                          <h4 className="text-sm font-bold text-orange-300">
+                            Legendary Forge Items
+                          </h4>
                           <span className="text-xs text-gray-500">Craft: +1 card, +1 VP</span>
                         </div>
 
@@ -335,11 +371,14 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                           ) : (
                             <div className="space-y-2">
                               {legendaryForgeItems.map((item, index) => (
-                                <div key={index} className="flex items-center justify-between bg-gray-900/30 rounded-lg px-3 py-2">
+                                <div
+                                  key={index}
+                                  className="flex items-center justify-between bg-gray-900/30 rounded-lg px-3 py-2"
+                                >
                                   <span className="text-sm text-white">{item}</span>
                                   <button
                                     onClick={() => removeForgeItem(index)}
-                                    className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded transition-colors"
+                                    className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded-sm transition-colors"
                                     title="Item crafted"
                                   >
                                     <Minus className="w-3 h-3" />
@@ -351,13 +390,15 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                         </div>
 
                         <div className="border-t border-gray-700 pt-3">
-                          <div className="text-sm text-gray-400 mb-2">Set up by the suit of the Forge clearing:</div>
+                          <div className="text-sm text-gray-400 mb-2">
+                            Set up by the suit of the Forge clearing:
+                          </div>
                           <div className="grid grid-cols-3 gap-2">
-                            {(['fox', 'mouse', 'rabbit'] as const).map(suit => (
+                            {(['fox', 'mouse', 'rabbit'] as const).map((suit) => (
                               <button
                                 key={suit}
                                 onClick={() => setForgeSuit(suit)}
-                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded transition-colors capitalize"
+                                className="px-2 py-1 bg-orange-900/30 hover:bg-orange-800/40 text-orange-300 text-xs rounded-sm transition-colors capitalize"
                               >
                                 {suit}
                               </button>

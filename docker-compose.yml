@@ -6,10 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000" # Vlevo je port hostitele (můžeš změnit), vpravo port kontejneru (neměnit)
+      - '3000:3000' # Vlevo je port hostitele (můžeš změnit), vpravo port kontejneru (neměnit)
     restart: unless-stopped
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - PORT=3000
-

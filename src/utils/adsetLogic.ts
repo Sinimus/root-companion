@@ -38,19 +38,22 @@ export function generateAdSetState(playerCount: number, options: AdSetOptions = 
     throw new Error(`Invalid player count: ${playerCount}. AdSet supports 2-4 players.`);
   }
 
-  const available = FACTIONS_DATA.filter(f =>
-    !excludedFactionIds.includes(f.id) &&
-    (includeSecondVagabond || f.id !== SECOND_VAGABOND_ID)
+  const available = FACTIONS_DATA.filter(
+    (f) =>
+      !excludedFactionIds.includes(f.id) && (includeSecondVagabond || f.id !== SECOND_VAGABOND_ID),
   );
 
-  const militants = shuffle(available.filter(f => f.type === 'militant'), random);
+  const militants = shuffle(
+    available.filter((f) => f.type === 'militant'),
+    random,
+  );
   const firstMilitant = militants[0];
   if (!firstMilitant) {
     throw new Error('No militant factions available for the pool');
   }
 
   // A.8.2.I: with two players the insurgent cards are removed before dealing
-  const insurgents = playerCount === 2 ? [] : available.filter(f => f.type === 'insurgent');
+  const insurgents = playerCount === 2 ? [] : available.filter((f) => f.type === 'insurgent');
   const rest = shuffle([...militants.slice(1), ...insurgents], random);
   if (rest.length < playerCount) {
     throw new Error(`Not enough faction setup cards for ${playerCount} players`);
@@ -60,26 +63,30 @@ export function generateAdSetState(playerCount: number, options: AdSetOptions = 
   const last = dealt[dealt.length - 1];
 
   return {
-    pool: [firstMilitant.id, ...dealt.map(f => f.id)],
-    lockedFactionId: last.type === 'insurgent' ? last.id : null
+    pool: [firstMilitant.id, ...dealt.map((f) => f.id)],
+    lockedFactionId: last.type === 'insurgent' ? last.id : null,
   };
 }
 
 export function getFactionById(id: string): IFaction | undefined {
-  return FACTIONS_DATA.find(f => f.id === id);
+  return FACTIONS_DATA.find((f) => f.id === id);
 }
 
 // A.8.2.II: the locked insurgent cannot be chosen until a militant faction has been chosen
-export function isChoosable(state: AdSetState, factionId: string, chosenFactionIds: string[]): boolean {
+export function isChoosable(
+  state: AdSetState,
+  factionId: string,
+  chosenFactionIds: string[],
+): boolean {
   if (!state.pool.includes(factionId)) return false;
   if (factionId !== state.lockedFactionId) return true;
-  return chosenFactionIds.some(id => getFactionById(id)?.type === 'militant');
+  return chosenFactionIds.some((id) => getFactionById(id)?.type === 'militant');
 }
 
 export function chooseFaction(state: AdSetState, factionId: string): AdSetState {
   return {
     ...state,
-    pool: state.pool.filter(id => id !== factionId)
+    pool: state.pool.filter((id) => id !== factionId),
   };
 }
 

@@ -1,7 +1,7 @@
 import { searchLaw } from '@/components/LawViewer';
 import { LAW_FULL } from '@/data/law_full';
 
-const ids = (query: string) => searchLaw(LAW_FULL, query).map(r => r.id);
+const ids = (query: string) => searchLaw(LAW_FULL, query).map((r) => r.id);
 
 describe('searchLaw', () => {
   it('finds a rule and its sub-rules by number', () => {
@@ -23,7 +23,13 @@ describe('searchLaw', () => {
   });
 
   it('includes lettered sub-rules of a roman sub-rule', () => {
-    expect(ids('9.2.9.III')).toEqual(['9.2.9.III', '9.2.9.IIIa', '9.2.9.IIIb', '9.2.9.IIIc', '9.2.9.IIId']);
+    expect(ids('9.2.9.III')).toEqual([
+      '9.2.9.III',
+      '9.2.9.IIIa',
+      '9.2.9.IIIb',
+      '9.2.9.IIIc',
+      '9.2.9.IIId',
+    ]);
   });
 
   it('falls back to text search', () => {

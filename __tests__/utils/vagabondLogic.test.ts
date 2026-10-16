@@ -1,10 +1,25 @@
 import {
-  VagabondItem, VagabondItemType, VAGABOND_CHARACTERS, startingItems, refreshCount, refresh,
-  drawCount, itemLimit, itemLoad, maxRolledHits, repair, rest, trackItemIds
+  VagabondItem,
+  VagabondItemType,
+  VAGABOND_CHARACTERS,
+  startingItems,
+  refreshCount,
+  refresh,
+  drawCount,
+  itemLimit,
+  itemLoad,
+  maxRolledHits,
+  repair,
+  rest,
+  trackItemIds,
 } from '@/utils/vagabondLogic';
 
-const item = (id: string, type: VagabondItemType, exhausted = false, damaged = false): VagabondItem =>
-  ({ id, type, exhausted, damaged });
+const item = (
+  id: string,
+  type: VagabondItemType,
+  exhausted = false,
+  damaged = false,
+): VagabondItem => ({ id, type, exhausted, damaged });
 
 describe('Vagabond logic', () => {
   describe('starting items (Law Appendix V)', () => {
@@ -16,7 +31,7 @@ describe('Vagabond logic', () => {
     });
 
     it('starts every item face up and undamaged (9.3.5)', () => {
-      startingItems('Tinker').forEach(i => {
+      startingItems('Tinker').forEach((i) => {
         expect(i.exhausted).toBe(false);
         expect(i.damaged).toBe(false);
       });
@@ -25,14 +40,22 @@ describe('Vagabond logic', () => {
 
   describe('refresh (9.4.1)', () => {
     it('counts only face-up tea on the track', () => {
-      expect(refreshCount([item('1', 'Tea'), item('2', 'Tea', true), item('3', 'Tea', false, true)])).toBe(5);
+      expect(
+        refreshCount([item('1', 'Tea'), item('2', 'Tea', true), item('3', 'Tea', false, true)]),
+      ).toBe(5);
       expect(refreshCount([item('1', 'Sword')])).toBe(3);
     });
 
     it('does not count tea flipped up during the refresh itself', () => {
-      const items = [item('t', 'Tea', true), item('a', 'Boot', true), item('b', 'Boot', true), item('c', 'Sword', true), item('d', 'Torch', true)];
+      const items = [
+        item('t', 'Tea', true),
+        item('a', 'Boot', true),
+        item('b', 'Boot', true),
+        item('c', 'Sword', true),
+        item('d', 'Torch', true),
+      ];
       const after = refresh(items);
-      expect(after.filter(i => !i.exhausted)).toHaveLength(3);
+      expect(after.filter((i) => !i.exhausted)).toHaveLength(3);
     });
 
     it('leaves damaged items in the Damaged box', () => {
@@ -51,13 +74,19 @@ describe('Vagabond logic', () => {
     });
 
     it('counts Satchel and Damaged box, not the tracks', () => {
-      const items = [item('1', 'Bag'), item('2', 'Tea'), item('3', 'Sword'), item('4', 'Boot', true), item('5', 'Coin', false, true)];
+      const items = [
+        item('1', 'Bag'),
+        item('2', 'Tea'),
+        item('3', 'Sword'),
+        item('4', 'Boot', true),
+        item('5', 'Coin', false, true),
+      ];
       expect(trackItemIds(items)).toEqual(new Set(['1', '2']));
       expect(itemLoad(items)).toBe(3);
     });
 
     it('holds at most three items per track (9.2.5.I)', () => {
-      const teas = ['1', '2', '3', '4'].map(id => item(id, 'Tea'));
+      const teas = ['1', '2', '3', '4'].map((id) => item(id, 'Tea'));
       expect(trackItemIds(teas).size).toBe(3);
       expect(itemLoad(teas)).toBe(1);
     });
@@ -69,11 +98,19 @@ describe('Vagabond logic', () => {
 
   describe('battle and repair', () => {
     it('caps rolled hits at undamaged swords, face up or down (9.2.6)', () => {
-      expect(maxRolledHits([item('1', 'Sword'), item('2', 'Sword', true), item('3', 'Sword', false, true)])).toBe(2);
+      expect(
+        maxRolledHits([
+          item('1', 'Sword'),
+          item('2', 'Sword', true),
+          item('3', 'Sword', false, true),
+        ]),
+      ).toBe(2);
     });
 
     it('repair keeps the item on its current side (9.5.7)', () => {
-      expect(repair([item('1', 'Boot', true, true)], '1')[0]).toEqual(item('1', 'Boot', true, false));
+      expect(repair([item('1', 'Boot', true, true)], '1')[0]).toEqual(
+        item('1', 'Boot', true, false),
+      );
     });
   });
 });

@@ -1,12 +1,33 @@
 export const GOLDEN_RULES = [
-  { title: '1. Precedence', text: 'Card text overrides the Law. The Law overrides Learning to Play.' },
-  { title: '2. "Cannot"', text: '"Cannot" is absolute. It cannot be overridden unless explicitly instructed.' },
-  { title: '3. Public Info', text: 'Hand size, discard pile, and boards are public. Hand content is secret.' },
-  { title: '4. Agreements', text: 'Deals are non-binding. You cannot give cards/items unless a rule says so.' },
-  { title: '5. Ruling', text: 'Most Warriors + Buildings = Rule. Ties = Nobody rules. (Eyrie/Lizards have exceptions).' },
+  {
+    title: '1. Precedence',
+    text: 'Card text overrides the Law. The Law overrides Learning to Play.',
+  },
+  {
+    title: '2. "Cannot"',
+    text: '"Cannot" is absolute. It cannot be overridden unless explicitly instructed.',
+  },
+  {
+    title: '3. Public Info',
+    text: 'Hand size, discard pile, and boards are public. Hand content is secret.',
+  },
+  {
+    title: '4. Agreements',
+    text: 'Deals are non-binding. You cannot give cards/items unless a rule says so.',
+  },
+  {
+    title: '5. Ruling',
+    text: 'Most Warriors + Buildings = Rule. Ties = Nobody rules. (Eyrie/Lizards have exceptions).',
+  },
   { title: '6. Movement', text: 'To Move, you must Rule the origin OR the destination.' },
-  { title: '7. Crafting', text: 'Activate pieces in matching clearings. Pieces are used once per turn.' },
-  { title: '8. Victory', text: 'First to 30 VP wins immediately. Or complete a Dominance start of turn.' }
+  {
+    title: '7. Crafting',
+    text: 'Activate pieces in matching clearings. Pieces are used once per turn.',
+  },
+  {
+    title: '8. Victory',
+    text: 'First to 30 VP wins immediately. Or complete a Dominance start of turn.',
+  },
 ];
 
 export const DECK_INFO = {
@@ -16,8 +37,8 @@ export const DECK_INFO = {
     features: [
       'Favor Cards: Remove ALL enemy pieces in suit clearings.',
       'Ambush: 5 cards (1 of each suit, 2 birds).',
-      'Dominance: 4 cards.'
-    ]
+      'Dominance: 4 cards.',
+    ],
   },
   exiles: {
     title: 'Exiles & Partisans',
@@ -27,7 +48,7 @@ export const DECK_INFO = {
       'Partisans: In battle in clearings of their suit, deal 1 extra hit, then discard all your cards except that suit.',
       'Coffin Makers: Collects removed warriors; score one point per five at start of Birdsong.',
       'False Orders: Move enemy warriors.',
-      'Corvid Planners: Ignore Rule for movement.'
-    ]
-  }
+      'Corvid Planners: Ignore Rule for movement.',
+    ],
+  },
 };
