@@ -191,13 +191,11 @@ export default function SetupPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setConfig({ ...config, method: 'draft' })}
-                    disabled={config.playerCount > 4}
                     className={clsx(
                       'py-3 px-2 rounded-lg border font-bold transition-all text-xs flex flex-col items-center gap-1',
                       config.method === 'draft'
                         ? 'bg-purple-900/60 border-purple-500 text-purple-100 shadow-lg shadow-purple-900/40'
                         : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-500',
-                      config.playerCount > 4 && 'opacity-30 cursor-not-allowed',
                     )}
                   >
                     <Shuffle className="w-4 h-4" />
@@ -216,11 +214,6 @@ export default function SetupPage() {
                     Reach Calc
                   </button>
                 </div>
-                {config.playerCount > 4 && config.method === 'draft' && (
-                  <p className="text-[10px] text-orange-400 mt-2">
-                    AdSet draft supports max 4 players. Switching to Reach Calc.
-                  </p>
-                )}
               </div>
 
               {/* Deck & Map Selectors */}
@@ -450,7 +443,7 @@ export default function SetupPage() {
 
             {config.method === 'draft' ? (
               <AdSetDraft
-                initialPlayerCount={config.playerCount as 2 | 3 | 4}
+                initialPlayerCount={config.playerCount}
                 excludedFactionIds={excludedFactionIds}
                 onFinish={handleSelectionFinish}
               />
@@ -464,7 +457,7 @@ export default function SetupPage() {
                     Ensure a balanced game for {config.playerCount} players
                   </p>
                 </div>
-                <SetupWizard onFinish={handleSelectionFinish} />
+                <SetupWizard playerCount={config.playerCount} onFinish={handleSelectionFinish} />
               </div>
             )}
           </div>

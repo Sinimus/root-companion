@@ -24,12 +24,12 @@ interface PlayerSelection {
 
 interface Props {
   onFinish?: (factions: string[]) => void;
-  initialPlayerCount?: 2 | 3 | 4;
+  initialPlayerCount?: number;
   excludedFactionIds?: string[]; // Factions omitted or replaced by a hireling (Law A.6.5)
 }
 
 export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }: Props) {
-  const [playerCount, setPlayerCount] = useState<2 | 3 | 4>(initialPlayerCount || 3);
+  const [playerCount, setPlayerCount] = useState<number>(initialPlayerCount || 3);
   const [setupState, setSetupState] = useState<AdSetState | null>(null);
   const [currentTurn, setCurrentTurn] = useState<number>(-1);
   const [selections, setSelections] = useState<PlayerSelection[]>([]);
@@ -286,10 +286,10 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
           <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-4">Select Player Count</h2>
             <div className="grid grid-cols-3 gap-4">
-              {[2, 3, 4].map((count) => (
+              {[2, 3, 4, 5, 6].map((count) => (
                 <button
                   key={count}
-                  onClick={() => setPlayerCount(count as 2 | 3 | 4)}
+                  onClick={() => setPlayerCount(count)}
                   className={`
                     p-4 rounded-lg border-2 font-bold transition-all
                     ${

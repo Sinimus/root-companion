@@ -14,10 +14,11 @@ import { clsx } from 'clsx';
 
 interface Props {
   onFinish?: (factions: string[]) => void;
+  playerCount?: number;
 }
 
-export function SetupWizard({ onFinish }: Props) {
-  const [playerCount, setPlayerCount] = useState<number>(4);
+export function SetupWizard({ onFinish, playerCount: initialPlayerCount }: Props) {
+  const [playerCount, setPlayerCount] = useState<number>(initialPlayerCount ?? 4);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const toggleFaction = (id: string) => {
@@ -31,7 +32,7 @@ export function SetupWizard({ onFinish }: Props) {
     if (onFinish) onFinish(Array.from(selectedIds));
   };
 
-  const { totalReach, militantCount, targetReach, isValid, errorMsg } = useMemo(() => {
+  const { totalReach, militantCount, targetReach, isValid, errorMsg, warningMsg } = useMemo(() => {
     const selected = FACTIONS_DATA.filter((f) => selectedIds.has(f.id));
     const reach = selected.reduce((sum, f) => sum + f.reach, 0);
     const militants = selected.filter((f) => f.type === 'militant').length;
@@ -39,19 +40,20 @@ export function SetupWizard({ onFinish }: Props) {
 
     let valid = true;
     let error = '';
+    let warning = '';
 
-    if (militants < 1) {
-      valid = false;
-      error = 'Missing Militant Faction';
-    } else if (reach < target) {
-      valid = false;
-      error = `Low Reach (Need ${target})`;
-    } else if (selected.length !== playerCount) {
+    if (selected.length !== playerCount) {
       if (selected.length > playerCount)
         error = `Too many factions (${selected.length}/${playerCount})`;
       if (selected.length < playerCount)
         error = `Select more factions (${selected.length}/${playerCount})`;
-      valid = selected.length === playerCount && reach >= target && militants >= 1;
+      valid = false;
+    } else if (reach < 17) {
+      // Any faction mix with 17+ Reach is playable (Law 5.2)
+      valid = false;
+      error = 'Low Reach (Need 17+, Law 5.2)';
+    } else if (reach < target) {
+      warning = `Below the recommended ${target}+ for ${playerCount} players (adventurous, Law 5.2)`;
     }
 
     return {
@@ -60,6 +62,7 @@ export function SetupWizard({ onFinish }: Props) {
       targetReach: target,
       isValid: valid,
       errorMsg: error,
+      warningMsg: warning,
     };
   }, [selectedIds, playerCount]);
 
@@ -217,6 +220,9 @@ export function SetupWizard({ onFinish }: Props) {
                 <div className="text-xs md:text-sm text-red-300/80 font-medium mt-0.5">
                   {errorMsg}
                 </div>
+              )}
+              {isValid && warningMsg && (
+                <div className="text-xs text-amber-400 font-medium mt-0.5">{warningMsg}</div>
               )}
             </div>
           </div>
