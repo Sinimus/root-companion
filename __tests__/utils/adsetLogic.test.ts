@@ -1,7 +1,13 @@
-import { generateAdSetState, isChoosable, chooseFaction, draftOrder, AdSetState } from '@/utils/adsetLogic';
+import {
+  generateAdSetState,
+  isChoosable,
+  chooseFaction,
+  draftOrder,
+  AdSetState,
+} from '@/utils/adsetLogic';
 import { FACTIONS_DATA } from '@/data/factions';
 
-const typeOf = (id: string) => FACTIONS_DATA.find(f => f.id === id)?.type;
+const typeOf = (id: string) => FACTIONS_DATA.find((f) => f.id === id)?.type;
 
 // Deterministic pseudo-random sequence for repeatable shuffles
 const seeded = (seed: number) => () => {
@@ -17,7 +23,7 @@ describe('AdSet Logic (Law A.8)', () => {
     });
 
     it('deals one more card than players, all unique (A.8.2)', () => {
-      [2, 3, 4].forEach(count => {
+      [2, 3, 4].forEach((count) => {
         for (let seed = 1; seed <= 25; seed++) {
           const state = generateAdSetState(count, { random: seeded(seed) });
           expect(state.pool).toHaveLength(count + 1);
@@ -36,7 +42,7 @@ describe('AdSet Logic (Law A.8)', () => {
     it('uses only militant factions with two players (A.8.2.I)', () => {
       for (let seed = 1; seed <= 25; seed++) {
         const state = generateAdSetState(2, { random: seeded(seed) });
-        state.pool.forEach(id => expect(typeOf(id)).toBe('militant'));
+        state.pool.forEach((id) => expect(typeOf(id)).toBe('militant'));
         expect(state.lockedFactionId).toBeNull();
       }
     });
@@ -51,7 +57,10 @@ describe('AdSet Logic (Law A.8)', () => {
 
     it('leaves out excluded factions and the second Vagabond by default', () => {
       for (let seed = 1; seed <= 50; seed++) {
-        const state = generateAdSetState(4, { random: seeded(seed), excludedFactionIds: ['marquise', 'alliance'] });
+        const state = generateAdSetState(4, {
+          random: seeded(seed),
+          excludedFactionIds: ['marquise', 'alliance'],
+        });
         expect(state.pool).not.toContain('marquise');
         expect(state.pool).not.toContain('alliance');
         expect(state.pool).not.toContain('vagabond_2');
@@ -62,7 +71,7 @@ describe('AdSet Logic (Law A.8)', () => {
   describe('isChoosable', () => {
     const state: AdSetState = {
       pool: ['marquise', 'eyrie', 'cult', 'alliance'],
-      lockedFactionId: 'alliance'
+      lockedFactionId: 'alliance',
     };
 
     it('blocks the locked insurgent until a militant has been chosen', () => {

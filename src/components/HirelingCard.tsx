@@ -1,11 +1,30 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { IHireling, HirelingAbilityType } from '@/types/engine';
 import {
-  Shield, Swords, Music, User, Plus, Minus, AlertTriangle,
-  RefreshCw, Crown, ArrowDown, Cat, Bird, Rabbit, Flame, KeyRound,
-  Ship, Sun, Pickaxe, Eye, Megaphone, Waves, Wheat
+  Shield,
+  Swords,
+  Music,
+  User,
+  Plus,
+  Minus,
+  AlertTriangle,
+  RefreshCw,
+  Crown,
+  ArrowDown,
+  Cat,
+  Bird,
+  Rabbit,
+  Flame,
+  KeyRound,
+  Ship,
+  Sun,
+  Pickaxe,
+  Eye,
+  Megaphone,
+  Waves,
+  Wheat,
 } from 'lucide-react';
 
 interface HirelingCardProps {
@@ -20,8 +39,22 @@ interface HirelingCardProps {
 
 // Icon mapping for hirelings
 const ICON_MAP = {
-  Shield, Swords, Music, User, Cat, Bird, Rabbit, Flame, KeyRound,
-  Ship, Sun, Pickaxe, Eye, Megaphone, Waves, Wheat,
+  Shield,
+  Swords,
+  Music,
+  User,
+  Cat,
+  Bird,
+  Rabbit,
+  Flame,
+  KeyRound,
+  Ship,
+  Sun,
+  Pickaxe,
+  Eye,
+  Megaphone,
+  Waves,
+  Wheat,
 };
 
 // Ability timing labels, Law H.2.1 to H.2.4
@@ -39,7 +72,7 @@ export function HirelingCard({
   onToggleActive,
   onFlipState,
   initialPromoted = true,
-  isActive = false
+  isActive = false,
 }: HirelingCardProps) {
   const [isPromoted, setIsPromoted] = useState(initialPromoted);
   const Icon = ICON_MAP[hireling.iconName as keyof typeof ICON_MAP] || User;
@@ -48,26 +81,32 @@ export function HirelingCard({
   const currentSide = isPromoted ? hireling.promotedSide : hireling.demotedSide;
 
   return (
-    <div className={`
+    <div
+      className={`
       relative p-4 rounded-xl border-2 transition-all duration-300
-      ${isActive
-        ? isPromoted
-          ? 'bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border-yellow-600/50 shadow-lg shadow-yellow-500/20'
-          : 'bg-gradient-to-br from-gray-800/40 to-gray-900/60 border-gray-600/50 shadow-lg shadow-gray-500/20'
-        : 'bg-gray-900/60 border-gray-800 hover:border-gray-600 hover:bg-gray-900/80'
+      ${
+        isActive
+          ? isPromoted
+            ? 'bg-gradient-to-br from-yellow-900/20 to-orange-900/20 border-yellow-600/50 shadow-lg shadow-yellow-500/20'
+            : 'bg-gradient-to-br from-gray-800/40 to-gray-900/60 border-gray-600/50 shadow-lg shadow-gray-500/20'
+          : 'bg-gray-900/60 border-gray-800 hover:border-gray-600 hover:bg-gray-900/80'
       }
-    `}>
+    `}
+    >
       {/* Header */}
       <div className="flex items-start gap-3 mb-3">
-        <div className={`
+        <div
+          className={`
           p-2 rounded-lg transition-colors
-          ${isActive
-            ? isPromoted
-              ? 'bg-yellow-800/50 text-yellow-300'
-              : 'bg-gray-700/50 text-gray-300'
-            : 'bg-gray-800 text-gray-400'
+          ${
+            isActive
+              ? isPromoted
+                ? 'bg-yellow-800/50 text-yellow-300'
+                : 'bg-gray-700/50 text-gray-300'
+              : 'bg-gray-800 text-gray-400'
           }
-        `}>
+        `}
+        >
           <Icon className="w-5 h-5" />
         </div>
         <div className="flex-1">
@@ -80,13 +119,14 @@ export function HirelingCard({
                 ) : (
                   <ArrowDown className="w-4 h-4 text-gray-400" />
                 )}
-                <span className={`
+                <span
+                  className={`
                   text-xs font-bold px-2 py-0.5 rounded
-                  ${isPromoted
-                    ? 'bg-yellow-900/30 text-yellow-400'
-                    : 'bg-gray-700/50 text-gray-400'
+                  ${
+                    isPromoted ? 'bg-yellow-900/30 text-yellow-400' : 'bg-gray-700/50 text-gray-400'
                   }
-                `}>
+                `}
+                >
                   {isPromoted ? 'PROMOTED' : 'DEMOTED'}
                 </span>
               </div>
@@ -102,9 +142,10 @@ export function HirelingCard({
               }}
               className={`
                 px-2 py-1 rounded-lg text-xs font-bold transition-all hover:scale-105
-                ${isPromoted
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                  : 'bg-yellow-700 text-yellow-200 hover:bg-yellow-600'
+                ${
+                  isPromoted
+                    ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    : 'bg-yellow-700 text-yellow-200 hover:bg-yellow-600'
                 }
               `}
               title="Flip hireling card"
@@ -116,11 +157,12 @@ export function HirelingCard({
             onClick={onToggleActive}
             className={`
               px-3 py-1 rounded-lg text-xs font-bold transition-all hover:scale-105
-              ${isActive
-                ? isPromoted
-                  ? 'bg-yellow-600 text-white hover:bg-yellow-700 shadow-lg shadow-yellow-500/30'
-                  : 'bg-gray-600 text-white hover:bg-gray-700 shadow-lg shadow-gray-500/30'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white shadow-md'
+              ${
+                isActive
+                  ? isPromoted
+                    ? 'bg-yellow-600 text-white hover:bg-yellow-700 shadow-lg shadow-yellow-500/30'
+                    : 'bg-gray-600 text-white hover:bg-gray-700 shadow-lg shadow-gray-500/30'
+                  : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white shadow-md'
               }
             `}
           >
@@ -142,15 +184,20 @@ export function HirelingCard({
       {/* Abilities */}
       <div className="space-y-2 mb-3">
         {currentSide.abilities.map((ability, i) => (
-          <div key={i} className={`
+          <div
+            key={i}
+            className={`
             p-3 rounded-lg transition-all
             ${isPromoted ? 'bg-yellow-900/10 border border-yellow-600/20' : 'bg-gray-800/40 border border-gray-600/20'}
-          `}>
+          `}
+          >
             <div className="flex items-start gap-2">
-              <span className={`
+              <span
+                className={`
                 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0
                 ${ABILITY_LABELS[ability.type].className}
-              `}>
+              `}
+              >
                 {ABILITY_LABELS[ability.type].label}
               </span>
               <div className="flex-1">
@@ -166,9 +213,7 @@ export function HirelingCard({
         <div className="border-t border-gray-700 pt-3">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-bold text-gray-300">Control Markers</span>
-            <div className="text-xs text-gray-500">
-              Set to your control die roll
-            </div>
+            <div className="text-xs text-gray-500">Set to your control die roll</div>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -177,19 +222,22 @@ export function HirelingCard({
                 disabled={controlMarkers <= 0}
                 className={`
                   p-1 rounded transition-colors
-                  ${controlMarkers > 0
-                    ? 'bg-red-800 hover:bg-red-700 text-red-300'
-                    : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                  ${
+                    controlMarkers > 0
+                      ? 'bg-red-800 hover:bg-red-700 text-red-300'
+                      : 'bg-gray-800 text-gray-600 cursor-not-allowed'
                   }
                 `}
               >
                 <Minus className="w-4 h-4" />
               </button>
 
-              <span className={`
+              <span
+                className={`
                 font-bold text-lg min-w-[3rem] text-center
                 ${controlMarkers === 0 ? 'text-red-500 animate-pulse' : 'text-white'}
-              `}>
+              `}
+              >
                 {controlMarkers}
               </span>
 
@@ -208,9 +256,12 @@ export function HirelingCard({
                   key={i}
                   className={`
                     w-2 h-2 rounded-full
-                    ${i < controlMarkers
-                      ? isPromoted ? 'bg-yellow-400' : 'bg-gray-400'
-                      : 'bg-gray-700'
+                    ${
+                      i < controlMarkers
+                        ? isPromoted
+                          ? 'bg-yellow-400'
+                          : 'bg-gray-400'
+                        : 'bg-gray-700'
                     }
                   `}
                 />

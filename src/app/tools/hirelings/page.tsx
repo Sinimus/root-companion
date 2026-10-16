@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -32,7 +32,7 @@ export default function HirelingsPage() {
             migrated[id] = {
               id, // <--- Add this line
               markers: value,
-              isPromoted: true
+              isPromoted: true,
             };
             needsMigration = true;
           } else {
@@ -61,19 +61,19 @@ export default function HirelingsPage() {
 
   const handleHire = (hirelingId: string) => {
     if (!activeHirelings[hirelingId]) {
-      setActiveHirelings(prev => ({
+      setActiveHirelings((prev) => ({
         ...prev,
         [hirelingId]: {
           id: hirelingId, // <--- Add this line
           markers: 1, // Placeholder; the player sets it to their control die roll (Law H.1.2)
-          isPromoted: true // Default to promoted state
-        }
+          isPromoted: true, // Default to promoted state
+        },
       }));
     }
   };
 
   const handleRelease = (hirelingId: string) => {
-    setActiveHirelings(prev => {
+    setActiveHirelings((prev) => {
       const newActive = { ...prev };
       delete newActive[hirelingId];
       return newActive;
@@ -81,7 +81,7 @@ export default function HirelingsPage() {
   };
 
   const handleUpdateMarkers = (hirelingId: string, delta: number) => {
-    setActiveHirelings(prev => {
+    setActiveHirelings((prev) => {
       const current = prev[hirelingId];
       if (!current) return prev;
 
@@ -91,19 +91,19 @@ export default function HirelingsPage() {
         ...prev,
         [hirelingId]: {
           ...current,
-          markers: newMarkers
-        }
+          markers: newMarkers,
+        },
       };
     });
   };
 
   const handleEndTurnDecay = () => {
-    setActiveHirelings(prev => {
+    setActiveHirelings((prev) => {
       const newActive: Record<string, ActiveHireling> = {};
       Object.entries(prev).forEach(([id, hireling]) => {
         newActive[id] = {
           ...hireling,
-          markers: Math.max(0, hireling.markers - 1)
+          markers: Math.max(0, hireling.markers - 1),
         };
       });
       return newActive;
@@ -111,7 +111,7 @@ export default function HirelingsPage() {
   };
 
   const handleFlipHireling = (hirelingId: string) => {
-    setActiveHirelings(prev => {
+    setActiveHirelings((prev) => {
       const current = prev[hirelingId];
       if (!current) return prev;
 
@@ -119,25 +119,27 @@ export default function HirelingsPage() {
         ...prev,
         [hirelingId]: {
           ...current,
-          isPromoted: !current.isPromoted
-        }
+          isPromoted: !current.isPromoted,
+        },
       };
     });
   };
 
-  const availableHirelings = HIRELINGS_DATA.filter(h => !activeHirelings[h.id]);
-  const activeHirelingsList = HIRELINGS_DATA.filter(h => activeHirelings[h.id]);
+  const availableHirelings = HIRELINGS_DATA.filter((h) => !activeHirelings[h.id]);
+  const activeHirelingsList = HIRELINGS_DATA.filter((h) => activeHirelings[h.id]);
 
   return (
     <div className="min-h-screen bg-[#0a0c10] p-4 pb-20 pt-20 relative">
       <div className="absolute top-6 left-6 z-40">
-        <Link href="/" className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium">
+        <Link
+          href="/"
+          className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium"
+        >
           <ArrowLeft className="w-5 h-5" /> Menu
         </Link>
       </div>
 
       <div className="max-w-6xl mx-auto space-y-8">
-
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-black text-white mb-2 flex items-center justify-center gap-3">
@@ -154,9 +156,10 @@ export default function HirelingsPage() {
             disabled={Object.keys(activeHirelings).length === 0}
             className={`
               px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all
-              ${Object.keys(activeHirelings).length > 0
-                ? 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20'
-                : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+              ${
+                Object.keys(activeHirelings).length > 0
+                  ? 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20'
+                  : 'bg-gray-800 text-gray-600 cursor-not-allowed'
               }
             `}
           >
@@ -173,7 +176,7 @@ export default function HirelingsPage() {
               Active Hirelings ({activeHirelingsList.length})
             </h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {activeHirelingsList.map(hireling => {
+              {activeHirelingsList.map((hireling) => {
                 const activeHireling = activeHirelings[hireling.id];
                 return (
                   <HirelingCard
@@ -206,14 +209,15 @@ export default function HirelingsPage() {
               <h3 className="text-yellow-400 font-bold">Hireling Markers</h3>
             </div>
             <p className="text-gray-400 text-sm">
-              A game uses exactly three hirelings. Hireling markers sit on the 4, 8 and 12 spaces of the score track.
-              When your score marker enters one of these spaces, take the marker and, at the end of your turn,
-              take any hireling card from the supply and roll for control.
+              A game uses exactly three hirelings. Hireling markers sit on the 4, 8 and 12 spaces of
+              the score track. When your score marker enters one of these spaces, take the marker
+              and, at the end of your turn, take any hireling card from the supply and roll for
+              control.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {availableHirelings.map(hireling => (
+            {availableHirelings.map((hireling) => (
               <HirelingCard
                 key={hireling.id}
                 hireling={hireling}
@@ -242,15 +246,19 @@ export default function HirelingsPage() {
             <div className="bg-gray-900/50 border border-gray-800 p-4 rounded-xl">
               <h3 className="text-orange-300 font-bold mb-2">Losing Control</h3>
               <ul className="text-sm text-gray-400 space-y-1">
-                <li>• End of your turn: remove 1 marker from each hireling gained on earlier turns</li>
+                <li>
+                  • End of your turn: remove 1 marker from each hireling gained on earlier turns
+                </li>
                 <li>• With no markers left, give the hireling to any other player</li>
                 <li>• That player rolls for control immediately</li>
-                <li>• &quot;End Turn Decay&quot; removes one marker from each; add one back for a hireling gained this turn</li>
+                <li>
+                  • &quot;End Turn Decay&quot; removes one marker from each; add one back for a
+                  hireling gained this turn
+                </li>
               </ul>
             </div>
           </div>
         </section>
-
       </div>
     </div>
   );

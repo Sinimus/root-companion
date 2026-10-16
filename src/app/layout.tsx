@@ -60,7 +60,7 @@ import { GlobalTools } from '@/components/GlobalTools';
 // Using Inter as fallback font with Root font as primary
 const inter = Inter({
   subsets: ['latin'],
-  fallback: ['Root', 'serif']
+  fallback: ['Root', 'serif'],
 });
 
 export const metadata: Metadata = {
@@ -88,14 +88,12 @@ export const viewport = {
   themeColor: '#0a0c10',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased selection:bg-orange-500/30 min-h-screen relative`}>
+      <body
+        className={`${inter.className} antialiased selection:bg-orange-500/30 min-h-screen relative`}
+      >
         {/*
           ========================================
           🎨 THEME LAYER ARCHITECTURE - REFACTORED
@@ -116,9 +114,7 @@ export default function RootLayout({
         <div className="fixed inset-0 z-[-1] theme-container bg-wood-pattern bg-cover bg-fixed bg-center" />
 
         {/* Content Layer - Natural scroll flow */}
-        <div className="min-h-screen bg-black/30 backdrop-blur-[0.5px]">
-          {children}
-        </div>
+        <div className="min-h-screen bg-black/30 backdrop-blur-[0.5px]">{children}</div>
 
         {/* Global Floating Tools */}
         <GlobalTools />

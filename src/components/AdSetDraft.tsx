@@ -4,11 +4,17 @@
  * @description Part of Root Companion App
  */
 
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { generateAdSetState, getFactionById, isChoosable, chooseFaction, AdSetState } from '@/utils/adsetLogic';
+import {
+  generateAdSetState,
+  getFactionById,
+  isChoosable,
+  chooseFaction,
+  AdSetState,
+} from '@/utils/adsetLogic';
 import { Users, ArrowRight, Shuffle, CheckCircle, Play, Lock } from 'lucide-react';
 
 interface PlayerSelection {
@@ -44,7 +50,14 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
 
   const makeSelection = (factionId: string) => {
     if (!setupState || currentTurn < 0) return;
-    if (!isChoosable(setupState, factionId, selections.map(sel => sel.factionId))) return;
+    if (
+      !isChoosable(
+        setupState,
+        factionId,
+        selections.map((sel) => sel.factionId),
+      )
+    )
+      return;
 
     const newSelections = [...selections, { playerIndex: currentTurn, factionId }];
     setSelections(newSelections);
@@ -57,7 +70,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
       // Draft complete - return data to parent in seating order
       const finalFactions = [...newSelections]
         .sort((x, y) => x.playerIndex - y.playerIndex)
-        .map(sel => sel.factionId);
+        .map((sel) => sel.factionId);
       if (onFinish) onFinish(finalFactions);
       setIsComplete(true);
     }
@@ -75,33 +88,35 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
     if (!faction) return null;
 
     return (
-      <div className={`
+      <div
+        className={`
         p-6 rounded-xl border-2 transition-all duration-300
-        ${isPool
-          ? 'bg-purple-900/20 border-purple-600/50 hover:border-purple-500/70 hover:shadow-lg hover:shadow-purple-500/20'
-          : faction.color
+        ${
+          isPool
+            ? 'bg-purple-900/20 border-purple-600/50 hover:border-purple-500/70 hover:shadow-lg hover:shadow-purple-500/20'
+            : faction.color
         }
-      `}>
+      `}
+      >
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-xl font-bold text-white">{faction.name}</h3>
           <div className="flex items-center gap-2">
-            <span className={`
+            <span
+              className={`
               text-xs px-2 py-1 rounded font-bold uppercase
-              ${faction.type === 'militant'
-                ? 'bg-red-800/50 text-red-300'
-                : 'bg-blue-800/50 text-blue-300'
+              ${
+                faction.type === 'militant'
+                  ? 'bg-red-800/50 text-red-300'
+                  : 'bg-blue-800/50 text-blue-300'
               }
-            `}>
+            `}
+            >
               {faction.type}
             </span>
-            <span className="text-sm text-gray-400 font-mono">
-              Reach: {faction.reach}
-            </span>
+            <span className="text-sm text-gray-400 font-mono">Reach: {faction.reach}</span>
           </div>
         </div>
-        <div className="text-sm text-gray-400">
-          Short Name: {faction.shortName}
-        </div>
+        <div className="text-sm text-gray-400">Short Name: {faction.shortName}</div>
       </div>
     );
   };
@@ -123,16 +138,14 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {Array.from({ length: playerCount }, (_, index) => {
-              const selection = selections.find(s => s.playerIndex === index);
+              const selection = selections.find((s) => s.playerIndex === index);
               if (!selection) return null;
               const playerFactionId = selection.factionId;
 
               return (
                 <div key={index} className="bg-gray-800/50 p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-bold text-white">
-                      Player {index + 1}
-                    </h3>
+                    <h3 className="text-lg font-bold text-white">Player {index + 1}</h3>
                   </div>
                   <FactionCard factionId={playerFactionId} />
                   <Link
@@ -162,7 +175,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
   }
 
   if (setupState && currentTurn >= 0) {
-    const chosenIds = selections.map(sel => sel.factionId);
+    const chosenIds = selections.map((sel) => sel.factionId);
 
     return (
       <div className="max-w-4xl mx-auto space-y-6">
@@ -172,21 +185,23 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
           <div className="flex items-center justify-center gap-4 text-gray-400">
             <span>Player Count: {playerCount}</span>
             <span>•</span>
-            <span>Turn: {playerCount - currentTurn}/{playerCount}</span>
+            <span>
+              Turn: {playerCount - currentTurn}/{playerCount}
+            </span>
           </div>
         </div>
 
         {/* Current Player */}
         <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-800/50 rounded-xl p-6 text-center">
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Player {currentTurn + 1}'s Turn
-          </h2>
-          <p className="text-gray-300">Choose one faction setup card from the pool and set it up immediately</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Player {currentTurn + 1}'s Turn</h2>
+          <p className="text-gray-300">
+            Choose one faction setup card from the pool and set it up immediately
+          </p>
         </div>
 
         {/* Faction Choices: the shared pool (Law A.8.3) */}
         <div className="grid gap-6 md:grid-cols-2">
-          {setupState.pool.map(factionId => {
+          {setupState.pool.map((factionId) => {
             const choosable = isChoosable(setupState, factionId, chosenIds);
             const isLocked = factionId === setupState.lockedFactionId;
 
@@ -204,9 +219,10 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
                   disabled={!choosable}
                   className={`
                     w-full mt-4 px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2
-                    ${choosable
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                      : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                    ${
+                      choosable
+                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                        : 'bg-gray-800 text-gray-600 cursor-not-allowed'
                     }
                   `}
                 >
@@ -223,7 +239,7 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
           <h3 className="text-lg font-bold text-white mb-3">Draft Progress</h3>
           <div className="flex gap-2">
             {Array.from({ length: playerCount }, (_, index) => {
-              const hasSelected = selections.some(s => s.playerIndex === index);
+              const hasSelected = selections.some((s) => s.playerIndex === index);
               const isCurrent = index === currentTurn;
 
               return (
@@ -270,15 +286,16 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
           <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-4">Select Player Count</h2>
             <div className="grid grid-cols-3 gap-4">
-              {[2, 3, 4].map(count => (
+              {[2, 3, 4].map((count) => (
                 <button
                   key={count}
                   onClick={() => setPlayerCount(count as 2 | 3 | 4)}
                   className={`
                     p-4 rounded-lg border-2 font-bold transition-all
-                    ${playerCount === count
-                      ? 'bg-blue-600 border-blue-500 text-white'
-                      : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-300'
+                    ${
+                      playerCount === count
+                        ? 'bg-blue-600 border-blue-500 text-white'
+                        : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-300'
                     }
                   `}
                 >
@@ -297,10 +314,20 @@ export function AdSetDraft({ onFinish, initialPlayerCount, excludedFactionIds }:
             AdSet Draft Rules
           </h3>
           <div className="space-y-2 text-sm text-gray-400">
-            <p><strong>Pool:</strong> One militant card first, then one card per player, all face up.</p>
-            <p><strong>2 Players:</strong> Only militant factions are used.</p>
-            <p><strong>Locked card:</strong> If the last card dealt is an insurgent, it cannot be chosen until a militant has been.</p>
-            <p><strong>Draft Order:</strong> Last player first, counterclockwise. Set up your faction as soon as you choose.</p>
+            <p>
+              <strong>Pool:</strong> One militant card first, then one card per player, all face up.
+            </p>
+            <p>
+              <strong>2 Players:</strong> Only militant factions are used.
+            </p>
+            <p>
+              <strong>Locked card:</strong> If the last card dealt is an insurgent, it cannot be
+              chosen until a militant has been.
+            </p>
+            <p>
+              <strong>Draft Order:</strong> Last player first, counterclockwise. Set up your faction
+              as soon as you choose.
+            </p>
           </div>
         </div>
 

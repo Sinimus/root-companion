@@ -44,14 +44,25 @@
   }
 
   /* Apply custom Root font only to headings - body text stays readable sans-serif */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-root;
   }
 
   /* Font class utilities for theming */
-  .font-root { font-family: 'Root', serif; }
-  .font-woodland { font-family: 'Woodland', sans-serif; }
-  .font-faction { font-family: 'Faction', sans-serif; }
+  .font-root {
+    font-family: 'Root', serif;
+  }
+  .font-woodland {
+    font-family: 'Woodland', sans-serif;
+  }
+  .font-faction {
+    font-family: 'Faction', sans-serif;
+  }
 }
 
 /*
@@ -80,14 +91,30 @@
   @apply bg-gradient-to-br from-yellow-900 to-amber-800 border-2 border-amber-600 shadow-lg;
 }
 
-.faction-marquise { @apply text-faction-marquise; }
-.faction-eyrie { @apply text-faction-eyrie; }
-.faction-alliance { @apply text-faction-alliance; }
-.faction-vagabond { @apply text-faction-vagabond; }
-.faction-corvid { @apply text-faction-corvid; }
-.faction-hundreds { @apply text-faction-hundreds; }
-.faction-keepers { @apply text-faction-keepers; }
-.faction-river { @apply text-faction-river; }
+.faction-marquise {
+  @apply text-faction-marquise;
+}
+.faction-eyrie {
+  @apply text-faction-eyrie;
+}
+.faction-alliance {
+  @apply text-faction-alliance;
+}
+.faction-vagabond {
+  @apply text-faction-vagabond;
+}
+.faction-corvid {
+  @apply text-faction-corvid;
+}
+.faction-hundreds {
+  @apply text-faction-hundreds;
+}
+.faction-keepers {
+  @apply text-faction-keepers;
+}
+.faction-river {
+  @apply text-faction-river;
+}
 
 /* Theme Container for Wood Background */
 .theme-container {

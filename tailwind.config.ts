@@ -1,18 +1,18 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/data/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/data/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       fontFamily: {
-        'root': ['Root', 'serif'],
-        'woodland': ['Woodland', 'sans-serif'],
-        'faction': ['Faction', 'sans-serif'],
+        root: ['Root', 'serif'],
+        woodland: ['Woodland', 'sans-serif'],
+        faction: ['Faction', 'sans-serif'],
       },
       backgroundImage: {
         'wood-pattern': "url('/assets/bg-wood.jpg')",
@@ -23,21 +23,21 @@ const config: Config = {
         'theme-paper': "url('/assets/paper-texture.jpg')",
       },
       backgroundColor: {
-        'wood': '#8B4513',
+        wood: '#8B4513',
         'wood-light': '#A0522D',
-        'paper': '#F5E6D3',
-        'map': '#D2B48C',
+        paper: '#F5E6D3',
+        map: '#D2B48C',
       },
       colors: {
-        'faction': {
-          'marquise': '#CD5C5C',
-          'eyrie': '#4169E1',
-          'alliance': '#228B22',
-          'vagabond': '#FFD700',
-          'corvid': '#8B008B',
-          'hundreds': '#FF6347',
-          'keepers': '#708090',
-          'river': '#4682B4',
+        faction: {
+          marquise: '#CD5C5C',
+          eyrie: '#4169E1',
+          alliance: '#228B22',
+          vagabond: '#FFD700',
+          corvid: '#8B008B',
+          hundreds: '#FF6347',
+          keepers: '#708090',
+          river: '#4682B4',
         },
       },
       animation: {
@@ -45,7 +45,7 @@ const config: Config = {
         'slide-up': 'slideUp 0.3s ease-out',
         'wood-glow': 'woodGlow 3s ease-in-out infinite alternate',
         'theme-glow': 'themeGlow 4s ease-in-out infinite alternate',
-        'float': 'float 6s ease-in-out infinite',
+        float: 'float 6s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {

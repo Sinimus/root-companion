@@ -1,4 +1,4 @@
-"use client"; // Needs to be client for state (Modals)
+'use client'; // Needs to be client for state (Modals)
 
 import React, { use } from 'react';
 import { EYRIE_GUIDE } from '@/data/guides/eyrie';
@@ -60,10 +60,13 @@ export default function FactionTurnPage({ params }: { params: Promise<{ factionI
           <Hammer className="w-12 h-12 text-gray-600" />
         </div>
         <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Error</h1>
-            <p className="text-gray-400 max-w-xs mx-auto">Guide not found.</p>
+          <h1 className="text-2xl font-bold text-white mb-2">Error</h1>
+          <p className="text-gray-400 max-w-xs mx-auto">Guide not found.</p>
         </div>
-        <Link href="/play" className="px-6 py-2 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition">
+        <Link
+          href="/play"
+          className="px-6 py-2 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition"
+        >
           Go Back
         </Link>
       </div>
@@ -74,28 +77,28 @@ export default function FactionTurnPage({ params }: { params: Promise<{ factionI
     <div className="min-h-screen bg-[#0a0c10] pb-24 pt-20 relative">
       {/* Ambient Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`} />
+        <div
+          className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`}
+        />
       </div>
 
-       {/* Unified Navigation */}
-       <div className="absolute top-6 left-6 z-40">
-            <Link href="/" className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium">
-                <ArrowLeft className="w-5 h-5" /> Menu
-            </Link>
-       </div>
+      {/* Unified Navigation */}
+      <div className="absolute top-6 left-6 z-40">
+        <Link
+          href="/"
+          className="text-gray-500 hover:text-white flex items-center gap-2 transition-colors font-medium"
+        >
+          <ArrowLeft className="w-5 h-5" /> Menu
+        </Link>
+      </div>
 
-       {/* Faction-Specific Item Trackers */}
-       {factionId.includes('vagabond') && (
-         <VagabondManager factionId={factionId} />
-       )}
-       {factionId === 'hundreds' && (
-         <HundredsHoard factionId={factionId} />
-       )}
+      {/* Faction-Specific Item Trackers */}
+      {factionId.includes('vagabond') && <VagabondManager factionId={factionId} />}
+      {factionId === 'hundreds' && <HundredsHoard factionId={factionId} />}
 
-       <div className="relative z-10">
+      <div className="relative z-10">
         <TurnGuide guide={guide} />
       </div>
-
     </div>
   );
 }

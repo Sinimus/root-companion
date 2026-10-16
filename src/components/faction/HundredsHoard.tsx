@@ -1,7 +1,17 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Package, Sword, Hammer, Target, Coffee, Coins, Briefcase, Plus, Minus } from 'lucide-react';
+import {
+  Package,
+  Sword,
+  Hammer,
+  Target,
+  Coffee,
+  Coins,
+  Briefcase,
+  Plus,
+  Minus,
+} from 'lucide-react';
 
 type ItemType = 'Boot' | 'Bag' | 'Coin' | 'Sword' | 'Hammer' | 'Crossbow' | 'Tea';
 
@@ -54,12 +64,12 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
 
   // Each Hoard track has four spaces (Law 14.2.4.I)
   const updateItemCount = (type: ItemType, delta: number) => {
-    setItems(prev => {
+    setItems((prev) => {
       const track = COMMAND_ITEMS.includes(type) ? COMMAND_ITEMS : PROWESS_ITEMS;
       if (delta > 0 && trackCount(track, prev) >= TRACK_SIZE) return prev;
       return {
         ...prev,
-        [type]: Math.max(0, prev[type] + delta)
+        [type]: Math.max(0, prev[type] + delta),
       };
     });
   };
@@ -72,7 +82,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
       Sword: <Sword className="w-5 h-5" />,
       Hammer: <Hammer className="w-5 h-5" />,
       Crossbow: <Target className="w-5 h-5" />,
-      Tea: <Coffee className="w-5 h-5" />
+      Tea: <Coffee className="w-5 h-5" />,
     };
     return iconMap[type];
   };
@@ -85,23 +95,38 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
       Sword: 'text-red-400',
       Hammer: 'text-gray-400',
       Crossbow: 'text-green-400',
-      Tea: 'text-orange-400'
+      Tea: 'text-orange-400',
     };
     return colorMap[type];
   };
 
-  const StatDisplay = ({ label, value, color }: { label: string; value: number; color: string }) => (
-    <div className={`
+  const StatDisplay = ({
+    label,
+    value,
+    color,
+  }: {
+    label: string;
+    value: number;
+    color: string;
+  }) => (
+    <div
+      className={`
       text-center p-4 rounded-xl border-2
-      ${color === 'blue'
-        ? 'bg-blue-900/20 border-blue-800/50'
-        : 'bg-purple-900/20 border-purple-800/50'
+      ${
+        color === 'blue'
+          ? 'bg-blue-900/20 border-blue-800/50'
+          : 'bg-purple-900/20 border-purple-800/50'
       }
-    `}>
-      <div className={`text-3xl font-bold ${color === 'blue' ? 'text-blue-400' : 'text-purple-400'}`}>
+    `}
+    >
+      <div
+        className={`text-3xl font-bold ${color === 'blue' ? 'text-blue-400' : 'text-purple-400'}`}
+      >
         {value}
       </div>
-      <div className={`text-sm font-bold mt-1 ${color === 'blue' ? 'text-blue-300' : 'text-purple-300'}`}>
+      <div
+        className={`text-sm font-bold mt-1 ${color === 'blue' ? 'text-blue-300' : 'text-purple-300'}`}
+      >
         {label}
       </div>
     </div>
@@ -110,7 +135,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
   const ItemPanel = ({
     title,
     items: panelItems,
-    statColor
+    statColor,
   }: {
     title: string;
     items: ItemType[];
@@ -119,7 +144,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
     <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
       <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
       <div className="space-y-3">
-        {panelItems.map(type => (
+        {panelItems.map((type) => (
           <div key={type} className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={`p-2 bg-gray-800 rounded ${getItemColor(type)}`}>
@@ -137,9 +162,10 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
                 disabled={items[type] === 0}
                 className={`
                   p-1 rounded transition-colors
-                  ${items[type] > 0
-                    ? 'bg-red-800 hover:bg-red-700 text-red-300'
-                    : 'bg-gray-800 text-gray-600 cursor-not-allowed'
+                  ${
+                    items[type] > 0
+                      ? 'bg-red-800 hover:bg-red-700 text-red-300'
+                      : 'bg-gray-800 text-gray-600 cursor-not-allowed'
                   }
                 `}
               >
@@ -165,7 +191,6 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
 
   return (
     <div className="max-w-4xl mx-auto mb-6 space-y-4">
-
       {/* Header */}
       <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
         <div className="flex items-center gap-3 mb-4">
@@ -181,17 +206,14 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
 
         {/* Rules Reference */}
         <div className="text-xs text-gray-500 text-center">
-          Each track holds up to 4 items. No items = 1, 1-2 items = 2, 3 items = 3, 4 items = 4 (Law 14.2.4)
+          Each track holds up to 4 items. No items = 1, 1-2 items = 2, 3 items = 3, 4 items = 4 (Law
+          14.2.4)
         </div>
       </div>
 
       {/* Item Panels */}
       <div className="grid md:grid-cols-2 gap-4">
-        <ItemPanel
-          title="Command Items"
-          items={['Boot', 'Bag', 'Coin']}
-          statColor="blue"
-        />
+        <ItemPanel title="Command Items" items={['Boot', 'Bag', 'Coin']} statColor="blue" />
         <ItemPanel
           title="Prowess Items"
           items={['Sword', 'Hammer', 'Crossbow', 'Tea']}
@@ -206,7 +228,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
           <button
             onClick={() => {
               const newItems = { ...items };
-              (Object.keys(newItems) as ItemType[]).forEach(type => {
+              (Object.keys(newItems) as ItemType[]).forEach((type) => {
                 newItems[type] = 0;
               });
               setItems(newItems);
@@ -241,14 +263,11 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
             <div className="text-gray-400">Total Items</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-400">
-              {commandStat + prowessStat}
-            </div>
+            <div className="text-2xl font-bold text-green-400">{commandStat + prowessStat}</div>
             <div className="text-gray-400">Total Stats</div>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

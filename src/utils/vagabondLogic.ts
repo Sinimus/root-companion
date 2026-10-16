@@ -1,6 +1,7 @@
 // Vagabond item rules, Law of Root 9.2.5 to 9.2.7, 9.4.1, 9.5.7, 9.6 and Appendix V.
 
-export type VagabondItemType = 'Sword' | 'Crossbow' | 'Hammer' | 'Torch' | 'Tea' | 'Coin' | 'Boot' | 'Bag';
+export type VagabondItemType =
+  'Sword' | 'Crossbow' | 'Hammer' | 'Torch' | 'Tea' | 'Coin' | 'Boot' | 'Bag';
 
 export interface VagabondItem {
   id: string;
@@ -9,7 +10,16 @@ export interface VagabondItem {
   damaged: boolean; // In the Damaged box (9.2.7)
 }
 
-export const ITEM_TYPES: VagabondItemType[] = ['Boot', 'Sword', 'Torch', 'Crossbow', 'Hammer', 'Tea', 'Coin', 'Bag'];
+export const ITEM_TYPES: VagabondItemType[] = [
+  'Boot',
+  'Sword',
+  'Torch',
+  'Crossbow',
+  'Hammer',
+  'Tea',
+  'Coin',
+  'Bag',
+];
 
 // Tea, Coins and Bags sit on tracks while face up and undamaged (9.2.5.I)
 export const TRACK_TYPES: VagabondItemType[] = ['Tea', 'Coin', 'Bag'];
@@ -43,18 +53,18 @@ export function startingItems(character: string): VagabondItem[] {
 // Ids of the items on tracks: face up, undamaged, at most three per track
 export function trackItemIds(items: VagabondItem[]): Set<string> {
   const ids = new Set<string>();
-  TRACK_TYPES.forEach(type => {
+  TRACK_TYPES.forEach((type) => {
     items
-      .filter(item => item.type === type && !item.exhausted && !item.damaged)
+      .filter((item) => item.type === type && !item.exhausted && !item.damaged)
       .slice(0, TRACK_SIZE)
-      .forEach(item => ids.add(item.id));
+      .forEach((item) => ids.add(item.id));
   });
   return ids;
 }
 
 function countOnTrack(items: VagabondItem[], type: VagabondItemType): number {
   const onTrack = trackItemIds(items);
-  return items.filter(item => item.type === type && onTrack.has(item.id)).length;
+  return items.filter((item) => item.type === type && onTrack.has(item.id)).length;
 }
 
 // 9.4.1: two per face-up Tea on its track, then three more
@@ -65,11 +75,11 @@ export function refreshCount(items: VagabondItem[]): number {
 // Flips exhausted items face up, undamaged items first
 export function refresh(items: VagabondItem[]): VagabondItem[] {
   const candidates = [
-    ...items.filter(item => item.exhausted && !item.damaged),
-    ...items.filter(item => item.exhausted && item.damaged),
+    ...items.filter((item) => item.exhausted && !item.damaged),
+    ...items.filter((item) => item.exhausted && item.damaged),
   ].slice(0, refreshCount(items));
-  const ids = new Set(candidates.map(item => item.id));
-  return items.map(item => (ids.has(item.id) ? { ...item, exhausted: false } : item));
+  const ids = new Set(candidates.map((item) => item.id));
+  return items.map((item) => (ids.has(item.id) ? { ...item, exhausted: false } : item));
 }
 
 // 9.6.2: one card plus one per face-up Coin on its track
@@ -89,15 +99,15 @@ export function itemLoad(items: VagabondItem[]): number {
 
 // 9.2.6: maximum rolled hits equals undamaged Swords, face up or face down
 export function maxRolledHits(items: VagabondItem[]): number {
-  return items.filter(item => item.type === 'Sword' && !item.damaged).length;
+  return items.filter((item) => item.type === 'Sword' && !item.damaged).length;
 }
 
 // 9.5.7: a repaired item keeps its current side
 export function repair(items: VagabondItem[], itemId: string): VagabondItem[] {
-  return items.map(item => (item.id === itemId ? { ...item, damaged: false } : item));
+  return items.map((item) => (item.id === itemId ? { ...item, damaged: false } : item));
 }
 
 // 9.6.1: in a forest, all damaged items return to the Satchel face up
 export function rest(items: VagabondItem[]): VagabondItem[] {
-  return items.map(item => (item.damaged ? { ...item, damaged: false, exhausted: false } : item));
+  return items.map((item) => (item.damaged ? { ...item, damaged: false, exhausted: false } : item));
 }

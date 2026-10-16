@@ -26,7 +26,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'ambush',
     cost: [],
-    effect: 'You may ambush in any clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    effect:
+      'You may ambush in any clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
     totalInDeck: 2,
   },
   {
@@ -36,7 +37,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'ambush',
     cost: [],
-    effect: 'You may only ambush in a fox clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    effect:
+      'You may only ambush in a fox clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
     totalInDeck: 1,
   },
   {
@@ -46,7 +48,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'ambush',
     cost: [],
-    effect: 'You may only ambush in a rabbit clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    effect:
+      'You may only ambush in a rabbit clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
     totalInDeck: 1,
   },
   {
@@ -56,7 +59,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'ambush',
     cost: [],
-    effect: 'You may only ambush in a mouse clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
+    effect:
+      'You may only ambush in a mouse clearing. At start of battle, defender may play to deal two immediate hits, then discard. Cancel if attacker plays matching ambush.',
     totalInDeck: 1,
   },
   {
@@ -66,7 +70,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'dominance',
     cost: [],
-    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule two opposite corners at the start of your Birdsong.',
+    effect:
+      'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule two opposite corners at the start of your Birdsong.',
     totalInDeck: 1,
   },
   {
@@ -76,7 +81,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'dominance',
     cost: [],
-    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three fox clearings at the start of your Birdsong.',
+    effect:
+      'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three fox clearings at the start of your Birdsong.',
     totalInDeck: 1,
   },
   {
@@ -86,7 +92,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'dominance',
     cost: [],
-    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three rabbit clearings at the start of your Birdsong.',
+    effect:
+      'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three rabbit clearings at the start of your Birdsong.',
     totalInDeck: 1,
   },
   {
@@ -96,7 +103,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'dominance',
     cost: [],
-    effect: 'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three mouse clearings at the start of your Birdsong.',
+    effect:
+      'If you have at least 10 points, play during Daylight and remove your score marker. If spent for suit, make available. You win the game if you rule three mouse clearings at the start of your Birdsong.',
     totalInDeck: 1,
   },
   {
@@ -178,7 +186,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['rabbit', 'fox', 'mouse'],
-    effect: 'Once in Daylight, you may remove a warrior of your faction from a clearing on the map to draw one card.',
+    effect:
+      'Once in Daylight, you may remove a warrior of your faction from a clearing on the map to draw one card.',
   },
   {
     id: 'std_codebreakers',
@@ -187,7 +196,7 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'Once in Daylight, may look at another player\'s hand.',
+    effect: "Once in Daylight, may look at another player's hand.",
   },
   {
     id: 'std_bank',
@@ -196,7 +205,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
-    effect: 'At start of Birdsong, you may draw one card. If you do, choose an enemy to draw one card.',
+    effect:
+      'At start of Birdsong, you may draw one card. If you do, choose an enemy to draw one card.',
   },
   {
     id: 'std_stand',
@@ -205,7 +215,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['mouse', 'mouse', 'mouse'],
-    effect: 'Once in Birdsong, you may take a random card from an enemy. If you do, they score one point.',
+    effect:
+      'Once in Birdsong, you may take a random card from an enemy. If you do, they score one point.',
   },
   {
     id: 'std_cobbler',
@@ -232,7 +243,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['fox'],
-    effect: 'In battle in fox clearings, may deal one extra hit, then discard all your cards except foxes.',
+    effect:
+      'In battle in fox clearings, may deal one extra hit, then discard all your cards except foxes.',
   },
   {
     id: 'ex_partisans_rabbit',
@@ -241,7 +253,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'In battle in rabbit clearings, may deal one extra hit, then discard all your cards except rabbits.',
+    effect:
+      'In battle in rabbit clearings, may deal one extra hit, then discard all your cards except rabbits.',
   },
   {
     id: 'ex_partisans_mouse',
@@ -250,7 +263,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'In battle in mouse clearings, may deal one extra hit, then discard all your cards except mice.',
+    effect:
+      'In battle in mouse clearings, may deal one extra hit, then discard all your cards except mice.',
   },
   {
     id: 'ex_coffin',
@@ -259,7 +273,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit', 'rabbit'],
-    effect: 'Warriors removed, not replaced, from the map to their supply are placed here. At start of Birdsong, score one point per five warriors here, then remove all warriors here.',
+    effect:
+      'Warriors removed, not replaced, from the map to their supply are placed here. At start of Birdsong, score one point per five warriors here, then remove all warriors here.',
   },
   {
     id: 'ex_soup',
@@ -295,7 +310,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['?', '?', '?'],
-    effect: 'Once in Daylight, you may spend a card to replace an enemy warrior in a matching clearing with a warrior of your faction.',
+    effect:
+      'Once in Daylight, you may spend a card to replace an enemy warrior in a matching clearing with a warrior of your faction.',
   },
   {
     id: 'ex_false_orders',
@@ -304,7 +320,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['fox'],
-    effect: 'In Birdsong, you may spend this card to force an enemy to move half their faction warriors, rounded up, from a clearing as you choose, ignoring rule.',
+    effect:
+      'In Birdsong, you may spend this card to force an enemy to move half their faction warriors, rounded up, from a clearing as you choose, ignoring rule.',
   },
   {
     id: 'ex_informants',
@@ -313,7 +330,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'fox',
     type: 'craft',
     cost: ['fox', 'fox'],
-    effect: 'In Evening, if you would draw cards, you may instead take one ambush card from the discard pile.',
+    effect:
+      'In Evening, if you would draw cards, you may instead take one ambush card from the discard pile.',
   },
   {
     id: 'ex_swap_meet',
@@ -322,7 +340,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'Once in Birdsong, may take a random card from another player and then give them a card.',
+    effect:
+      'Once in Birdsong, may take a random card from another player and then give them a card.',
   },
   {
     id: 'ex_tunnels',
@@ -331,7 +350,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'rabbit',
     type: 'craft',
     cost: ['rabbit'],
-    effect: 'You treat clearings with your crafting pieces as adjacent. You may ignore paths when moving between them.',
+    effect:
+      'You treat clearings with your crafting pieces as adjacent. You may ignore paths when moving between them.',
   },
   {
     id: 'ex_league',
@@ -340,7 +360,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'mouse',
     type: 'craft',
     cost: ['mouse'],
-    effect: 'Once in Daylight, may exhaust an item in your Crafted Items box to take a move or initiate a battle.',
+    effect:
+      'Once in Daylight, may exhaust an item in your Crafted Items box to take a move or initiate a battle.',
   },
   {
     id: 'ex_murine',
@@ -367,7 +388,7 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'craft',
     cost: ['?'],
-    effect: 'At start of Birdsong, may discard this card to discard an enemy\'s crafted card.',
+    effect: "At start of Birdsong, may discard this card to discard an enemy's crafted card.",
   },
   {
     id: 'ex_emigre',
@@ -376,7 +397,8 @@ export const CARDS_DB: ICard[] = [
     suit: 'bird',
     type: 'craft',
     cost: ['fox', 'fox'],
-    effect: 'At end of Birdsong, you must take a move, then you must battle in the destination clearing. Discard this if you did not take both actions.',
+    effect:
+      'At end of Birdsong, you must take a move, then you must battle in the destination clearing. Discard this if you did not take both actions.',
   },
   {
     id: 'ex_engravers',
@@ -554,7 +576,7 @@ export const CARDS_DB: ICard[] = [
   },
   {
     id: 'item_smugglers_trail',
-    name: 'Smuggler\'s Trail',
+    name: "Smuggler's Trail",
     deck: ['standard', 'exiles'],
     suit: 'rabbit',
     type: 'craft',
