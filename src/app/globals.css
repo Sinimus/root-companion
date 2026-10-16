@@ -5,11 +5,11 @@
   --font-woodland: Woodland, sans-serif;
   --font-faction: Faction, sans-serif;
 
-  --background-image-wood-pattern: url('/assets/bg-wood.jpg');
-  --background-image-wood-texture: url('/assets/bg-wood.jpg');
+  --background-image-wood-pattern: url('/assets/bg-wood.webp');
+  --background-image-wood-texture: url('/assets/bg-wood.webp');
   --background-image-paper-texture: url('/assets/paper-texture.jpg');
   --background-image-map-bg: url('/assets/map-texture.jpg');
-  --background-image-theme-woodland: url('/assets/bg-wood.jpg');
+  --background-image-theme-woodland: url('/assets/bg-wood.webp');
   --background-image-theme-paper: url('/assets/paper-texture.jpg');
 
   --background-color-wood: #8b4513;

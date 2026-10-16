@@ -15,7 +15,7 @@
  *
  * 📁 CUSTOM ASSETS INTEGRATION:
  *    =========================================
- *    1. Wood Background: Add `bg-wood.jpg` to `/public/assets/`
+ *    1. Wood Background: Add `bg-wood.webp` to `/public/assets/`
  *    2. Custom Fonts: Add `root-font.ttf` to `/public/fonts/`
  *    3. Optional: Add `woodland-font.ttf` and `faction-font.ttf`
  *    4. Result: Automatic theme activation across all pages
