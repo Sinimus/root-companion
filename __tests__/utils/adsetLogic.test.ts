@@ -19,11 +19,11 @@ describe('AdSet Logic (Law A.8)', () => {
   describe('generateAdSetState', () => {
     it('should throw error for invalid player counts', () => {
       expect(() => generateAdSetState(1)).toThrow('Invalid player count');
-      expect(() => generateAdSetState(5)).toThrow('Invalid player count');
+      expect(() => generateAdSetState(0)).toThrow('Invalid player count');
     });
 
     it('deals one more card than players, all unique (A.8.2)', () => {
-      [2, 3, 4].forEach((count) => {
+      [2, 3, 4, 5, 6].forEach((count) => {
         for (let seed = 1; seed <= 25; seed++) {
           const state = generateAdSetState(count, { random: seeded(seed) });
           expect(state.pool).toHaveLength(count + 1);
@@ -65,6 +65,17 @@ describe('AdSet Logic (Law A.8)', () => {
         expect(state.pool).not.toContain('alliance');
         expect(state.pool).not.toContain('vagabond_2');
       }
+    });
+
+    it('throws when exclusions leave too few setup cards for six players', () => {
+      // 11 factions in FACTIONS_DATA, vagabond_2 always out by default: 10 available.
+      // Excluding marquise, alliance, cult and riverfolk leaves 6 cards; the first
+      // militant goes to the center pool, so only 5 remain for 6 players.
+      expect(() =>
+        generateAdSetState(6, {
+          excludedFactionIds: ['marquise', 'alliance', 'cult', 'riverfolk'],
+        }),
+      ).toThrow('Not enough faction setup cards');
     });
   });
 

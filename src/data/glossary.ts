@@ -60,8 +60,9 @@ export const GLOSSARY_DATA: IGlossaryTerm[] = [
   },
   {
     term: 'Defenseless',
-    definition: 'Defender has no warriors in battle clearing. +1 Hit for attacker.',
-    ruleReference: '4.3.5',
+    definition:
+      'Defender has no warriors in the battle clearing: the attacker deals an extra hit, and the defender deals no rolled hits.',
+    ruleReference: '4.3.5.II',
   },
   {
     term: 'Discard',
@@ -125,8 +126,8 @@ export const GLOSSARY_DATA: IGlossaryTerm[] = [
   },
   {
     term: 'Recruit',
+    // The Law has no general Recruit entry; each faction's chapter defines it
     definition: 'Faction action that places new warriors from supply on the map.',
-    ruleReference: 'G.20',
   },
   {
     term: 'Relationship',

@@ -15,6 +15,7 @@ import {
   itemLimit,
   itemLoad,
   maxRolledHits,
+  repairHammerId,
   repair,
   rest,
 } from '@/utils/vagabondLogic';
@@ -330,14 +331,24 @@ export function VagabondManager({ factionId }: VagabondManagerProps) {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setItems(repair(items, item.id))}
-                  title="Exhaust a Hammer. The repaired item keeps its current side."
-                  className="px-3 py-1 bg-blue-800 hover:bg-blue-700 text-blue-300 rounded-sm text-sm flex items-center gap-1"
-                >
-                  <Hammer className="w-4 h-4" />
-                  Repair
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setItems(repair(items, item.id))}
+                    disabled={repairHammerId(items, item.id) === null}
+                    title="Exhaust a face-up Hammer (9.5.7). The repaired item keeps its current side."
+                    className="px-3 py-1 bg-blue-800 hover:bg-blue-700 text-blue-300 rounded-sm text-sm flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Hammer className="w-4 h-4" />
+                    Repair
+                  </button>
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    title="Remove from the game (over the item limit, 9.6.4)"
+                    className="px-3 py-1 bg-red-800 hover:bg-red-700 text-red-200 rounded-sm text-sm flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             ))}
           </div>

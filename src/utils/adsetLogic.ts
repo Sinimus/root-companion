@@ -34,8 +34,8 @@ function shuffle<T>(items: readonly T[], random: () => number): T[] {
 export function generateAdSetState(playerCount: number, options: AdSetOptions = {}): AdSetState {
   const { excludedFactionIds = [], includeSecondVagabond = false, random = Math.random } = options;
 
-  if (playerCount < 2 || playerCount > 4) {
-    throw new Error(`Invalid player count: ${playerCount}. AdSet supports 2-4 players.`);
+  if (!Number.isInteger(playerCount) || playerCount < 2) {
+    throw new Error(`Invalid player count: ${playerCount}. AdSet needs at least 2 players.`);
   }
 
   const available = FACTIONS_DATA.filter(

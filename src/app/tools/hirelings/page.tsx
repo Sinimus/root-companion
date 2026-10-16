@@ -5,15 +5,16 @@ import Link from 'next/link';
 import { ArrowLeft, Users, Clock, AlertTriangle, RotateCcw } from 'lucide-react';
 import { HirelingCard } from '@/components/HirelingCard';
 import { HIRELINGS_DATA } from '@/data/hirelings';
-
-interface ActiveHireling {
-  id: string;
-  markers: number;
-  isPromoted: boolean;
-}
+import {
+  ActiveHirelings,
+  endTurnDecay,
+  hirelingsToPassOn,
+  migrateStoredHirelings,
+  newActiveHireling,
+} from '@/utils/hirelingLogic';
 
 export default function HirelingsPage() {
-  const [activeHirelings, setActiveHirelings] = useState<Record<string, ActiveHireling>>({});
+  const [activeHirelings, setActiveHirelings] = useState<ActiveHirelings>({});
 
   // Load state from localStorage
   useEffect(() => {
@@ -21,32 +22,7 @@ export default function HirelingsPage() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-
-        // Migrate old format (Record<string, number>) to new format (Record<string, ActiveHireling>)
-        const migrated: Record<string, ActiveHireling> = {};
-        let needsMigration = false;
-
-        Object.entries(parsed).forEach(([id, value]) => {
-          if (typeof value === 'number') {
-            // Old format: { markers: number, isPromoted: boolean }
-            migrated[id] = {
-              id, // <--- Add this line
-              markers: value,
-              isPromoted: true,
-            };
-            needsMigration = true;
-          } else {
-            // New format - already has ActiveHireling structure
-            migrated[id] = value as ActiveHireling;
-          }
-        });
-
-        setActiveHirelings(migrated);
-
-        // Save migrated format if needed
-        if (needsMigration) {
-          localStorage.setItem('root_hirelings_active', JSON.stringify(migrated));
-        }
+        setActiveHirelings(migrateStoredHirelings(parsed));
       } catch (e) {
         console.error('Error parsing hirelings data:', e);
         setActiveHirelings({});
@@ -63,11 +39,7 @@ export default function HirelingsPage() {
     if (!activeHirelings[hirelingId]) {
       setActiveHirelings((prev) => ({
         ...prev,
-        [hirelingId]: {
-          id: hirelingId, // <--- Add this line
-          markers: 1, // Placeholder; the player sets it to their control die roll (Law H.1.2)
-          isPromoted: true, // Default to promoted state
-        },
+        [hirelingId]: newActiveHireling(hirelingId),
       }));
     }
   };
@@ -98,16 +70,7 @@ export default function HirelingsPage() {
   };
 
   const handleEndTurnDecay = () => {
-    setActiveHirelings((prev) => {
-      const newActive: Record<string, ActiveHireling> = {};
-      Object.entries(prev).forEach(([id, hireling]) => {
-        newActive[id] = {
-          ...hireling,
-          markers: Math.max(0, hireling.markers - 1),
-        };
-      });
-      return newActive;
-    });
+    setActiveHirelings((prev) => endTurnDecay(prev));
   };
 
   const handleFlipHireling = (hirelingId: string) => {
@@ -125,8 +88,27 @@ export default function HirelingsPage() {
     });
   };
 
+  const handleToggleGainedThisTurn = (hirelingId: string) => {
+    setActiveHirelings((prev) => {
+      const current = prev[hirelingId];
+      if (!current) return prev;
+
+      return {
+        ...prev,
+        [hirelingId]: {
+          ...current,
+          gainedThisTurn: !current.gainedThisTurn,
+        },
+      };
+    });
+  };
+
   const availableHirelings = HIRELINGS_DATA.filter((h) => !activeHirelings[h.id]);
   const activeHirelingsList = HIRELINGS_DATA.filter((h) => activeHirelings[h.id]);
+  // Second sentence of H.1.3: these leave with a hireling marker at the end of the turn
+  const passOnNames = hirelingsToPassOn(activeHirelings)
+    .map((id) => HIRELINGS_DATA.find((h) => h.id === id)?.name ?? id)
+    .join(', ');
 
   return (
     <div className="min-h-screen bg-[#0a0c10] p-4 pb-20 pt-20 relative">
@@ -150,7 +132,7 @@ export default function HirelingsPage() {
         </div>
 
         {/* Controls */}
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleEndTurnDecay}
             disabled={Object.keys(activeHirelings).length === 0}
@@ -166,6 +148,11 @@ export default function HirelingsPage() {
             <Clock className="w-5 h-5" />
             End Turn Decay
           </button>
+          {passOnNames.length > 0 && (
+            <p className="text-sm text-red-400 text-center">
+              Pass on with a hireling marker (H.1.3): {passOnNames}
+            </p>
+          )}
         </div>
 
         {/* Active Hirelings */}
@@ -187,6 +174,8 @@ export default function HirelingsPage() {
                     onToggleActive={() => handleRelease(hireling.id)}
                     onFlipState={() => handleFlipHireling(hireling.id)}
                     initialPromoted={activeHireling?.isPromoted ?? true}
+                    gainedThisTurn={activeHireling?.gainedThisTurn ?? false}
+                    onToggleGainedThisTurn={() => handleToggleGainedThisTurn(hireling.id)}
                     isActive={true}
                   />
                 );
@@ -252,8 +241,8 @@ export default function HirelingsPage() {
                 <li>• With no markers left, give the hireling to any other player</li>
                 <li>• That player rolls for control immediately</li>
                 <li>
-                  • &quot;End Turn Decay&quot; removes one marker from each; add one back for a
-                  hireling gained this turn
+                  • &quot;End Turn Decay&quot; removes one marker from each hireling not marked
+                  &quot;Gained this turn&quot;, then clears that mark
                 </li>
               </ul>
             </div>

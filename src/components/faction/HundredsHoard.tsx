@@ -12,15 +12,21 @@ import {
   Plus,
   Minus,
 } from 'lucide-react';
-
-type ItemType = 'Boot' | 'Bag' | 'Coin' | 'Sword' | 'Hammer' | 'Crossbow' | 'Tea';
+import {
+  COMMAND_ITEMS,
+  PROWESS_ITEMS,
+  addItem,
+  hoardStat,
+  type Hoard,
+  type ItemType,
+} from '@/utils/hoardLogic';
 
 interface HundredsHoardProps {
   factionId: string;
 }
 
 export function HundredsHoard({ factionId }: HundredsHoardProps) {
-  const [items, setItems] = useState<Record<ItemType, number>>({
+  const [items, setItems] = useState<Hoard>({
     Boot: 0,
     Bag: 0,
     Coin: 0,
@@ -29,6 +35,9 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
     Crossbow: 0,
     Tea: 0,
   });
+
+  // Shown when a gained item hits a full track (Law 14.2.4.I)
+  const [fullTrackNotice, setFullTrackNotice] = useState<string | null>(null);
 
   // Load state from localStorage
   useEffect(() => {
@@ -43,35 +52,25 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
     localStorage.setItem(`root_hundreds_items_${factionId}`, JSON.stringify(items));
   }, [items, factionId]);
 
-  const COMMAND_ITEMS: ItemType[] = ['Boot', 'Bag', 'Coin'];
-  const PROWESS_ITEMS: ItemType[] = ['Sword', 'Hammer', 'Crossbow', 'Tea'];
-  const TRACK_SIZE = 4;
-
-  const trackCount = (itemTypes: ItemType[], hoard: Record<ItemType, number> = items) =>
-    itemTypes.reduce((sum, type) => sum + hoard[type], 0);
-
-  // Law 14.2.4.II: no items = 1, one or two items = 2, three items = 3, four items = 4
-  const calculateStat = (itemTypes: ItemType[]) => {
-    const totalItems = trackCount(itemTypes);
-    if (totalItems === 0) return 1;
-    if (totalItems <= 2) return 2;
-    if (totalItems === 3) return 3;
-    return 4;
-  };
-
-  const commandStat = calculateStat(COMMAND_ITEMS);
-  const prowessStat = calculateStat(PROWESS_ITEMS);
+  const commandStat = hoardStat(items, COMMAND_ITEMS);
+  const prowessStat = hoardStat(items, PROWESS_ITEMS);
 
   // Each Hoard track has four spaces (Law 14.2.4.I)
   const updateItemCount = (type: ItemType, delta: number) => {
-    setItems((prev) => {
-      const track = COMMAND_ITEMS.includes(type) ? COMMAND_ITEMS : PROWESS_ITEMS;
-      if (delta > 0 && trackCount(track, prev) >= TRACK_SIZE) return prev;
-      return {
-        ...prev,
-        [type]: Math.max(0, prev[type] + delta),
-      };
-    });
+    if (delta > 0) {
+      const { hoard, trackFull } = addItem(items, type);
+      if (trackFull) {
+        const trackName = COMMAND_ITEMS.includes(type) ? 'Command' : 'Prowess';
+        setFullTrackNotice(
+          `${trackName} track is full: remove the gained ${type} or any item on that track from the game, and score 1 victory point (14.2.4.I).`,
+        );
+        return;
+      }
+      setItems(hoard);
+    } else {
+      setItems((prev) => ({ ...prev, [type]: Math.max(0, prev[type] + delta) }));
+    }
+    setFullTrackNotice(null);
   };
 
   const getItemIcon = (type: ItemType) => {
@@ -221,6 +220,8 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
         />
       </div>
 
+      {fullTrackNotice && <p className="text-sm text-amber-400">{fullTrackNotice}</p>}
+
       {/* Quick Actions */}
       <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-4">
         <h3 className="text-lg font-bold text-white mb-3">Quick Actions</h3>
@@ -232,6 +233,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
                 newItems[type] = 0;
               });
               setItems(newItems);
+              setFullTrackNotice(null);
             }}
             className="px-3 py-2 bg-red-800 hover:bg-red-700 text-red-300 rounded-lg text-sm font-bold transition-colors"
           >

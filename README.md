@@ -72,7 +72,7 @@ Pull requests run the test and docker-build jobs; only a push or manual dispatch
 
 - `src/data/law_full.ts` is generated from the official Law PDF: `uv run --with pymupdf python scripts/extract_law.py <Root_Base_Law_Oct_2025.pdf>`.
 - `scripts/export_strategy.py <output.md>` writes the faction guides to a Markdown file.
-- `docs/audit-2026-09-27-law.md` is the rules audit of the app data against the Law. `docs/fix-2026-10-02-law.md` lists what was fixed and the open items (for example, the AdSet draft is limited to 2 to 4 players in the UI, and the Hireling tool does not track the H.1.3 exemption for a hireling gained this turn).
+- `docs/audit-2026-09-27-law.md` is the rules audit of the app data against the Law. `docs/fix-2026-10-02-law.md` and `docs/fix-2026-10-17-law.md` list what was fixed in two rounds; the open items are in the later one.
 
 ## Tech stack
 

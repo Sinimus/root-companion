@@ -40,12 +40,7 @@ describe('SetupWizard Component', () => {
 
     // Select 1 Militant (Marquise) and 1 Insurgent (Alliance)
     // Marquise Reach 10, Alliance Reach 3. Total 13.
-    // Target for 2 players is 17.
-    // Also needs 2 militants? Wait, AdSet logic says "2 players: Only militant factions".
-    // But SetupWizard uses standard reach calculation logic generally.
-    // Let's check SetupWizard logic:
-    // "militants < 1" -> Valid = false.
-    // "reach < target" -> Valid = false.
+    // 13 is below the 17+ minimum for any mix (Law 5.2).
 
     // Click Marquise
     fireEvent.click(screen.getByText('Marquise de Cat'));
@@ -90,5 +85,29 @@ describe('SetupWizard Component', () => {
     fireEvent.click(screen.getByText('Lizard Cult')); // 5th faction
 
     expect(screen.getByText(/Too many factions/)).toBeInTheDocument();
+  });
+
+  it('allows 17+ Reach below the recommendation with a warning (Law 5.2)', () => {
+    render(<SetupWizard />);
+
+    // Default 4 players, recommended Reach 21. Select:
+    // 1. Eyrie Dynasties (7, Militant)
+    // 2. Underground Duchy (8, Militant)
+    // 3. Corvid Conspiracy (3, Insurgent)
+    // 4. Lizard Cult (2, Insurgent)
+    // Total: 20. Valid (17+ minimum), but below the recommended 21+.
+    fireEvent.click(screen.getByText('Eyrie Dynasties'));
+    fireEvent.click(screen.getByText('Underground Duchy'));
+    fireEvent.click(screen.getByText('Corvid Conspiracy'));
+    fireEvent.click(screen.getByText('Lizard Cult'));
+
+    expect(screen.getByText('Ready to Start')).toBeInTheDocument();
+    expect(screen.getByText(/Below the recommended 21\+/)).toBeInTheDocument();
+    expect(screen.getByText('Start Game')).toBeInTheDocument();
+  });
+
+  it('starts with the select at the playerCount prop', () => {
+    render(<SetupWizard playerCount={5} />);
+    expect(screen.getByRole('combobox')).toHaveValue('5');
   });
 });
