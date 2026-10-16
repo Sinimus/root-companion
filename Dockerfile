@@ -1,14 +1,16 @@
 # Base image
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
+# pnpm comes from corepack, at the version pinned in package.json "packageManager"
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable pnpm
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -17,18 +19,18 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Environment variables for build
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application
-RUN npm run build
+RUN pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create nextjs user with reduced privileges
 RUN addgroup --system --gid 1001 nodejs
@@ -50,10 +52,10 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 # Listen on IPv4 and IPv6: the platform healthcheck calls http://localhost:3000,
 # and busybox wget resolves localhost to ::1 first
-ENV HOSTNAME "::"
+ENV HOSTNAME="::"
 
 # Start the application
 CMD ["node", "server.js"]
