@@ -15,17 +15,52 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      # pnpm version comes from "packageManager" in package.json
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version-file: .nvmrc
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       - name: Run Lint
-        run: npm run lint
+        run: pnpm lint
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
       - name: Run Tests
-        run: npm test
+        run: pnpm test
+
+  # Builds the production image on pull requests (no push), so a broken
+  # Dockerfile fails here instead of on the deploy after the merge
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: root-companion:ci
+
+      - name: Smoke test the image
+        run: |
+          docker run --detach --name smoke --publish 3000:3000 root-companion:ci
+          for i in $(seq 1 30); do
+            if curl --silent --fail --output /dev/null http://localhost:3000/; then
+              echo "Container answered on attempt ${i}"
+              docker rm --force smoke
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs smoke
+          exit 1
 
   build-and-push:
     needs: test
