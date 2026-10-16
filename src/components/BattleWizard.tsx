@@ -11,6 +11,7 @@ import {
   Skull,
   Flame,
   Crown,
+  Coins,
   Users,
 } from 'lucide-react';
 import { FACTIONS_DATA } from '@/data/factions';
@@ -91,6 +92,8 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   const [keeperHasRelic, setKeeperHasRelic] = useState(true);
   const [hundredsWrathful, setHundredsWrathful] = useState(false);
   const [hundredsWarlord, setHundredsWarlord] = useState(true);
+  const [hundredsStubborn, setHundredsStubborn] = useState(true); // starting mood (14.3.4)
+  const [hundredsLoot, setHundredsLoot] = useState(false);
   const [eyrieCommander, setEyrieCommander] = useState(false);
 
   // Context Checks
@@ -100,6 +103,7 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
   const isKeeperAttacker = attackerId === 'keepers';
   const isKeeperDefender = defenderId === 'keepers';
   const isHundredsAttacker = attackerId === 'hundreds';
+  const isHundredsDefender = defenderId === 'hundreds';
   const isEyrieAttacker = attackerId === 'eyrie';
 
   const handleRoll = () => {
@@ -125,6 +129,8 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
         keeperHasRelic,
         hundredsWrathful,
         hundredsWarlord,
+        hundredsStubborn,
+        hundredsLoot,
         eyrieCommander,
       })
     : null;
@@ -411,6 +417,21 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
 
             {isHundredsAttacker && (
               <div className="border-t border-gray-800 pt-2 mt-2 flex flex-col gap-2">
+                {!isVagabondDefender && (
+                  <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
+                    <div className="flex items-center gap-2">
+                      <Coins className="w-4 h-4 text-yellow-500" />
+                      <span className="text-sm text-yellow-200">Loot the defender</span>
+                      <Tooltip text="No rolled hits; take an item from the defender's Crafted Items box if you rule the clearing after the battle (14.2.5). Not against the Vagabond." />
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={hundredsLoot}
+                      onChange={(e) => setHundredsLoot(e.target.checked)}
+                      className="accent-yellow-500 w-4 h-4"
+                    />
+                  </label>
+                )}
                 <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm">
                   <div className="flex items-center gap-2">
                     <Crown className="w-4 h-4 text-orange-500" />
@@ -439,6 +460,22 @@ export function BattleWizard({ defaultAttackerId, onClose }: BattleProps) {
                   </label>
                 )}
               </div>
+            )}
+
+            {isHundredsDefender && (
+              <label className="flex items-center justify-between cursor-pointer hover:bg-gray-800/50 p-1 rounded-sm border-t border-gray-800 pt-2">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-orange-500" />
+                  <span className="text-sm text-orange-200">Stubborn (warlord's clearing)</span>
+                  <Tooltip text="Ignore the first hit taken in the warlord's clearing (14.7.7)." />
+                </div>
+                <input
+                  type="checkbox"
+                  checked={hundredsStubborn}
+                  onChange={(e) => setHundredsStubborn(e.target.checked)}
+                  className="accent-orange-500 w-4 h-4"
+                />
+              </label>
             )}
 
             {isEyrieAttacker && (

@@ -18,6 +18,8 @@ const makeInput = (overrides: Partial<BattleInput> = {}): BattleInput => ({
   keeperHasRelic: false,
   hundredsWrathful: false,
   hundredsWarlord: false,
+  hundredsStubborn: false,
+  hundredsLoot: false,
   eyrieCommander: false,
   ...overrides,
 });
@@ -124,5 +126,56 @@ describe('resolveBattle (Law of Root 4.3)', () => {
     });
     expect(noHit.attackerHits).toBe(0);
     expect(noHit.notes).not.toContain('DEVOUT KNIGHTS: Keepers ignore 1 hit taken.');
+  });
+
+  it('lets a Stubborn Hundreds defender ignore the first hit taken (14.7.7)', () => {
+    const stubborn = resolve({
+      attackerId: 'marquise',
+      defenderId: 'hundreds',
+      hundredsStubborn: true,
+    });
+    expect(stubborn.attackerHits).toBe(2); // 3 - 1
+    expect(stubborn.defenderHits).toBe(1);
+    expect(stubborn.notes).toContain('Stubborn: the Hundreds ignore the first hit taken (14.7.7).');
+
+    const withoutMood = resolve({
+      defenderId: 'hundreds',
+      hundredsStubborn: false,
+    });
+    expect(withoutMood.attackerHits).toBe(3);
+    expect(withoutMood.notes).not.toContain(
+      'Stubborn: the Hundreds ignore the first hit taken (14.7.7).',
+    );
+  });
+
+  it('drops the Hundreds rolled hits when they loot, keeping extra hits (14.2.5)', () => {
+    const loot = resolve({
+      attackerId: 'hundreds',
+      hundredsLoot: true,
+    });
+    expect(loot.attackerHits).toBe(0);
+    expect(loot.defenderHits).toBe(1); // the defender still deals rolled hits
+    expect(loot.notes).toContain('Looters: the Hundreds deal no rolled hits (14.2.5).');
+
+    const wrathful = resolve({
+      attackerId: 'hundreds',
+      hundredsLoot: true,
+      hundredsWarlord: true,
+      hundredsWrathful: true,
+    });
+    expect(wrathful.attackerHits).toBe(1); // 0 rolled + 1 Wrathful extra hit
+    expect(wrathful.defenderHits).toBe(1);
+    expect(wrathful.notes).toContain('Wrathful Warlord: +1 Attacker Hit.');
+  });
+
+  it('ignores a declared loot against a Vagabond defender (14.2.5)', () => {
+    const result = resolve({
+      attackerId: 'hundreds',
+      defenderId: 'vagabond_1',
+      hundredsLoot: true,
+    });
+    expect(result.attackerHits).toBe(3);
+    expect(result.defenderHits).toBe(1);
+    expect(result.notes).not.toContain('Looters: the Hundreds deal no rolled hits (14.2.5).');
   });
 });

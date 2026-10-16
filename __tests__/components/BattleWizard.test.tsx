@@ -13,6 +13,7 @@ jest.mock('lucide-react', () => ({
   Skull: () => <div data-testid="icon-skull" />,
   Flame: () => <div data-testid="icon-flame" />,
   Crown: () => <div data-testid="icon-crown" />,
+  Coins: () => <div data-testid="icon-coins" />,
 }));
 
 describe('BattleWizard Component', () => {

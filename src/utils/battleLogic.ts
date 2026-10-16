@@ -18,6 +18,8 @@ export interface BattleInput {
   keeperHasRelic: boolean;
   hundredsWrathful: boolean;
   hundredsWarlord: boolean;
+  hundredsStubborn: boolean; // Hundreds defend in their warlord's clearing with Stubborn (14.7.7)
+  hundredsLoot: boolean; // Hundreds attacker declares a loot (14.2.5)
   eyrieCommander: boolean;
 }
 
@@ -46,6 +48,8 @@ export function resolveBattle(input: BattleInput): BattleResult {
     keeperHasRelic,
     hundredsWrathful,
     hundredsWarlord,
+    hundredsStubborn,
+    hundredsLoot,
     eyrieCommander,
   } = input;
 
@@ -59,6 +63,7 @@ export function resolveBattle(input: BattleInput): BattleResult {
   const isKeeperAttacker = attackerId === 'keepers';
   const isKeeperDefender = defenderId === 'keepers';
   const isHundredsAttacker = attackerId === 'hundreds';
+  const isHundredsDefender = defenderId === 'hundreds';
   const isEyrieAttacker = attackerId === 'eyrie';
 
   const rawHigh = Math.max(roll.d1, roll.d2);
@@ -95,6 +100,13 @@ export function resolveBattle(input: BattleInput): BattleResult {
   if (defenderWarriors !== null && !isVagabondDefender && rawDefender > defenderWarriors) {
     rawDefender = defenderWarriors;
     notes.push(`Rolled hits limited by ${defenderWarriors} defending warriors (4.3.3.I).`);
+  }
+
+  // LOOTERS (Hundreds): a declared loot means the Hundreds deal no rolled hits; the
+  // defender still deals theirs, and extra hits (e.g. Wrathful) still land (14.2.5)
+  if (isHundredsAttacker && hundredsLoot && !isVagabondDefender) {
+    rawAttacker = 0;
+    notes.push('Looters: the Hundreds deal no rolled hits (14.2.5).');
   }
 
   // Defenseless: no defending warriors (4.3.5.II); a Vagabond defender without an undamaged
@@ -172,10 +184,14 @@ export function resolveBattle(input: BattleInput): BattleResult {
   }
   let attackerHits = rawAttacker + attackerExtraHits;
 
-  // DEVOUT KNIGHTS (Keepers): Ignore first hit taken
+  // DEVOUT KNIGHTS (Keepers) / STUBBORN (Hundreds): ignore the first hit taken; the
+  // abilities do not combine, so at most one of them applies (14.7.7)
   if (isKeeperDefender && keeperHasRelic && attackerHits > 0) {
     attackerHits -= 1;
     notes.push('DEVOUT KNIGHTS: Keepers ignore 1 hit taken.');
+  } else if (isHundredsDefender && hundredsStubborn && attackerHits > 0) {
+    attackerHits -= 1;
+    notes.push('Stubborn: the Hundreds ignore the first hit taken (14.7.7).');
   }
 
   if (isKeeperAttacker && keeperHasRelic && defenderHits > 0) {
