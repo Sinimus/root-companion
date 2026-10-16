@@ -12,9 +12,11 @@ jest.mock('lucide-react', () => ({
 
 // Mock Link since we are not in a router context
 jest.mock('next/link', () => {
-  return ({ children }: { children: React.ReactNode }) => {
+  const MockLink = ({ children }: { children: React.ReactNode }) => {
     return <span data-testid="link">{children}</span>;
   };
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 describe('SetupWizard Component', () => {

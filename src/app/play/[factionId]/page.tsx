@@ -1,6 +1,6 @@
 "use client"; // Needs to be client for state (Modals)
 
-import React from 'react';
+import React, { use } from 'react';
 import { EYRIE_GUIDE } from '@/data/guides/eyrie';
 import { MARQUISE_GUIDE } from '@/data/guides/marquise';
 import { ALLIANCE_GUIDE } from '@/data/guides/alliance';
@@ -49,8 +49,9 @@ const FACTION_AMBIENT_COLORS: Record<string, string> = {
 
 // Note: generateStaticParams removed because this is a client component
 
-export default function FactionTurnPage({ params }: { params: { factionId: string } }) {
-  const guide = GUIDES[params.factionId];
+export default function FactionTurnPage({ params }: { params: Promise<{ factionId: string }> }) {
+  const { factionId } = use(params);
+  const guide = GUIDES[factionId];
 
   if (!guide) {
     return (
@@ -73,7 +74,7 @@ export default function FactionTurnPage({ params }: { params: { factionId: strin
     <div className="min-h-screen bg-[#0a0c10] pb-24 pt-20 relative">
       {/* Ambient Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[params.factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`} />
+        <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${FACTION_AMBIENT_COLORS[factionId] || 'from-gray-600/20'} via-gray-900/0 to-gray-900/0`} />
       </div>
 
        {/* Unified Navigation */}
@@ -84,11 +85,11 @@ export default function FactionTurnPage({ params }: { params: { factionId: strin
        </div>
 
        {/* Faction-Specific Item Trackers */}
-       {params.factionId.includes('vagabond') && (
-         <VagabondManager factionId={params.factionId} />
+       {factionId.includes('vagabond') && (
+         <VagabondManager factionId={factionId} />
        )}
-       {params.factionId === 'hundreds' && (
-         <HundredsHoard factionId={params.factionId} />
+       {factionId === 'hundreds' && (
+         <HundredsHoard factionId={factionId} />
        )}
 
        <div className="relative z-10">
