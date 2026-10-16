@@ -43,11 +43,12 @@ CI runs these in this order on every push and pull request to `main` or `master`
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm lint          # next lint, config in .eslintrc.json
+pnpm lint          # ESLint 9, flat config in eslint.config.mjs
+pnpm format:check  # Prettier, config in .prettierrc.json
 pnpm test          # jest, jsdom environment
 ```
 
-Tests live in `__tests__/` (components, data, utils). The data integrity tests check that every rule reference in the guides, glossary and rules database resolves in the Law text, and that map, deck, hireling and landmark data satisfy their invariants. `next build` does not run ESLint (`eslint.ignoreDuringBuilds` is true), so run `pnpm lint` separately.
+Tests live in `__tests__/` (components, data, utils). The data integrity tests check that every rule reference in the guides, glossary and rules database resolves in the Law text, and that map, deck, hireling and landmark data satisfy their invariants. `next build` (with `--webpack`, which the PWA plugin needs) type-checks the code but does not run ESLint, so run `pnpm lint` separately. The build writes the service worker `public/sw.js` and `public/workbox-*.js`; they are not tracked in git.
 
 ## Docker
 
@@ -61,8 +62,8 @@ The app is served on `http://localhost:3000`. The compose file builds the local 
 
 The workflow `.github/workflows/ci-cd.yml` has three jobs.
 
-1. **test**: checkout, pnpm, Node 24, `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm test`. Runs on pushes and pull requests to `main` or `master`, and on manual dispatch.
-2. **docker-build**: runs only after `test` passes, and only on pull requests. It builds the production image from the Dockerfile without pushing it and checks that the container answers on port 3000, so a broken Dockerfile fails before the merge deploys it.
+1. **test**: checkout, pnpm, Node 24, `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm format:check`, `pnpm test`. Runs on pushes and pull requests to `main` or `master`, and on manual dispatch.
+2. **docker-build**: runs only after `test` passes, and only on pull requests. It builds the production image from the Dockerfile without pushing it and checks that the container answers on port 3000 and serves `/sw.js`, so a broken Dockerfile fails before the merge deploys it.
 3. **build-and-push**: runs only after `test` passes, and only for a push or manual dispatch on `main` or `master`. It logs in to GHCR with `GITHUB_TOKEN`, builds the Dockerfile and pushes `ghcr.io/<owner>/<repo>` with the tags `latest` and `sha-<short sha>`. It then sends a POST to the Coolify deploy API and fails the job unless the HTTP status is 2xx. The request authenticates with the repository secret `COOLIFY_TOKEN`.
 
 Pull requests run the test and docker-build jobs; only a push or manual dispatch on `main` or `master` deploys. To redeploy without a commit, start the workflow manually from the Actions tab.
@@ -75,9 +76,9 @@ Pull requests run the test and docker-build jobs; only a push or manual dispatch
 
 ## Tech stack
 
-- Next.js 14.2 (App Router), React 18, TypeScript
-- Tailwind CSS 3, Lucide React
-- Jest 30 with Testing Library, ESLint with `next/core-web-vitals`
+- Next.js 16 (App Router, webpack build), React 19, TypeScript
+- Tailwind CSS 4, Lucide React
+- Jest 30 with Testing Library, ESLint 9 with `eslint-config-next`, Prettier
 - Docker image on GHCR, deployed through Coolify
 
 ## License
