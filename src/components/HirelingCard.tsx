@@ -152,6 +152,7 @@ export function HirelingCard({
                     : 'bg-yellow-700 text-yellow-200 hover:bg-yellow-600'
                 }
               `}
+              aria-label="Flip hireling card"
               title="Flip hireling card"
             >
               <RefreshCw className="w-3 h-3" />
@@ -223,6 +224,7 @@ export function HirelingCard({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onUpdateMarkers(-1)}
+                aria-label="Remove one control marker"
                 disabled={controlMarkers <= 0}
                 className={`
                   p-1 rounded transition-colors
@@ -247,6 +249,7 @@ export function HirelingCard({
 
               <button
                 onClick={() => onUpdateMarkers(1)}
+                aria-label="Add one control marker"
                 className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
               >
                 <Plus className="w-4 h-4" />

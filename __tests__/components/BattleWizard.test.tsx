@@ -94,7 +94,7 @@ describe('BattleWizard Component', () => {
     render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
 
     // Click Defenseless checkbox
-    const defenselessCheckbox = screen.getByLabelText(/Defenseless/); // Find by text inside label
+    const defenselessCheckbox = screen.getByRole('checkbox', { name: /Defenseless/ }); // Find by text inside label
     fireEvent.click(defenselessCheckbox);
 
     // Mock roll 1, 1
@@ -142,7 +142,7 @@ describe('BattleWizard Component', () => {
     // Open Advanced Cards
     fireEvent.click(screen.getByText('Advanced Cards'));
     // Activate Armorers
-    fireEvent.click(screen.getByLabelText(/Armorers/));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Armorers/ }));
 
     jest.spyOn(Math, 'random').mockReturnValueOnce(0.9).mockReturnValueOnce(0.1); // 3, 0
     fireEvent.click(screen.getByText('FIGHT'));
@@ -156,8 +156,8 @@ describe('BattleWizard Component', () => {
     render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
 
     fireEvent.click(screen.getByText('Advanced Cards'));
-    fireEvent.click(screen.getByLabelText(/Armorers/));
-    fireEvent.click(screen.getByLabelText(/Brutal Tactics/));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Armorers/ }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Brutal Tactics/ }));
 
     jest.spyOn(Math, 'random').mockReturnValueOnce(0.9).mockReturnValueOnce(0.1); // 3, 0
     fireEvent.click(screen.getByText('FIGHT'));
@@ -170,7 +170,7 @@ describe('BattleWizard Component', () => {
     render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
 
     // Activate Ambush
-    fireEvent.click(screen.getByLabelText(/Ambush!/));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Ambush!/ }));
 
     // Roll 1, 1
     jest.spyOn(Math, 'random').mockReturnValue(0.3); // 1
@@ -183,12 +183,18 @@ describe('BattleWizard Component', () => {
   it('shows the Foiled by ambush checkbox only while Ambush is ticked', () => {
     render(<BattleWizard defaultAttackerId="marquise" onClose={mockOnClose} />);
 
-    expect(screen.queryByLabelText(/Foiled by attacker's ambush/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: /Foiled by attacker's ambush/ }),
+    ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText(/Ambush!/));
-    expect(screen.getByLabelText(/Foiled by attacker's ambush/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('checkbox', { name: /Ambush!/ }));
+    expect(
+      screen.getByRole('checkbox', { name: /Foiled by attacker's ambush/ }),
+    ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText(/Ambush!/));
-    expect(screen.queryByLabelText(/Foiled by attacker's ambush/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('checkbox', { name: /Ambush!/ }));
+    expect(
+      screen.queryByRole('checkbox', { name: /Foiled by attacker's ambush/ }),
+    ).not.toBeInTheDocument();
   });
 });

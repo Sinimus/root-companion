@@ -71,6 +71,7 @@ export default function SetupGuidePage() {
         <div className="flex gap-3">
           <button
             onClick={() => setStep(Math.max(0, step - 1))}
+            aria-label="Previous step"
             disabled={step === 0}
             className="px-6 py-4 rounded-xl font-bold text-gray-500 bg-gray-900 border border-gray-800 disabled:opacity-30 hover:bg-gray-800"
           >

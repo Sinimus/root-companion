@@ -15,7 +15,7 @@
  *
  * 📁 CUSTOM ASSETS INTEGRATION:
  *    =========================================
- *    1. Wood Background: Add `bg-wood.jpg` to `/public/assets/`
+ *    1. Wood Background: Add `bg-wood.webp` to `/public/assets/`
  *    2. Custom Fonts: Add `root-font.ttf` to `/public/fonts/`
  *    3. Optional: Add `woodland-font.ttf` and `faction-font.ttf`
  *    4. Result: Automatic theme activation across all pages
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
       { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
     ],
-    apple: '/apple-touch-icon.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
 };
 

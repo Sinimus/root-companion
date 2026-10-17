@@ -291,6 +291,9 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                           <h4 className="text-sm font-bold text-amber-300">Market Deck</h4>
                           <button
                             onClick={() => setShowMarketDeck(!showMarketDeck)}
+                            aria-label={
+                              showMarketDeck ? 'Hide black market deck' : 'Show black market deck'
+                            }
                             className="text-amber-400 hover:text-amber-300 transition-colors"
                           >
                             {showMarketDeck ? (
@@ -308,6 +311,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => removeBlackMarketCard()}
+                              aria-label="Remove one black market deck card"
                               disabled={blackMarketDeck.length === 0}
                               className={`
                                 p-1 rounded transition-colors
@@ -327,6 +331,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
 
                             <button
                               onClick={() => setBlackMarketDeck((prev) => [...prev, '🎴'])}
+                              aria-label="Add one black market deck card"
                               className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
                             >
                               <Plus className="w-4 h-4" />
@@ -378,6 +383,7 @@ export function LandmarkManager({}: LandmarkManagerProps) {
                                   <span className="text-sm text-white">{item}</span>
                                   <button
                                     onClick={() => removeForgeItem(index)}
+                                    aria-label="Item crafted"
                                     className="p-1 bg-red-800 hover:bg-red-700 text-red-300 rounded-sm transition-colors"
                                     title="Item crafted"
                                   >

@@ -86,6 +86,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
       <div className="p-4 bg-gray-950 border-b border-gray-800 flex gap-2 shrink-0">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          aria-label="Toggle rules sidebar"
           className="md:hidden p-3 bg-gray-800 rounded-lg text-gray-300 border border-gray-700 hover:bg-gray-700 transition-colors"
         >
           <ListFilter className="w-5 h-5" />
@@ -102,6 +103,7 @@ export function LawViewer({ initialQuery = '' }: Props) {
           {query && (
             <button
               onClick={() => setQuery('')}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 bg-gray-800/50 rounded-full p-1 transition-colors"
             >
               <X className="w-3 h-3" />

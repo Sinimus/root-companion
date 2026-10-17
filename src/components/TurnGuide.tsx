@@ -138,6 +138,7 @@ export function TurnGuide({ guide }: Props) {
           <div className="bg-gray-900 border border-gray-600 p-6 rounded-xl shadow-2xl max-w-sm w-full relative">
             <button
               onClick={() => setActiveModal(null)}
+              aria-label="Close info modal"
               className="absolute top-2 right-2 p-2 text-gray-400 hover:text-white"
             >
               <X className="w-5 h-5" />
@@ -156,6 +157,7 @@ export function TurnGuide({ guide }: Props) {
           <div className="bg-gray-900 border border-gray-600 p-6 rounded-xl shadow-2xl max-w-md w-full relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setShowSetupInfo(false)}
+              aria-label="Close faction setup"
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white"
             >
               <X className="w-5 h-5" />
@@ -180,6 +182,7 @@ export function TurnGuide({ guide }: Props) {
           <div className="bg-gray-900 border border-yellow-600/50 p-6 rounded-xl shadow-2xl max-w-md w-full relative max-h-[80vh] overflow-y-auto">
             <button
               onClick={() => setShowStrategy(false)}
+              aria-label="Close strategy tips"
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white"
             >
               <X className="w-5 h-5" />

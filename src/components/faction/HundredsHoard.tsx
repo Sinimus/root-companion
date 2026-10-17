@@ -158,6 +158,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => updateItemCount(type, -1)}
+                aria-label={`Remove one ${type} item`}
                 disabled={items[type] === 0}
                 className={`
                   p-1 rounded transition-colors
@@ -177,6 +178,7 @@ export function HundredsHoard({ factionId }: HundredsHoardProps) {
 
               <button
                 onClick={() => updateItemCount(type, 1)}
+                aria-label={`Add one ${type} item`}
                 className="p-1 bg-green-800 hover:bg-green-700 text-green-300 rounded-sm transition-colors"
               >
                 <Plus className="w-4 h-4" />
