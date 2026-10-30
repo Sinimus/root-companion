@@ -1,0 +1,18 @@
+# Only install versions published at least 7 days ago (minutes).
+minimumReleaseAge: 10080
+
+# Write exact versions to package.json on pnpm add.
+savePrefix: ''
+
+# Packages allowed to run install scripts; everything else is skipped.
+# None is needed: install, lint, test and build work with all scripts off.
+onlyBuiltDependencies: []
+
+# Install scripts that are skipped on purpose (silences the pnpm warning):
+# - @parcel/watcher: file watching helper pulled in by a dev tool
+# - unrs-resolver: eslint-import-resolver-typescript
+# Each ships prebuilt binaries as optional dependencies; the scripts only
+# check for them or build a fallback when none matches the platform.
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - unrs-resolver

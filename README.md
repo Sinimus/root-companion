@@ -10,7 +10,6 @@ A companion web app for the board game **Root: A Game of Woodland Might and Righ
 - **Tools**: Battle wizard, card database, Hirelings, Landmarks, Law of Root viewer with search, glossary, and an About page.
 - **Law search**: all 701 rules of the Oct 2025 Law are indexed. Searching a rule number matches that rule and its sub-rules only.
 - **Factions**: the 11 entries in `src/data/factions.ts` (Marquise de Cat, Eyrie Dynasties, Woodland Alliance, two Vagabonds, Lizard Cult, Riverfolk Company, Underground Duchy, Corvid Conspiracy, Lord of the Hundreds, Keepers in Iron).
-- **PWA**: configured with `@ducanh2912/next-pwa` and a web manifest, so it can be installed on a phone. The service worker is disabled in development.
 
 Game state (setup and trackers) is kept in the browser with `localStorage`; there is no backend or database.
 
@@ -36,6 +35,10 @@ pnpm start
 ```
 
 `next.config.mjs` sets `output: 'standalone'`, which the Docker image relies on.
+
+`public/sw.js` is a self-removing service worker. The app used to be a PWA; browsers that still have the old worker installed fetch this file, which clears their caches and unregisters the worker. It can be deleted once no such browser is left.
+
+pnpm settings live in `pnpm-workspace.yaml`: `minimumReleaseAge` (7 days), exact versions on `pnpm add` and the install scripts that are skipped. Versions in `package.json` are exact, without `^` or `~`.
 
 ## Tests and lint
 
