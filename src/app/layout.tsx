@@ -66,12 +66,6 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Root Companion',
   description: 'Unofficial Helper App for Root Board Game',
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'Root Companion',
-  },
   icons: {
     icon: [
       { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
