@@ -1,0 +1,13 @@
+[
+  { "path": "/", "heading": "ROOT" },
+  { "path": "/play", "heading": "Choose Faction" },
+  { "path": "/play/marquise", "button": "Birdsong" },
+  { "path": "/setup", "heading": "Game Configuration" },
+  { "path": "/setup/guide", "heading": "1. Map & Variants" },
+  { "path": "/tools/battle", "button": "Advanced Cards" },
+  { "path": "/tools/rules", "button": "Glossary" },
+  { "path": "/tools/deck", "heading": "Deck Comparison" },
+  { "path": "/tools/hirelings", "heading": "Hireling Manager" },
+  { "path": "/tools/landmarks", "heading": "Landmarks Manager" },
+  { "path": "/tools/about", "heading": "Root Companion App" }
+]
