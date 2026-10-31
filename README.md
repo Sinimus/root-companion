@@ -51,6 +51,8 @@ pnpm format:check  # Prettier, config in .prettierrc.json
 pnpm test          # jest, jsdom environment
 ```
 
+The browser test (`pnpm test:e2e`, Playwright) runs against a running image on `http://localhost:3000` (`E2E_BASE_URL` overrides); run `pnpm exec playwright install chromium` once first. CI runs it in the docker-build job.
+
 Tests live in `__tests__/` (components, data, utils). The data integrity tests check that every rule reference in the guides, glossary and rules database resolves in the Law text, and that map, deck, hireling and landmark data satisfy their invariants. `next build` (with `--webpack`, which the PWA plugin needs) type-checks the code but does not run ESLint, so run `pnpm lint` separately. The build writes the service worker `public/sw.js` and `public/workbox-*.js`; they are not tracked in git.
 
 ## Docker
@@ -66,8 +68,8 @@ The app is served on `http://localhost:3000`. The compose file builds the local 
 The workflow `.github/workflows/ci-cd.yml` has three jobs.
 
 1. **test**: checkout, pnpm, Node 24, `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm format:check`, `pnpm test`. Runs on pushes and pull requests to `main` or `master`, and on manual dispatch.
-2. **docker-build**: runs only after `test` passes, and only on pull requests. It builds the production image from the Dockerfile without pushing it and checks that the container answers on port 3000 and serves `/sw.js`, so a broken Dockerfile fails before the merge deploys it.
-3. **build-and-push**: runs only after `test` passes, and only for a push or manual dispatch on `main` or `master`. It logs in to GHCR with `GITHUB_TOKEN`, builds the Dockerfile and pushes `ghcr.io/<owner>/<repo>` with the tags `latest` and `sha-<short sha>`. It then sends a POST to the Coolify deploy API and fails the job unless the HTTP status is 2xx. The request authenticates with the repository secret `COOLIFY_TOKEN`.
+2. **docker-build**: runs after `test` passes, on pull requests and on pushes to `main` or `master`. It builds the production image from the Dockerfile without pushing it, checks that the container answers on port 3000 and serves `/sw.js`, and runs the Playwright browser test against it: every page in `e2e/routes.json` must render its heading (or a button on pages without one) from the bundle without a JavaScript or console error, and one test opens a tool from the menu and switches the rules to the glossary. A broken Dockerfile or bundle fails here before anything is deployed.
+3. **build-and-push**: runs only after `test` and `docker-build` pass, and only for a push or manual dispatch on `main` or `master`. It logs in to GHCR with `GITHUB_TOKEN`, builds the Dockerfile and pushes `ghcr.io/<owner>/<repo>` with the tags `latest` and `sha-<short sha>`. It then sends a POST to the Coolify deploy API and fails the job unless the HTTP status is 2xx. The request authenticates with the repository secret `COOLIFY_TOKEN`.
 
 Pull requests run the test and docker-build jobs; only a push or manual dispatch on `main` or `master` deploys. To redeploy without a commit, start the workflow manually from the Actions tab.
 
