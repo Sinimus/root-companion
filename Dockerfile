@@ -1,5 +1,5 @@
 # Base image
-FROM node:24-alpine AS base
+FROM node:24-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85 AS base
 # pnpm comes from corepack, at the version pinned in package.json "packageManager"
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN corepack enable pnpm
